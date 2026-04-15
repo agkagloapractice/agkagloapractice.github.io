@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AGK AGLOA Flash Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{--blur:24px;--glass-bg:rgba(255,255,255,0.18);--glass-border:rgba(255,255,255,0.38);--glass-shadow:0 8px 32px rgba(0,0,0,0.12);--accent-blue:#007AFF;--accent-green:#34C759;--accent-red:#FF3B30;--accent-orange:#FF9500;--accent-purple:#AF52DE;--accent-teal:#5AC8FA;--text-primary:#1C1C1E;--text-secondary:#3C3C43;--text-tertiary:#8E8E93;--bg-gradient:linear-gradient(135deg,#e0eaff 0%,#c9f0ff 30%,#e8d5ff 65%,#ffd6ec 100%)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;background:var(--bg-gradient);background-attachment:fixed;color:var(--text-primary);overflow-x:hidden}
+  .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:float 8s ease-in-out infinite}
+  .orb1{width:400px;height:400px;background:rgba(0,122,255,0.18);top:-100px;left:-100px}
+  .orb2{width:300px;height:300px;background:rgba(175,82,222,0.15);top:40%;right:-80px;animation-delay:2s}
+  .orb3{width:350px;height:350px;background:rgba(52,199,89,0.12);bottom:-100px;left:30%;animation-delay:4s}
+  @keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+  .app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 16px 60px}
+  .header{text-align:center;margin-bottom:24px;padding:24px 32px 20px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);animation:slideDown 0.5s ease}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  .header-badge{display:inline-block;background:rgba(0,122,255,0.15);color:var(--accent-blue);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(0,122,255,0.25)}
+  .header h1{font-size:clamp(20px,4vw,30px);font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#007AFF,#AF52DE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+  .header p{color:var(--text-tertiary);font-size:13px}
+  .nav{display:flex;gap:8px;margin-bottom:18px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:18px;padding:7px;box-shadow:var(--glass-shadow);overflow-x:auto}
+  .nav-tab{flex:1;min-width:80px;padding:9px 12px;border-radius:12px;border:none;background:transparent;color:var(--text-tertiary);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.22s ease;white-space:nowrap;font-family:inherit}
+  .nav-tab.active{background:rgba(255,255,255,0.78);color:var(--accent-blue);box-shadow:0 2px 10px rgba(0,0,0,0.09);font-weight:600}
+  .nav-tab:hover:not(.active){background:rgba(255,255,255,0.3);color:var(--text-primary)}
+  .subject-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .subject-btn{flex:1;min-width:110px;padding:11px 14px;border-radius:14px;border:1.5px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-secondary);transition:all 0.2s ease;display:flex;align-items:center;gap:7px;justify-content:center}
+  .subject-btn.active{border-color:var(--accent-blue);color:var(--accent-blue);background:rgba(0,122,255,0.10)}
+  .subject-btn:hover:not(.active){background:rgba(255,255,255,0.38)}
+  .subject-icon{font-size:17px}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .card-area{animation:fadeIn 0.35s ease}
+  .flashcard-wrap{perspective:1200px;margin-bottom:16px}
+  .flashcard{position:relative;width:100%;min-height:220px;transform-style:preserve-3d;transition:transform 0.52s cubic-bezier(.4,0,.2,1);cursor:pointer}
+  .flashcard.flipped{transform:rotateY(180deg)}
+  .card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;padding:28px 24px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:rgba(255,255,255,0.58);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);box-shadow:0 8px 32px rgba(0,0,0,0.09);min-height:220px}
+  .card-back{transform:rotateY(180deg);background:rgba(0,122,255,0.07)}
+  .card-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:14px}
+  .card-content{font-size:clamp(15px,2.3vw,19px);font-weight:500;color:var(--text-primary);line-height:1.55;max-width:680px}
+  .card-hint{margin-top:14px;font-size:11px;color:var(--text-tertiary)}
+  .card-section-tag{margin-top:12px;display:inline-block;background:rgba(0,122,255,0.12);color:var(--accent-blue);font-size:11px;font-weight:600;padding:3px 10px;border-radius:8px}
+  .progress-bar{width:100%;height:4px;background:rgba(255,255,255,0.4);border-radius:2px;margin-bottom:18px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));border-radius:2px;transition:width 0.3s ease}
+  .card-counter{text-align:center;font-size:12px;color:var(--text-tertiary);margin-bottom:8px}
+  .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+  .btn{padding:10px 20px;border-radius:12px;border:none;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;gap:6px}
+  .btn-glass{background:rgba(255,255,255,0.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1.5px solid var(--glass-border);color:var(--text-primary);box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+  .btn-glass:hover{background:rgba(255,255,255,0.82);transform:translateY(-1px)}
+  .btn-primary{background:var(--accent-blue);color:#fff;box-shadow:0 4px 14px rgba(0,122,255,0.32)}
+  .btn-primary:hover{background:#0066d6;transform:translateY(-1px)}
+  .btn-primary:disabled{background:#b0c8f5;box-shadow:none;cursor:default;transform:none}
+  .quiz-question-card{background:rgba(255,255,255,0.55);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:20px;padding:24px 20px;margin-bottom:12px;box-shadow:var(--glass-shadow)}
+  .quiz-q-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-tertiary);margin-bottom:8px}
+  .quiz-q-text{font-size:16px;font-weight:500;color:var(--text-primary);line-height:1.55}
+  .quiz-q-section{margin-top:6px;font-size:11px;color:var(--text-tertiary)}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  .quiz-option{padding:13px 16px;border-radius:13px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,0.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;font-family:inherit;font-size:14px;color:var(--text-primary);text-align:left;transition:all 0.18s ease;font-weight:400;line-height:1.45}
+  .quiz-option:hover:not(:disabled){background:rgba(255,255,255,0.78);border-color:var(--accent-blue)}
+  .quiz-option.selected{border-color:var(--accent-blue);background:rgba(0,122,255,0.08)}
+  .quiz-option.correct{border-color:var(--accent-green);background:rgba(52,199,89,0.12);color:#1a6e2e;font-weight:500}
+  .quiz-option.incorrect{border-color:var(--accent-red);background:rgba(255,59,48,0.09);color:#8a1a1a}
+  .quiz-option.reveal-correct{border-color:var(--accent-green);background:rgba(52,199,89,0.08)}
+  .quiz-option:disabled{cursor:default}
+  .quiz-feedback{padding:14px 16px;border-radius:14px;margin-bottom:12px;font-size:13.5px;line-height:1.65;display:none;animation:fadeIn 0.3s ease}
+  .quiz-feedback.correct{background:rgba(52,199,89,0.11);border:1.5px solid rgba(52,199,89,0.32);color:#1a6e2e}
+  .quiz-feedback.incorrect{background:rgba(255,59,48,0.07);border:1.5px solid rgba(255,59,48,0.28);color:#8a1a1a}
+  .quiz-feedback.show{display:block}
+  .feedback-title{font-weight:700;margin-bottom:6px;font-size:14px}
+  .score-bar{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+  .score-chip{padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(255,255,255,0.5);backdrop-filter:blur(12px);border:1.5px solid var(--glass-border)}
+  .score-chip.correct-chip{color:var(--accent-green);border-color:rgba(52,199,89,0.32)}
+  .score-chip.incorrect-chip{color:var(--accent-red);border-color:rgba(255,59,48,0.28)}
+  .score-chip.total-chip{color:var(--accent-blue);border-color:rgba(0,122,255,0.28)}
+  /* Reference */
+  .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px;margin-bottom:8px}
+  .ref-section-card{background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:16px;padding:18px;cursor:pointer;transition:all 0.2s ease}
+  .ref-section-card:hover{background:rgba(255,255,255,0.78);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.10)}
+  .ref-sec-icon{font-size:26px;margin-bottom:8px}
+  .ref-sec-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+  .ref-sec-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:3px}
+  .ref-sec-count{font-size:12px;color:var(--text-tertiary)}
+  .technique-list-panel{background:rgba(255,255,255,0.45);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:18px;padding:20px;margin-top:12px;animation:fadeIn 0.3s ease}
+  .technique-list-panel h3{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .tech-btn{width:100%;text-align:left;background:rgba(255,255,255,0.55);border:1.5px solid var(--glass-border);border-radius:11px;padding:11px 14px;margin-bottom:7px;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:500;color:var(--text-primary);transition:all 0.18s;display:flex;justify-content:space-between;align-items:center}
+  .tech-btn:hover{background:rgba(255,255,255,0.85);border-color:var(--accent-blue)}
+  .tech-btn .arrow{font-size:11px;color:var(--text-tertiary)}
+  .detail-panel{background:rgba(255,255,255,0.62);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:18px;padding:24px 22px;margin-top:12px;animation:fadeIn 0.3s ease}
+  .detail-panel h2{font-size:20px;font-weight:700;margin-bottom:5px}
+  .detail-section-badge{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.09em;padding:3px 10px;border-radius:8px;margin-bottom:14px}
+  .detail-def{font-size:15px;line-height:1.7;color:var(--text-primary);margin-bottom:14px}
+  .detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-bottom:6px}
+  .detail-example{background:rgba(0,122,255,0.06);border-left:3px solid var(--accent-blue);border-radius:0 10px 10px 0;padding:12px 14px;font-size:13.5px;line-height:1.65;color:var(--text-secondary);margin-bottom:14px}
+  .detail-tip{background:rgba(255,149,0,0.08);border-left:3px solid var(--accent-orange);border-radius:0 10px 10px 0;padding:12px 14px;font-size:13px;color:var(--text-secondary);line-height:1.6}
+  .back-btn{margin-bottom:12px}
+  .pres-era{background:rgba(255,255,255,0.45);backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:16px;margin-bottom:12px;overflow:hidden}
+  .pres-era-header{padding:14px 18px;font-size:13px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.2s}
+  .pres-era-header:hover{background:rgba(255,255,255,0.35)}
+  .pres-era-body{display:none;border-top:1px solid var(--glass-border)}
+  .pres-era-body.open{display:block}
+  .pres-row{padding:11px 18px;border-bottom:1px solid rgba(255,255,255,0.22);cursor:pointer;display:flex;align-items:center;gap:12px;transition:background 0.15s}
+  .pres-row:last-child{border-bottom:none}
+  .pres-row:hover{background:rgba(255,255,255,0.5)}
+  .pres-num{font-size:11px;font-weight:700;color:var(--text-tertiary);min-width:28px}
+  .pres-name{font-size:14px;font-weight:600;color:var(--text-primary);flex:1}
+  .pres-party-tag{font-size:11px;color:var(--text-tertiary)}
+  .pres-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}
+  .pres-detail-item{background:rgba(255,255,255,0.5);border-radius:12px;padding:11px 13px}
+  .pres-detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-bottom:4px}
+  .pres-detail-value{font-size:13.5px;font-weight:600;color:var(--text-primary)}
+  .pres-clues{background:rgba(0,122,255,0.06);border:1.5px solid rgba(0,122,255,0.15);border-radius:12px;padding:14px;margin-top:4px}
+  .clue-item{display:flex;gap:10px;margin-bottom:9px;font-size:13.5px;line-height:1.55}
+  .clue-item:last-child{margin-bottom:0}
+  .clue-pts{background:var(--accent-blue);color:#fff;border-radius:6px;padding:2px 7px;font-size:10px;font-weight:700;min-width:26px;text-align:center;height:fit-content;margin-top:2px;white-space:nowrap}
+  .sources-intro{background:rgba(255,255,255,0.45);backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:16px;padding:16px 18px;margin-bottom:14px;font-size:13.5px;color:var(--text-secondary);line-height:1.6}
+  .source-category{margin-bottom:18px}
+  .source-cat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-bottom:8px;padding-left:2px}
+  .source-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+  .source-card{background:rgba(255,255,255,0.52);backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:14px;padding:14px 16px;text-decoration:none;transition:all 0.2s;display:block}
+  .source-card:hover{background:rgba(255,255,255,0.82);transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,0.10)}
+  .source-name{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+  .source-desc{font-size:12px;color:var(--text-tertiary);line-height:1.5;margin-bottom:6px}
+  .source-tag{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;padding:2px 8px;border-radius:6px;background:rgba(0,122,255,0.12);color:var(--accent-blue)}
+  .ask-ai-box{background:rgba(255,255,255,0.45);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--glass-shadow)}
+  .ask-ai-box h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .ai-placeholder{font-size:12.5px;color:var(--text-tertiary);margin-bottom:10px;line-height:1.6;background:rgba(255,255,255,0.4);border-radius:10px;padding:10px 13px;border:1px dashed rgba(0,122,255,0.25);font-style:italic}
+  .ai-textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,0.65);font-family:inherit;font-size:14px;resize:vertical;min-height:76px;color:var(--text-primary);outline:none;transition:border-color 0.2s;margin-bottom:10px}
+  .ai-textarea:focus{border-color:var(--accent-blue)}
+  .ai-response{background:rgba(0,122,255,0.05);border:1.5px solid rgba(0,122,255,0.15);border-radius:14px;padding:15px;font-size:14px;line-height:1.7;color:var(--text-primary);margin-top:12px;display:none;animation:fadeIn 0.3s ease;white-space:pre-wrap}
+  .ai-response.show{display:block}
+  .ai-loading{display:none;text-align:center;padding:14px;color:var(--text-tertiary);font-size:14px}
+  .ai-loading.show{display:block}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,122,255,0.3);border-top-color:var(--accent-blue);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .suggestions-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .sugg-btn{background:rgba(255,255,255,0.55);backdrop-filter:blur(12px);border:1.5px solid var(--glass-border);border-radius:10px;padding:7px 13px;font-family:inherit;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all 0.18s;font-weight:500}
+  .sugg-btn:hover{background:rgba(255,255,255,0.85);color:var(--accent-blue);border-color:rgba(0,122,255,0.3)}
+  .results-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);display:none;place-items:center;z-index:1000}
+  .results-overlay.show{display:grid}
+  .results-modal{background:rgba(255,255,255,0.82);backdrop-filter:blur(30px);border:1.5px solid rgba(255,255,255,0.6);border-radius:24px;padding:34px 30px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.18);animation:popIn 0.33s cubic-bezier(.17,.89,.32,1.27)}
+  @keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+  .results-emoji{font-size:50px;margin-bottom:10px}
+  .results-modal h2{font-size:22px;font-weight:800;margin-bottom:7px}
+  .results-modal p{color:var(--text-secondary);font-size:14px;line-height:1.5;margin-bottom:18px}
+  .results-score{font-size:42px;font-weight:800;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+  @media(max-width:600px){.pres-detail-grid{grid-template-columns:1fr}.nav-tab{font-size:11px;padding:8px 9px}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+<div class="app">
+  <div class="header">
+    <div class="header-badge">Academic Games Leagues of America</div>
+    <h1>AGK AGLOA Flash Cards</h1>
+    <p>AI-powered flashcards, quizzes &amp; reference for Presidents, Propaganda, and Current Events.</p>
+  </div>
+  <div class="nav">
+    <button class="nav-tab active" onclick="switchMode('flashcards')">📇 Flashcards</button>
+    <button class="nav-tab" onclick="switchMode('quiz')">🧠 Quiz</button>
+    <button class="nav-tab" onclick="switchMode('reference')">📖 Reference</button>
+    <button class="nav-tab" onclick="switchMode('ask')">✨ Ask AI</button>
+  </div>
+  <div class="subject-row" id="subject-row">
+    <button class="subject-btn active" onclick="setSubject('propaganda')" id="sbtn-propaganda"><span class="subject-icon">🗣️</span> Propaganda</button>
+    <button class="subject-btn" onclick="setSubject('presidents')" id="sbtn-presidents"><span class="subject-icon">🎖️</span> Presidents</button>
+    <button class="subject-btn" onclick="setSubject('currentevents')" id="sbtn-currentevents"><span class="subject-icon">🌍</span> Current Events</button>
+    <button class="subject-btn" id="sbtn-equations" onclick="setSubject('equations')" style="display:none"><span class="subject-icon">➗</span> Equations</button>
+  </div>
+  <div id="main-content"></div>
+</div>
+<div class="results-overlay" id="results-overlay">
+  <div class="results-modal">
+    <div class="results-emoji" id="results-emoji">🎉</div>
+    <h2 id="results-title">Quiz Complete!</h2>
+    <div class="results-score" id="results-score">8/10</div>
+    <p id="results-msg"></p>
+    <button class="btn btn-primary" onclick="closeResults()" style="width:100%;justify-content:center;">Try Again</button>
+  </div>
+</div>
+ 
+<script>
+// ============================================================
+// PROPAGANDA SECTIONS (full reference data)
+// ============================================================
+const PROP_SECTIONS=[
+  {id:'a',label:'Section A',title:'Self-Deception',icon:'🧠',color:'#FF9500',techniques:[
+    {name:'Prejudice',def:'Judging a person or group before learning about them and acting on that prejudgment rather than on evidence.',example:'"Those people are always lazy — I\'ve never liked them."',tip:'Look for snap judgments based on group membership rather than observed behavior.'},
+    {name:'Academic Detachment',def:'When a decision is demanded, you argue both sides but refuse to commit to either position or take action.',example:'"On one hand taxes are too high; on the other, services need funding." — then does nothing.',tip:'Key signal: inaction or refusal to decide when a choice is actually required.'},
+    {name:'Drawing the Line',def:'Making a sharp black-or-white distinction where a spectrum actually exists; treating issues as strictly one thing or the other.',example:'"You\'re either with us or against us — there\'s no in between."',tip:'Look for false dichotomies where nuance is ignored.'},
+    {name:'Not Drawing the Line',def:'Continuously extending limits "just a little more," over-indulging because each step is only a small increase.',example:'"I\'ll just have one more — it\'s only a little each time."',tip:'The opposite of Drawing the Line; a slippery slope of small increments.'},
+    {name:'Conservatism / Radicalism / Moderatism',def:'Always preferring the old (Conservative), new (Radical), or middle ground (Moderate), regardless of the merit of each case.',example:'"We\'ve always done it this way — that\'s good enough for me." (Conservatism)',tip:'The problem is rigidity — ideas are judged by habit rather than merit.'},
+    {name:'Rationalization',def:'After acting, you invent plausible-sounding reasons to justify what you did, knowing the real reasons are less creditable.',example:'"I didn\'t study because the teacher makes bad tests anyway."',tip:'The real reason comes first (action/result), the invented justification comes second.'},
+    {name:'Wishful Thinking',def:'You believe something is true simply because you want it to be true, without any supporting evidence.',example:'"I know our team will win — I just feel it."',tip:'Pure desire replaces evidence. No facts are offered, only hopes.'},
+    {name:'Tabloid Thinking',def:'Stereotyping people or issues with simple catchphrases; preferring quick summaries with no deep analysis.',example:'"Politicians are all crooks. That\'s all you need to know."',tip:'Oversimplified labels stand in for complex reality.'},
+    {name:'Causal Oversimplification',def:'Explaining a complex event by attributing it to only one cause, ignoring all other contributing factors.',example:'"Crime rose because the mayor was weak on law enforcement."',tip:'If a situation clearly has multiple causes but only one is cited, this technique is at work.'},
+    {name:'Inconceivability',def:'Rejecting an idea simply because you cannot personally imagine or conceive of it being true.',example:'"That\'s impossible — I can\'t even picture how it would work."',tip:'The speaker\'s imagination is used as evidence. If they can\'t picture it, it must be false.'},
+  ]},
+  {id:'b',label:'Section B',title:'Language',icon:'💬',color:'#007AFF',techniques:[
+    {name:'Emotional Terms',def:'Using words or phrases that arouse strong feelings for or against a person or cause, beyond what the facts warrant.',example:'"This brutal, heartless policy will destroy innocent families."',tip:'Charged adjectives doing more emotional work than factual work.'},
+    {name:'Metaphor and Simile',def:'Claiming a likeness between two things that does not really exist or is irrelevant to the argument.',example:'"The economy is a garden — we need to prune the weeds of regulation."',tip:'The comparison sounds vivid but breaks down when examined closely.'},
+    {name:'Emphasis',def:'Quoting someone but stressing certain words so as to change the meaning of what was originally said.',example:'Same sentence — different stressed word — different implied meaning.',tip:'The same words can mean very different things depending on which is emphasized.'},
+    {name:'Quotation Out of Context',def:'Removing a quote from its original setting so that it gives a false impression of what the speaker meant.',example:'Speaker said: "War is sometimes necessary." Quoted as: "War is necessary."',tip:'Always ask: what came before and after? Does surrounding context change the meaning?'},
+    {name:'Abstract Terms',def:'Using vague, high-level concepts that are hard to define and mean different things to different people.',example:'"We stand for freedom, justice, and the American way!"',tip:'Listeners fill in their own meaning, allowing the speaker to appeal to everyone while committing to nothing.'},
+    {name:'Vagueness',def:'Using language so imprecise that listeners can fill in their own preferred meaning.',example:'"Our product gives you more of what you really want."',tip:'If no specifics are offered, it is probably Vagueness.'},
+    {name:'Ambiguity',def:'Using a word or phrase that has two or more meanings without clarifying which is intended.',example:'"I\'ll make sure you get what\'s coming to you." (threat or reward?)',tip:'Look for words that function as a double meaning — one innocent, one not.'},
+    {name:'Shift of Meaning',def:'Using the same word in two different senses within the same argument without acknowledging it.',example:'Using "law" as both a legal statute and a law of nature in the same argument.',tip:'Spot the word that appears twice but means something different each time.'},
+  ]},
+  {id:'c',label:'Section C',title:'Irrelevance',icon:'🎭',color:'#34C759',techniques:[
+    {name:'Appearance',def:'Judging someone or something solely on how they look rather than on the substance of their argument.',example:'"He can\'t be a good leader — look at how he dresses."',tip:'Appearance is irrelevant to the truth or quality of an argument.'},
+    {name:'Manner',def:'Judging on how something is delivered — confidence, charm, style — rather than on what is said.',example:'"She speaks with such authority — she must know what she\'s talking about."',tip:'Different from Appearance: this is about delivery style, not physical looks.'},
+    {name:'Degrees and Titles',def:'Using credentials that are impressive but irrelevant to the topic being discussed.',example:'"As a Nobel Prize-winning chemist, I can tell you this economic policy is wrong."',tip:'Chemistry expertise does not transfer to economics; the title is irrelevant.'},
+    {name:'Numbers',def:'Using statistics or impressive quantities to mislead without proper context.',example:'"99% of users loved our product!" (survey of 10 employees)',tip:'Ask: what is the sample size? Is the number contextually meaningful?'},
+    {name:'Status',def:'Using a person\'s high social position or fame to substitute for a logical argument.',example:'"The country club president says this investment is solid — good enough for me."',tip:'Social status confers no logical authority on any given claim.'},
+    {name:'Repetition',def:'Repeating a claim or slogan so often that people begin to believe it, regardless of evidence.',example:'"This is the greatest product ever made. The greatest. Ever made."',tip:'Frequency of assertion is not proof.'},
+    {name:'Slogans',def:'Using catchy, memorable phrases to substitute for reasoned argument and inspire automatic emotional agreement.',example:'"Just Do It." / "Make America Great Again." / "Change We Can Believe In."',tip:'Slogans resist analysis by design. They feel complete but make no verifiable claim.'},
+    {name:'Technical Jargon',def:'Using specialized language to confuse or impress audiences rather than to genuinely inform them.',example:'"Our synergistic, cross-functional paradigm shift leverages core competencies."',tip:'If removing the jargon leaves nothing meaningful, this technique was used.'},
+    {name:'Sophistical Formula',def:'Using misleading but logical-sounding phrases that create the appearance of valid argument.',example:'"Everybody knows that... / It goes without saying that..."',tip:'These formulas assert agreement without establishing it.'},
+  ]},
+  {id:'d',label:'Section D',title:'Exploitation',icon:'🪝',color:'#AF52DE',techniques:[
+    {name:'Appeal to Pity',def:'Attempting to win agreement by arousing sympathy or compassion rather than by presenting logical evidence.',example:'"Please pass my proposal — I\'ve worked so hard and I\'m going through a really difficult time."',tip:'Sympathy is aroused to bypass rational evaluation.'},
+    {name:'Appeal to Flattery',def:'Praising the audience in order to make them more receptive to accepting your argument or product.',example:'"Someone as intelligent and discerning as you can clearly see that our product is superior."',tip:'Complimenting the listener is designed to lower their critical resistance.'},
+    {name:'Appeal to Ridicule',def:'Making an opponent\'s argument seem absurd or laughable rather than engaging with its substance.',example:'"Ha! My opponent actually thinks we should negotiate with them — what a joke!"',tip:'Laughter replaces logic. No actual counter-argument is offered.'},
+    {name:'Appeal to Prestige',def:'Using the fame or high status of a person to endorse an idea, even if they have no expertise in the relevant area.',example:'"Four out of five celebrities prefer BrightSmile toothpaste!"',tip:'Fame confers no relevant expertise.'},
+    {name:'Appeal to Prejudice',def:'Exploiting existing biases or prejudices in the audience to win support.',example:'"You know how those people are — do you really want them running things?"',tip:'Uses the audience\'s pre-existing bias as the engine of persuasion.'},
+    {name:'Bargain Appeal',def:'Persuading someone to accept something based on its low cost or great value rather than its actual truth or quality.',example:'"For only $19.99 — that\'s less than a cup of coffee a day!"',tip:'Price or value is presented as the reason to accept a claim.'},
+    {name:'Folksy Appeal',def:'Pretending to be an ordinary, common person to gain the trust of audiences.',example:'"I\'m just a regular guy from Main Street — I understand your struggles."',tip:'Watch for wealthy or powerful people claiming to be just like you.'},
+    {name:'Join the Bandwagon',def:'Urging someone to adopt a belief or behavior because "everyone else" is doing it, using social pressure rather than reason.',example:'"Millions of Americans can\'t be wrong — join the movement today!"',tip:'Popularity is not proof. The size of a crowd does not determine the truth of a claim.'},
+    {name:'Appeal to Practical Consequences',def:'Arguing that you should believe something is true because believing it produces beneficial practical results.',example:'"You should believe in positive thinking — it will make you more successful."',tip:'Usefulness of a belief ≠ truth of a belief.'},
+    {name:'Passing from the Acceptable to the Dubious',def:'Starting with a widely accepted premise and gradually linking it, step by step, to a questionable conclusion.',example:'"We all agree safety matters → All risk must be eliminated → Therefore all outdoor activities should be banned."',tip:'Each step seems small; the destination would never have been accepted if stated at the outset.'},
+  ]},
+  {id:'e',label:'Section E',title:'Form',icon:'🔷',color:'#FF3B30',techniques:[
+    {name:'Concurrency',def:'Assuming two events are causally related simply because they occur at the same time.',example:'"My headaches started the same week as the new cell tower. The tower is causing them."',tip:'Simultaneous ≠ causal. Compare with Post Hoc, where the first event comes before in time.'},
+    {name:'Post Hoc',def:'Assuming that because one event came before another, the first event must have caused the second.',example:'"I wore my lucky socks and we won — those socks are the reason!"',tip:'Temporal sequence ≠ causation. "After this, therefore because of this."'},
+    {name:'Selected Instances',def:'Choosing only the examples that support your point while ignoring the many examples that contradict it.',example:'"Just look at these 5 success stories — this program clearly works!"',tip:'Ask: how many examples were NOT shown?'},
+    {name:'Hasty Generalization',def:'Drawing a broad conclusion from too few examples or from a sample that is not representative.',example:'"The two teenagers I met were rude. Teenagers today have no manners."',tip:'Two examples cannot represent an entire group.'},
+    {name:'Faulty Analogy',def:'Comparing two things that are similar in some ways but differ in the ways that actually matter for the argument.',example:'"Running a country is just like running a business — cut the losers and maximize profit."',tip:'The analogy works on surface level but breaks down on the relevant points.'},
+    {name:'Composition',def:'Assuming that what is true of individual parts of a whole must also be true of the whole itself.',example:'"Every player on this team is a star. Therefore this team must be the best ever."',tip:'Part → Whole assumption. Great individuals do not automatically make a great collective.'},
+    {name:'Division',def:'Assuming that what is true of a whole must also be true of each of its individual parts.',example:'"This is the best team in the state, so every player must be the best at their position."',tip:'Whole → Part assumption. The reverse of Composition.'},
+    {name:'Non Sequitur',def:'A conclusion that does not logically follow from the premises given; an unsupported leap in reasoning.',example:'"She is kind and beautiful, therefore she should be our class president."',tip:'Even if the premises are true, the conclusion simply doesn\'t follow.'},
+  ]},
+  {id:'f',label:'Section F',title:'Maneuver',icon:'🎯',color:'#5AC8FA',techniques:[
+    {name:'Diversion',def:'Changing the subject or introducing an irrelevant topic to distract attention from the real issue.',example:'Reporter: "Why did taxes go up?" Politician: "Let\'s talk about our excellent jobs record!"',tip:'The original question is never answered. Look for sudden topic changes.'},
+    {name:'Disproving a Minor Point',def:'Defeating a trivial detail in an opponent\'s argument and then acting as if the entire argument has been refuted.',example:'"She said 3pm — it was actually 3:05pm. Her entire argument is wrong."',tip:'A minor factual error does not invalidate a larger argument.'},
+    {name:'Ad Hominem',def:'Attacking the person making an argument rather than addressing the argument itself.',example:'"Don\'t listen to her — she filed for bankruptcy once."',tip:'Personal failings are irrelevant to the logical validity of an argument.'},
+    {name:'Appeal to Ignorance',def:'Claiming something is true because it has not been proven false, or false because it has not been proven true.',example:'"No one has proved aliens don\'t exist — therefore aliens definitely exist."',tip:'The absence of disproof is not proof.'},
+    {name:'Leading Question',def:'A question phrased in a way that suggests the desired answer and steers the respondent toward agreeing.',example:'"Don\'t you think this is the most important issue of our time?"',tip:'The question contains a suggested answer. Different from Complex Question, which contains a hidden accusation.'},
+    {name:'Complex Question',def:'A question that contains a hidden assumption, forcing the answerer to accept that assumption just by responding.',example:'"Have you stopped cheating on your tests?"',tip:'Any yes or no answer accepts the accusation as fact. The embedded assumption is the trap.'},
+    {name:'Inconsequent Argument',def:'Presenting an argument that simply does not bear on the issue being debated.',example:'Q: "Should we raise the minimum wage?" A: "Our city has a great parks department."',tip:'The argument may be valid in itself but is entirely irrelevant to the question.'},
+    {name:'Attacking a Straw Man',def:'Misrepresenting an opponent\'s argument in a weaker or more extreme form, then defeating that distorted version.',example:'"My opponent says reduce military spending — he wants to leave America defenseless!"',tip:'The real argument was modest; the straw man version is extreme and easy to attack.'},
+    {name:'Victory by Definition',def:'Redefining terms so that your conclusion is true by definition, with no need for evidence.',example:'"No true Scotsman would ever do such a thing." (Redefines "true Scotsman" to exclude counterexamples)',tip:'The speaker adjusts definitions to exclude inconvenient counter-cases.'},
+    {name:'Begging the Question',def:'Assuming the truth of what you are trying to prove within the premises of your argument — a circular argument.',example:'"The Bible is true because it says so in the Bible."',tip:'The conclusion is hidden inside the premise. No independent evidence is ever offered.'},
+  ]},
+];
+ 
+// ============================================================
+// PRESIDENTS DATA
+// ============================================================
+const PRES_ERAS=[
+  {label:'Founding & Early Republic (1–12)',color:'#FF9500',presidents:[
+    {n:1,name:'George Washington',party:'None',term:'1789–1797',born:'Westmoreland Co., VA',died:'Mount Vernon, VA',vp:'John Adams',clues:['Led the Continental Army to victory in the Revolutionary War; presided over the Constitutional Convention of 1787','Voluntarily relinquished power after two terms, setting the presidential term precedent that held for 150 years','Only president unanimously elected by the Electoral College — and he was elected unanimously twice']},
+    {n:2,name:'John Adams',party:'Federalist',term:'1797–1801',born:'Braintree, MA',died:'Quincy, MA',vp:'Thomas Jefferson',clues:['First president to live in the White House; only Federalist president after Washington','Key delegate at the Continental Congress; helped negotiate the Treaty of Paris (1783)','His son John Quincy Adams became the 6th president — first father-son presidential pair']},
+    {n:3,name:'Thomas Jefferson',party:'Dem-Republican',term:'1801–1809',born:'Shadwell, VA',died:'Monticello, VA',vp:'Aaron Burr / George Clinton',clues:['Primary author of the Declaration of Independence (1776); founder of the University of Virginia','Negotiated the Louisiana Purchase (1803), doubling U.S. territory for $15 million','Sent the Lewis & Clark Expedition (1804–1806) to explore the newly acquired western territory']},
+    {n:4,name:'James Madison',party:'Dem-Republican',term:'1809–1817',born:'Port Conway, VA',died:'Montpelier, VA',vp:'Clinton / Gerry',clues:['Called the "Father of the Constitution" — primary architect of both the Constitution and the Bill of Rights','Co-authored The Federalist Papers with Hamilton and Jay to argue for ratification of the Constitution','Led the country during the War of 1812; the White House was burned by British troops during his presidency']},
+    {n:5,name:'James Monroe',party:'Dem-Republican',term:'1817–1825',born:'Westmoreland Co., VA',died:'New York City, NY',vp:'Daniel D. Tompkins',clues:['His presidency was called the "Era of Good Feelings" — one-party dominance and national unity','Issued the Monroe Doctrine (1823) warning European powers not to re-colonize the Western Hemisphere','Last of the Founding Fathers to serve as president; last president to wear a powdered wig']},
+    {n:6,name:'John Quincy Adams',party:'Dem-Republican',term:'1825–1829',born:'Braintree, MA',died:'Washington, D.C.',vp:'John C. Calhoun',clues:['Son of President John Adams — first president whose father was also president','Won the disputed 1824 "Corrupt Bargain" election in the House of Representatives; lost popular vote to Jackson','After his presidency, served 17 years in the House of Representatives — the only former president to do so']},
+    {n:7,name:'Andrew Jackson',party:'Democratic',term:'1829–1837',born:'Waxhaws, SC',died:'The Hermitage, TN',vp:'Calhoun / Van Buren',clues:['War hero of the Battle of New Orleans (1815); founder of the modern Democratic Party — called "Old Hickory"','Signed the Indian Removal Act (1830), forcing the Trail of Tears displacement of Native American tribes','Survived the first assassination attempt on a U.S. president; both of his attacker\'s pistols misfired']},
+    {n:8,name:'Martin Van Buren',party:'Democratic',term:'1837–1841',born:'Kinderhook, NY',died:'Kinderhook, NY',vp:'Richard M. Johnson',clues:['First president born as a U.S. citizen (all prior presidents were born as British subjects)','His presidency was immediately struck by the Panic of 1837, a severe economic depression','First president from New York; the expression "OK" may trace to his nickname "Old Kinderhook"']},
+    {n:9,name:'William H. Harrison',party:'Whig',term:'1841',born:'Charles City Co., VA',died:'Washington, D.C.',vp:'John Tyler',clues:['Served the shortest presidential term in U.S. history — only 31 days before dying of pneumonia','Delivered the longest inaugural address in history (1 hour 45 min) in cold rain without a hat or coat','His grandson Benjamin Harrison became the 23rd president']},
+    {n:10,name:'John Tyler',party:'Whig',term:'1841–1845',born:'Charles City Co., VA',died:'Richmond, VA',vp:'None',clues:['First vice president to assume the presidency upon the death of his predecessor','The Whig party expelled him while he was still president — nicknamed "His Accidency"','Had more children than any other president — 15 in total, from two wives']},
+    {n:11,name:'James K. Polk',party:'Democratic',term:'1845–1849',born:'Pineville, NC',died:'Nashville, TN',vp:'George M. Dallas',clues:['First "dark horse" candidate to win the presidency — largely unknown before his nomination in 1844','Presided over the Mexican-American War (1846–1848), adding the Southwest and California to the U.S.','Pledged to serve only one term and kept his word — one of the few presidents to honor a single-term promise']},
+    {n:12,name:'Zachary Taylor',party:'Whig',term:'1849–1850',born:'Barboursville, VA',died:'Washington, D.C.',vp:'Millard Fillmore',clues:['War hero of the Mexican-American War; served 40 years in the military before becoming president','Died 16 months into his term, likely from gastroenteritis after a July 4th celebration','Never voted in an election before winning the presidency; reportedly unaware of his nomination at first']},
+  ]},
+  {label:'Antebellum & Civil War Era (13–18)',color:'#FF3B30',presidents:[
+    {n:13,name:'Millard Fillmore',party:'Whig',term:'1850–1853',born:'Summerhill, NY',died:'Buffalo, NY',vp:'None',clues:['Signed the Compromise of 1850 and the Fugitive Slave Act, attempting to avert civil war','Last Whig president — the party collapsed after his term; the Republican Party rose in its place','Opened trade with Japan by sending Commodore Perry\'s expedition in 1852']},
+    {n:14,name:'Franklin Pierce',party:'Democratic',term:'1853–1857',born:'Hillsborough, NH',died:'Concord, NH',vp:'William R.D. King',clues:['Only president from New Hampshire; all three of his young sons died during or before his presidency','Signed the Kansas-Nebraska Act (1854), reigniting the slavery debate and triggering "Bleeding Kansas" violence','Considered one of the least effective presidents for failing to prevent the slide toward civil war']},
+    {n:15,name:'James Buchanan',party:'Democratic',term:'1857–1861',born:'Cove Gap, PA',died:'Lancaster, PA',vp:'John C. Breckinridge',clues:['Only president who never married; only president from Pennsylvania','Failed to act as Southern states began seceding before Lincoln\'s inauguration in early 1861','Widely considered one of the worst presidents for his inaction on the eve of the Civil War']},
+    {n:16,name:'Abraham Lincoln',party:'Republican',term:'1861–1865',born:'Hardin Co., KY',died:'Washington, D.C.',vp:'Hamlin / A. Johnson',clues:['Issued the Emancipation Proclamation (January 1, 1863), declaring enslaved people in Confederate states free','Led the Union through the Civil War; delivered the Gettysburg Address in November 1863','Assassinated by John Wilkes Booth at Ford\'s Theatre on April 14, 1865 — first president killed in office']},
+    {n:17,name:'Andrew Johnson',party:'Dem/National Union',term:'1865–1869',born:'Raleigh, NC',died:'Carter\'s Station, TN',vp:'None',clues:['First president to be impeached (1868) by the House; acquitted by the Senate by a single vote','Succeeded Lincoln; strongly opposed Reconstruction and vetoed civil rights legislation repeatedly','Taught himself to read as an adult — never attended school a single day in his life']},
+    {n:18,name:'Ulysses S. Grant',party:'Republican',term:'1869–1877',born:'Point Pleasant, OH',died:'Mount McGregor, NY',vp:'Colfax / Wilson',clues:['Commanded the Union Army to victory in the Civil War; accepted Lee\'s surrender at Appomattox Court House','His presidency was marked by Reconstruction efforts and major corruption scandals (Crédit Mobilier)','Completed his famous memoirs days before dying of throat cancer — the book became a bestseller']},
+  ]},
+  {label:'Gilded Age & Progressive Era (19–28)',color:'#34C759',presidents:[
+    {n:19,name:'Rutherford B. Hayes',party:'Republican',term:'1877–1881',born:'Delaware, OH',died:'Fremont, OH',vp:'William A. Wheeler',clues:['Won the disputed 1876 election decided by a special congressional commission — nicknamed "His Fraudulency"','Ended Reconstruction by withdrawing federal troops from the South as part of the Compromise of 1877','First president to have a telephone in the White House; introduced the Easter Egg Roll lawn event']},
+    {n:20,name:'James A. Garfield',party:'Republican',term:'1881',born:'Orange, OH',died:'Elberon, NJ',vp:'Chester Arthur',clues:['Served only 200 days before being shot by Charles Guiteau, a disappointed office-seeker','Could simultaneously write Latin with one hand and Greek with the other','Spent 79 agonizing days dying after being shot; doctors\' unsanitary probing may have caused more harm than the bullet']},
+    {n:21,name:'Chester A. Arthur',party:'Republican',term:'1881–1885',born:'Fairfield, VT',died:'New York City, NY',vp:'None',clues:['Ascended after Garfield\'s assassination; known for elegant wardrobe — called "Elegant Arthur" and "Dude President"','Signed the Pendleton Civil Service Reform Act (1883), replacing patronage with merit-based federal hiring','Renovated the White House extensively, auctioning off 24 wagon-loads of old furnishings']},
+    {n:22,name:'Grover Cleveland',party:'Democratic',term:'1885–1889',born:'Caldwell, NJ',died:'Princeton, NJ',vp:'Thomas A. Hendricks',clues:['First of his two non-consecutive terms (22nd and 24th president)','Only president married in the White House — to Frances Folsom, 27 years his junior','Set a record-breaking veto count — vetoed more bills than all prior presidents combined']},
+    {n:23,name:'Benjamin Harrison',party:'Republican',term:'1889–1893',born:'North Bend, OH',died:'Indianapolis, IN',vp:'Levi P. Morton',clues:['Grandson of President William Henry Harrison — only president with a presidential grandfather','Lost the popular vote in 1888 to Grover Cleveland but won the Electoral College','Six states were admitted to the Union during his one term — the most admitted in any single presidential term']},
+    {n:24,name:'Grover Cleveland',party:'Democratic',term:'1893–1897',born:'Caldwell, NJ',died:'Princeton, NJ',vp:'Adlai Stevenson I',clues:['Only president counted twice in the numbering — served non-consecutive terms as 22nd and 24th','His second term was dominated by the Panic of 1893 economic depression','Fought to maintain the gold standard against the "free silver" movement of William Jennings Bryan']},
+    {n:25,name:'William McKinley',party:'Republican',term:'1897–1901',born:'Niles, OH',died:'Buffalo, NY',vp:'Hobart / T. Roosevelt',clues:['Led the U.S. during the Spanish-American War (1898); acquired Guam, Puerto Rico, and the Philippines','Known as the "Napoleon of Protection" for his strong support of high protective tariffs','Assassinated by anarchist Leon Czolgosz at the Pan-American Exposition in Buffalo, NY in 1901']},
+    {n:26,name:'Theodore Roosevelt',party:'Republican',term:'1901–1909',born:'New York City, NY',died:'Oyster Bay, NY',vp:'Charles W. Fairbanks',clues:['Youngest person to become president at age 42, after McKinley\'s assassination','Vigorous trust-buster; established the national park system, preserving 230 million acres','Won the Nobel Peace Prize (1906) for mediating the end of the Russo-Japanese War']},
+    {n:27,name:'William Howard Taft',party:'Republican',term:'1909–1913',born:'Cincinnati, OH',died:'Washington, D.C.',vp:'James S. Sherman',clues:['Only person in U.S. history to serve as both President and Chief Justice of the Supreme Court','Heaviest president, weighing approximately 330 pounds','His split with Theodore Roosevelt in 1912 allowed Woodrow Wilson to win the three-way race']},
+    {n:28,name:'Woodrow Wilson',party:'Democratic',term:'1913–1921',born:'Staunton, VA',died:'Washington, D.C.',vp:'Thomas R. Marshall',clues:['Led the U.S. during World War I; proposed the Fourteen Points peace plan and the League of Nations','Created the Federal Reserve System (1913); signed the Clayton Antitrust Act','Suffered a massive stroke in 1919; his wife Edith effectively managed many presidential duties in secret']},
+  ]},
+  {label:'Modern Era (29–46)',color:'#AF52DE',presidents:[
+    {n:29,name:'Warren G. Harding',party:'Republican',term:'1921–1923',born:'Blooming Grove, OH',died:'San Francisco, CA',vp:'Calvin Coolidge',clues:['Coined the term "normalcy" promising a return to stability after WWI; won by a landslide in 1920','Died in office; presidency later tainted by the Teapot Dome bribery scandal (exposed after his death)','First president to own a radio and first to deliver a speech over radio broadcast']},
+    {n:30,name:'Calvin Coolidge',party:'Republican',term:'1923–1929',born:'Plymouth, VT',died:'Northampton, MA',vp:'Charles G. Dawes',clues:['Nicknamed "Silent Cal" for his extreme brevity; took office upon Harding\'s sudden death','Presided over the booming "Roaring Twenties" economic prosperity','Declined to run in 1928 by simply distributing slips of paper reading "I do not choose to run"']},
+    {n:31,name:'Herbert Hoover',party:'Republican',term:'1929–1933',born:'West Branch, IA',died:'New York City, NY',vp:'Charles Curtis',clues:['The Great Stock Market Crash of 1929 and the Great Depression began during his presidency','Distinguished pre-presidential humanitarian: organized massive European food relief after WWI, saving millions','Served as Secretary of Commerce under both Harding and Coolidge before becoming president']},
+    {n:32,name:'Franklin D. Roosevelt',party:'Democratic',term:'1933–1945',born:'Hyde Park, NY',died:'Warm Springs, GA',vp:'Garner/Wallace/Truman',clues:['Only president elected four times; led the U.S. through the Great Depression and most of WWII','Created the New Deal — establishing Social Security, the FDIC, SEC, and dozens of relief programs','Had polio and used a wheelchair; the press cooperated in concealing the extent of his disability from the public']},
+    {n:33,name:'Harry S. Truman',party:'Democratic',term:'1945–1953',born:'Lamar, MO',died:'Kansas City, MO',vp:'Alben W. Barkley',clues:['Authorized the atomic bombings of Hiroshima (Aug. 6) and Nagasaki (Aug. 9), 1945, ending WWII in the Pacific','The "S" in his name is not an abbreviation — it literally stands for nothing, honoring both grandfathers','Issued executive order desegregating the U.S. armed forces in 1948; recognized the State of Israel in 1948']},
+    {n:34,name:'Dwight D. Eisenhower',party:'Republican',term:'1953–1961',born:'Denison, TX',died:'Washington, D.C.',vp:'Richard Nixon',clues:['Supreme Commander of Allied Forces in Europe during WWII; planned the D-Day Normandy invasion','Warned of the dangers of the "military-industrial complex" in his famous farewell address','Signed the Federal-Aid Highway Act (1956), creating the 46,000-mile Interstate Highway System']},
+    {n:35,name:'John F. Kennedy',party:'Democratic',term:'1961–1963',born:'Brookline, MA',died:'Dallas, TX',vp:'Lyndon B. Johnson',clues:['Youngest person elected president at 43; first and only Catholic president of the United States','Navigated the Cuban Missile Crisis (1962) — the closest the Cold War came to full nuclear war','Assassinated in Dallas, TX on November 22, 1963; Warren Commission concluded Lee Harvey Oswald acted alone']},
+    {n:36,name:'Lyndon B. Johnson',party:'Democratic',term:'1963–1969',born:'Stonewall, TX',died:'Stonewall, TX',vp:'Hubert Humphrey',clues:['Signed the Civil Rights Act (1964) and Voting Rights Act (1965) — landmark civil rights legislation','His Great Society programs created Medicare, Medicaid, and the Dept. of Housing and Urban Development','Escalated U.S. military involvement in the Vietnam War significantly, sending over 500,000 troops']},
+    {n:37,name:'Richard Nixon',party:'Republican',term:'1969–1974',born:'Yorba Linda, CA',died:'New York City, NY',vp:'Agnew / Ford',clues:['Only U.S. president to resign from office — did so on August 9, 1974, due to the Watergate scandal','Opened diplomatic relations with China (1972) and signed the SALT I arms limitation treaty with the USSR','Won a massive re-election landslide in 1972, carrying 49 out of 50 states']},
+    {n:38,name:'Gerald Ford',party:'Republican',term:'1974–1977',born:'Omaha, NE',died:'Rancho Mirage, CA',vp:'Nelson Rockefeller',clues:['Only person in U.S. history to become both Vice President and President without being elected to either office','Controversially pardoned Richard Nixon for any crimes related to Watergate','Survived two separate assassination attempts within 17 days in September 1975, both by women']},
+    {n:39,name:'Jimmy Carter',party:'Democratic',term:'1977–1981',born:'Plains, GA',died:'Plains, GA',vp:'Walter Mondale',clues:['Brokered the Camp David Accords (1978) — a historic peace agreement between Egypt and Israel','Iran Hostage Crisis (52 Americans held for 444 days) defined and ultimately ended his presidency','Won the Nobel Peace Prize in 2002 for decades of post-presidential humanitarian and diplomatic work']},
+    {n:40,name:'Ronald Reagan',party:'Republican',term:'1981–1989',born:'Tampico, IL',died:'Los Angeles, CA',vp:'George H.W. Bush',clues:['Former Hollywood actor and Governor of California; oldest person inaugurated as president at age 69','"Reaganomics": sweeping tax cuts, deregulation, and a massive military buildup during the Cold War\'s final years','Survived an assassination attempt by John Hinckley Jr. on March 30, 1981, outside the Washington Hilton hotel']},
+    {n:41,name:'George H.W. Bush',party:'Republican',term:'1989–1993',born:'Milton, MA',died:'Houston, TX',vp:'Dan Quayle',clues:['Led a 35-nation coalition in the Gulf War (Operation Desert Storm, 1991), liberating Kuwait from Iraq','Broke his famous "Read my lips: no new taxes" campaign pledge — a major factor in his re-election loss','Youngest naval aviator in U.S. history during WWII; father of 43rd President George W. Bush']},
+    {n:42,name:'Bill Clinton',party:'Democratic',term:'1993–2001',born:'Hope, AR',died:'(living)',vp:'Al Gore',clues:['Presided over the longest peacetime economic expansion in U.S. history and a federal budget surplus','Second president to be impeached by the House (1998); acquitted by the Senate','First Rhodes Scholar to become president; played saxophone on The Arsenio Hall Show during the 1992 campaign']},
+    {n:43,name:'George W. Bush',party:'Republican',term:'2001–2009',born:'New Haven, CT',died:'(living)',vp:'Dick Cheney',clues:['The September 11, 2001 attacks occurred 8 months into his presidency; launched the War on Terror','Ordered invasions of Afghanistan (2001) and Iraq (2003), leading to the longest wars in U.S. history','Son of the 41st president — only the second father-son presidential pair in U.S. history']},
+    {n:44,name:'Barack Obama',party:'Democratic',term:'2009–2017',born:'Honolulu, HI',died:'(living)',vp:'Joe Biden',clues:['First African American president; awarded the Nobel Peace Prize in 2009 in his first year in office','Signed the Affordable Care Act (2010) — "Obamacare" — the largest healthcare reform in decades','First African American President of the Harvard Law Review; former U.S. Senator from Illinois']},
+    {n:45,name:'Donald Trump',party:'Republican',term:'2017–2021',born:'Queens, NY',died:'(living)',vp:'Mike Pence',clues:['First president with no prior political or military service; former TV host of "The Apprentice"','Only president in history to be impeached twice (2019 and 2021); acquitted by the Senate both times','Appointed three Supreme Court justices during a single term: Gorsuch, Kavanaugh, and Barrett']},
+    {n:46,name:'Joe Biden',party:'Democratic',term:'2021–2025',born:'Scranton, PA',died:'(living)',vp:'Kamala Harris',clues:['Oldest person inaugurated as president, at age 78; previously served as Vice President under Obama','His VP Kamala Harris became the first woman, first Black American, and first South Asian American elected VP','Served 36 years as U.S. Senator from Delaware before becoming Vice President, then President']},
+  ]},
+];
+ 
+// ============================================================
+// FLASHCARD DATA (Propaganda, Presidents, Current Events only)
+// ============================================================
+const FLASHCARD_DATA={
+  propaganda:[
+    {q:'What is Prejudice in propaganda?',a:'Judging a person or group before learning about them and acting on that prejudgment rather than on evidence.',section:'Section A – Self-Deception'},
+    {q:'What is Rationalization?',a:'After acting, you invent plausible-sounding reasons to justify what you did, knowing the real reasons are less creditable.',section:'Section A – Self-Deception'},
+    {q:'What is Wishful Thinking?',a:'You believe something is true simply because you want it to be true, without any supporting evidence.',section:'Section A – Self-Deception'},
+    {q:'What is Causal Oversimplification?',a:'Explaining a complex event by attributing it to only one cause, ignoring all other contributing factors.',section:'Section A – Self-Deception'},
+    {q:'What is Drawing the Line?',a:'Making a sharp black-or-white distinction where a spectrum actually exists; treating everything as strictly one thing or the other.',section:'Section A – Self-Deception'},
+    {q:'What are Emotional Terms?',a:'Using words or phrases that arouse strong feelings for or against a person or cause, well beyond what the facts warrant.',section:'Section B – Language'},
+    {q:'What is Quotation Out of Context?',a:'Removing a quote from its original setting so that it gives a false impression of what the speaker meant.',section:'Section B – Language'},
+    {q:'What is Ambiguity?',a:'Using a word or phrase that has two or more meanings without clarifying which is intended, allowing the speaker to deceive.',section:'Section B – Language'},
+    {q:'What is Shift of Meaning?',a:'Using the same word in two different senses within the same argument, switching meanings without acknowledging it.',section:'Section B – Language'},
+    {q:'What is Vagueness?',a:'Using language so imprecise that listeners fill in their own preferred meaning, making the claim impossible to challenge.',section:'Section B – Language'},
+    {q:'What is Repetition in propaganda?',a:'Repeating a claim or slogan so often that people begin to believe it, regardless of whether any evidence supports it.',section:'Section C – Irrelevance'},
+    {q:'What are Slogans in propaganda?',a:'Using catchy, memorable phrases to substitute for reasoned argument and inspire automatic emotional agreement.',section:'Section C – Irrelevance'},
+    {q:'What is Technical Jargon?',a:'Using specialized language to confuse or impress audiences rather than to genuinely inform them.',section:'Section C – Irrelevance'},
+    {q:'What is Appeal to Pity?',a:'Attempting to win agreement by arousing sympathy or compassion rather than by presenting logical evidence.',section:'Section D – Exploitation'},
+    {q:'What is Join the Bandwagon?',a:'Urging someone to adopt a belief because "everyone else" is doing it, using social pressure rather than reason.',section:'Section D – Exploitation'},
+    {q:'What is Appeal to Prestige?',a:'Using the fame or high status of a person to endorse an idea, even if they have no expertise in the relevant area.',section:'Section D – Exploitation'},
+    {q:'What is Folksy Appeal?',a:'Pretending to be an ordinary, common person to gain trust, even when the person is not ordinary at all.',section:'Section D – Exploitation'},
+    {q:'What is Post Hoc?',a:'Assuming that because one event came before another, the first event must have caused the second.',section:'Section E – Form'},
+    {q:'What is Concurrency?',a:'Assuming two events are causally related simply because they occur at the same time.',section:'Section E – Form'},
+    {q:'What is Hasty Generalization?',a:'Drawing a broad conclusion from too few examples or from a sample that is not representative.',section:'Section E – Form'},
+    {q:'What is Composition in propaganda?',a:'Assuming that what is true of individual parts of a whole must also be true of the whole itself.',section:'Section E – Form'},
+    {q:'What is Division in propaganda?',a:'Assuming that what is true of the whole must also be true of each individual part.',section:'Section E – Form'},
+    {q:'What is Non Sequitur?',a:'A conclusion that does not logically follow from the premises given; an unsupported leap in reasoning.',section:'Section E – Form'},
+    {q:'What is Faulty Analogy?',a:'Comparing two things that are similar in some ways but differ in the ways that actually matter for the argument.',section:'Section E – Form'},
+    {q:'What is Ad Hominem?',a:'Attacking the person making an argument rather than addressing the argument itself.',section:'Section F – Maneuver'},
+    {q:'What is Begging the Question?',a:'Assuming the truth of what you are trying to prove within the argument — a circular argument.',section:'Section F – Maneuver'},
+    {q:'What is Attacking a Straw Man?',a:'Misrepresenting an opponent\'s argument in a weaker or distorted form, then defeating that distorted version.',section:'Section F – Maneuver'},
+    {q:'What is a Complex Question?',a:'A question that contains a hidden assumption, forcing the answerer to accept that assumption just by responding.',section:'Section F – Maneuver'},
+    {q:'What is Diversion in propaganda?',a:'Changing the subject or introducing an irrelevant topic to distract attention from the real issue.',section:'Section F – Maneuver'},
+  ],
+  presidents:[
+    {q:'Who was the 1st U.S. President and what was his party?',a:'George Washington (1789–1797) — No political party. Born in Virginia. Set the two-term precedent.',section:'Founding Era'},
+    {q:'Which president purchased the Louisiana Territory and sent Lewis & Clark westward?',a:'Thomas Jefferson (3rd President, 1801–1809) — Democratic-Republican.',section:'Founding Era'},
+    {q:'Who is called the "Father of the Constitution"?',a:'James Madison (4th President, 1809–1817). He also co-authored The Federalist Papers.',section:'Founding Era'},
+    {q:'Which president issued the Monroe Doctrine, warning Europe not to colonize the Americas?',a:'James Monroe (5th President, 1817–1825).',section:'Founding Era'},
+    {q:'Which president served the shortest term — only 31 days — and died of pneumonia?',a:'William Henry Harrison (9th President, 1841).',section:'Antebellum Era'},
+    {q:'Who issued the Emancipation Proclamation and was assassinated at Ford\'s Theatre?',a:'Abraham Lincoln (16th President, 1861–1865). Assassinated by John Wilkes Booth on April 14, 1865.',section:'Civil War Era'},
+    {q:'Which president was the first to be impeached?',a:'Andrew Johnson (17th President). Impeached in 1868, acquitted by the Senate by one vote.',section:'Civil War Era'},
+    {q:'Who was the only president to serve two non-consecutive terms?',a:'Grover Cleveland — served as both the 22nd (1885–1889) and 24th (1893–1897) President.',section:'Gilded Age'},
+    {q:'Which president is known for trust-busting, the Rough Riders, and the Nobel Peace Prize?',a:'Theodore Roosevelt (26th President, 1901–1909).',section:'Progressive Era'},
+    {q:'Who led the U.S. during WWI and proposed the League of Nations?',a:'Woodrow Wilson (28th President, 1913–1921).',section:'Progressive Era'},
+    {q:'Who was the only president elected four times and led the country through WWII?',a:'Franklin D. Roosevelt (32nd President, 1933–1945).',section:'Modern Era'},
+    {q:'Which president authorized the atomic bombings of Japan to end WWII?',a:'Harry S. Truman (33rd President, 1945–1953).',section:'Modern Era'},
+    {q:'Who was the youngest person elected president and the first Catholic president?',a:'John F. Kennedy (35th President, 1961–1963), elected at age 43.',section:'Modern Era'},
+    {q:'Which president signed the Civil Rights Act (1964) and Voting Rights Act (1965)?',a:'Lyndon B. Johnson (36th President, 1963–1969).',section:'Modern Era'},
+    {q:'Who was the only U.S. president to resign from office?',a:'Richard Nixon (37th President) — resigned August 9, 1974, due to the Watergate scandal.',section:'Modern Era'},
+    {q:'Who was the first African American president of the United States?',a:'Barack Obama (44th President, 2009–2017). Born in Hawaii.',section:'Modern Era'},
+  ],
+  currentevents:[
+    {q:'What is the Electoral College and how many votes are needed to win?',a:'The system that formally elects the U.S. president. A candidate needs 270 of 538 electoral votes to win.',section:'U.S. Government'},
+    {q:'What are the three branches of the U.S. federal government?',a:'Legislative (Congress), Executive (President), and Judicial (Supreme Court and lower courts).',section:'U.S. Government'},
+    {q:'What is the Supreme Court\'s power of judicial review?',a:'The power to declare laws or executive actions unconstitutional. Established by Marbury v. Madison (1803).',section:'U.S. Government'},
+    {q:'What is GDP and why does it matter?',a:'Gross Domestic Product — the total value of all goods and services produced in a country. The primary measure of economic size.',section:'Economics'},
+    {q:'What is the Federal Reserve and what does it do?',a:'The U.S. central bank. It sets monetary policy, controls the money supply, and adjusts interest rates.',section:'Economics'},
+    {q:'What is inflation, and how does the Federal Reserve try to control it?',a:'The rate at which general price levels rise. The Fed raises interest rates to cool spending and slow inflation.',section:'Economics'},
+    {q:'What is NATO and what is its core mission?',a:'The North Atlantic Treaty Organization — a 32-nation military alliance. Article 5: an attack on one member is an attack on all.',section:'World Affairs'},
+    {q:'What is the United Nations and how many member states does it have?',a:'An international organization with 193 member states, founded in 1945 to promote peace, security, and human rights.',section:'World Affairs'},
+    {q:'What is climate change and why is it prominent in current events?',a:'Long-term shifts in global temperatures driven by greenhouse gases. Causes sea-level rise, extreme weather, and ecosystem disruption.',section:'Science'},
+    {q:'What is artificial intelligence (AI) and why is it newsworthy?',a:'Computer systems performing tasks that normally require human intelligence. AI\'s rapid growth raises major societal, ethical, and economic questions.',section:'Technology'},
+  ],
+};
+ 
+// ============================================================
+// QUIZ DATA (Propaganda, Presidents, Current Events only)
+// ============================================================
+const QUIZ_DATA={
+  propaganda:[
+    {q:'"I did poorly on the test — the teacher was just too demanding." Which technique?',section:'Section A',options:['Rationalization','Wishful Thinking','Causal Oversimplification','Academic Detachment'],answer:0,explanation:'Rationalization: after failing, the student invents a plausible excuse (the teacher) to avoid personal responsibility. The excuse is created after the fact, not the original motivation — that is the hallmark of Rationalization.'},
+    {q:'"The Saints will definitely win the Super Bowl this year — I just know it!" Which technique?',section:'Section A',options:['Tabloid Thinking','Wishful Thinking','Causal Oversimplification','Prejudice'],answer:1,explanation:'Wishful Thinking: the speaker believes something is true purely because they want it to be. There is no evidence — only desire. If there were a reason cited, it might be Rationalization or Causal Oversimplification instead.'},
+    {q:'A politician keeps chanting "Make Our Streets Safe Again!" with no policy specifics. Which technique?',section:'Section C',options:['Slogans','Repetition','Vagueness','Technical Jargon'],answer:0,explanation:'Slogans: a catchy phrase substitutes for a reasoned argument. It inspires emotional agreement without requiring evaluation of any evidence. If the same phrase were repeated many times in the same passage, Repetition might also apply — but here the defining feature is the slogan itself.'},
+    {q:'"My diet started Monday; I also got promoted Monday — the diet is bringing me luck!" Which technique?',section:'Section E',options:['Post Hoc','Concurrency','Causal Oversimplification','Non Sequitur'],answer:1,explanation:'Concurrency: two events happened at the same time and the speaker wrongly assumes they are causally connected. Post Hoc would apply if the diet clearly preceded the promotion in time — here they happen simultaneously, making this Concurrency.'},
+    {q:'"Every player on this team has all-star stats, so this must be the greatest team ever." Which technique?',section:'Section E',options:['Hasty Generalization','Division','Composition','Selected Instances'],answer:2,explanation:'Composition: what is true of the individual parts (great individual stats) is assumed to be true of the whole (the team). Individual excellence does not guarantee team chemistry, cohesion, or success.'},
+    {q:'"She is beautiful and kind, therefore she should be our class president." Which technique?',section:'Section E',options:['Non Sequitur','Faulty Analogy','Hasty Generalization','Post Hoc'],answer:0,explanation:'Non Sequitur: the conclusion (should be president) does not logically follow from the premises (beautiful and kind). No logical connection between personal traits and presidential suitability is established.'},
+    {q:'"Are you still cheating on your exams?" Which technique?',section:'Section F',options:['Leading Question','Complex Question','Begging the Question','Ad Hominem'],answer:1,explanation:'Complex Question: the question has a hidden assumption — that the person has been cheating. Any yes or no answer forces acceptance of that embedded assumption. A Leading Question pushes toward an answer but does not necessarily contain a hidden accusation inside the structure of the question.'},
+    {q:'"Don\'t listen to her — she got a speeding ticket last year!" Which technique?',section:'Section F',options:['Diversion','Attacking a Straw Man','Ad Hominem','Appeal to Ridicule'],answer:2,explanation:'Ad Hominem: the speaker attacks the person\'s character or behavior rather than engaging with her argument. The speeding ticket has no bearing on the validity of her ideas.'},
+    {q:'"This is the best team in the state, so every player must be the best at their position." Which technique?',section:'Section E',options:['Composition','Division','Hasty Generalization','Selected Instances'],answer:1,explanation:'Division: what is true of the whole (best team in state) is assumed to be true of each individual part (each player). A team can be excellent through coordination even if individual players are not the absolute best at their positions.'},
+    {q:'Buy SkinGlow — your favorite celebrities love it! Which technique?',section:'Section D',options:['Appeal to Prestige','Folksy Appeal','Join the Bandwagon','Appeal to Flattery'],answer:0,explanation:'Appeal to Prestige: celebrity status is used to endorse a product. Celebrities have no dermatological expertise, so their fame is entirely irrelevant to evaluating the product\'s actual quality.'},
+  ],
+  presidents:[
+    {q:'Who was the first U.S. President?',section:'Founding Era',options:['John Adams','Thomas Jefferson','George Washington','James Madison'],answer:2,explanation:'George Washington (1789–1797) served two terms with no party affiliation. He is called "Father of His Country" and set the two-term precedent voluntarily.'},
+    {q:'Which president issued the Emancipation Proclamation?',section:'Civil War Era',options:['Ulysses S. Grant','James Buchanan','Abraham Lincoln','Andrew Johnson'],answer:2,explanation:'Abraham Lincoln (16th President) issued the Emancipation Proclamation on January 1, 1863, declaring enslaved people in Confederate states free.'},
+    {q:'Which president served the shortest term in U.S. history?',section:'Founding Era',options:['Zachary Taylor','William Henry Harrison','John Tyler','James Garfield'],answer:1,explanation:'William Henry Harrison (9th President) served only 31 days before dying of pneumonia in 1841 — the shortest term of any U.S. president.'},
+    {q:'Who was the only president to serve two non-consecutive terms?',section:'Gilded Age',options:['Benjamin Harrison','James Buchanan','Grover Cleveland','Franklin Pierce'],answer:2,explanation:'Grover Cleveland served as both the 22nd (1885–1889) and 24th (1893–1897) President — the only president counted twice in the numbering.'},
+    {q:'Who was the only U.S. president to resign from office?',section:'Modern Era',options:['Gerald Ford','Richard Nixon','Lyndon B. Johnson','Jimmy Carter'],answer:1,explanation:'Richard Nixon (37th President) resigned on August 9, 1974, due to the Watergate scandal — the only president ever to do so.'},
+    {q:'Which president signed the Civil Rights Act of 1964?',section:'Modern Era',options:['John F. Kennedy','Dwight Eisenhower','Lyndon B. Johnson','Richard Nixon'],answer:2,explanation:'Lyndon B. Johnson (36th President) signed both the Civil Rights Act (1964) and the Voting Rights Act (1965), landmark legislation of the civil rights movement.'},
+    {q:'Who was the first African American president?',section:'Modern Era',options:['Bill Clinton','Barack Obama','Joe Biden','Jimmy Carter'],answer:1,explanation:'Barack Obama (44th President, 2009–2017) made history as the first African American elected to the presidency.'},
+  ],
+  currentevents:[
+    {q:'How many electoral votes are needed to win the U.S. presidency?',section:'U.S. Government',options:['218','270','300','538'],answer:1,explanation:'A candidate needs 270 out of 538 total electoral votes. Each state gets electoral votes equal to its number of senators (always 2) plus its number of House representatives.'},
+    {q:'What is the Federal Reserve\'s primary tool for fighting inflation?',section:'Economics',options:['Printing more money','Raising interest rates','Cutting taxes','Increasing government spending'],answer:1,explanation:'The Federal Reserve raises interest rates to make borrowing more expensive, which slows spending and investment, reducing inflationary pressure throughout the economy.'},
+    {q:'How many member states does the United Nations have?',section:'World Affairs',options:['150','175','193','210'],answer:2,explanation:'The United Nations has 193 member states. It was founded in 1945 after World War II to promote international peace, security, and cooperation.'},
+    {q:'What does NATO\'s Article 5 mean?',section:'World Affairs',options:['Free trade among members','Nuclear sharing agreement','Collective defense — attack on one is attack on all','Environmental cooperation treaty'],answer:2,explanation:'Article 5 is NATO\'s collective defense clause. If one member is attacked, all other members consider it an attack on themselves and are obligated to respond.'},
+    {q:'Which branch of U.S. government can declare laws unconstitutional?',section:'U.S. Government',options:['Executive','Legislative','Judicial','All three equally'],answer:2,explanation:'The Judicial branch, led by the Supreme Court, holds the power of judicial review — established in Marbury v. Madison (1803).'},
+  ],
+};
+ 
+// ============================================================
+// STATE
+// ============================================================
+let currentMode='flashcards';
+let currentSubject='propaganda';
+let cardIndex=0,isFlipped=false;
+let quizIndex=0,quizAnswered=false,quizScore={correct:0,incorrect:0},quizCards=[],selectedOption=null;
+let refState={propSection:null,propTech:null,presEra:null,pres:null};
+ 
+// ============================================================
+// NAVIGATION
+// ============================================================
+function switchMode(mode){
+  currentMode=mode;
+  const eqBtn=document.getElementById('sbtn-equations');
+  eqBtn.style.display=(mode==='ask')?'':'none';
+  if(currentSubject==='equations'&&mode!=='ask'){
+    currentSubject='propaganda';
+    document.querySelectorAll('.subject-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('sbtn-propaganda').classList.add('active');
+  }
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['flashcards','quiz','reference','ask'][i]===mode));
+  cardIndex=0;isFlipped=false;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
+  refState={propSection:null,propTech:null,presEra:null,pres:null};
+  render();
+}
+function setSubject(s){
+  currentSubject=s;
+  document.querySelectorAll('.subject-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sbtn-'+s).classList.add('active');
+  cardIndex=0;isFlipped=false;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
+  refState={propSection:null,propTech:null,presEra:null,pres:null};
+  render();
+}
+function render(){
+  const el=document.getElementById('main-content');
+  if(currentMode==='flashcards') el.innerHTML=renderFlashcards();
+  else if(currentMode==='quiz') el.innerHTML=renderQuiz();
+  else if(currentMode==='reference') el.innerHTML=renderReference();
+  else el.innerHTML=renderAsk();
+}
+ 
+// ============================================================
+// FLASHCARDS
+// ============================================================
+function renderFlashcards(){
+  const cards=FLASHCARD_DATA[currentSubject];
+  const card=cards[cardIndex];
+  const pct=((cardIndex+1)/cards.length*100).toFixed(0);
+  return `<div class="card-area">
+    <div class="card-counter">Card ${cardIndex+1} of ${cards.length}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="flashcard-wrap">
+      <div class="flashcard ${isFlipped?'flipped':''}" onclick="flipCard()">
+        <div class="card-face card-front">
+          <div class="card-label">Question — Tap to flip</div>
+          <div class="card-content">${card.q}</div>
+          <div class="card-section-tag">${card.section}</div>
+          <div class="card-hint">👆 Tap card to reveal answer</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-label">Answer</div>
+          <div class="card-content">${card.a}</div>
+          <div class="card-section-tag">${card.section}</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn btn-glass" onclick="prevCard()">← Prev</button>
+      <button class="btn btn-glass" onclick="shuffleCards()">🔀 Shuffle</button>
+      <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+    </div>
+  </div>`;
+}
+function flipCard(){isFlipped=!isFlipped;render();}
+function nextCard(){const c=FLASHCARD_DATA[currentSubject];cardIndex=(cardIndex+1)%c.length;isFlipped=false;render();}
+function prevCard(){const c=FLASHCARD_DATA[currentSubject];cardIndex=(cardIndex-1+c.length)%c.length;isFlipped=false;render();}
+function shuffleCards(){FLASHCARD_DATA[currentSubject].sort(()=>Math.random()-0.5);cardIndex=0;isFlipped=false;render();}
+ 
+// ============================================================
+// QUIZ
+// ============================================================
+function renderQuiz(){
+  if(!QUIZ_DATA[currentSubject]||QUIZ_DATA[currentSubject].length===0)
+    return `<div class="ask-ai-box"><p style="color:var(--text-tertiary);text-align:center;padding:20px">No quiz available for this subject in this mode.</p></div>`;
+  if(quizCards.length===0) quizCards=[...QUIZ_DATA[currentSubject]].sort(()=>Math.random()-0.5);
+  if(quizIndex>=quizCards.length){renderQuizFinal();return '';}
+  const q=quizCards[quizIndex];
+  const pct=(quizIndex/quizCards.length*100).toFixed(0);
+  return `<div class="card-area">
+    <div class="score-bar">
+      <div class="score-chip correct-chip">✓ ${quizScore.correct}</div>
+      <div class="score-chip total-chip">${quizIndex}/${quizCards.length}</div>
+      <div class="score-chip incorrect-chip">✗ ${quizScore.incorrect}</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-question-card">
+      <div class="quiz-q-label">Question ${quizIndex+1} of ${quizCards.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-q-section">${q.section}</div>
+    </div>
+    <div class="quiz-options">
+      ${q.options.map((opt,i)=>`<button class="quiz-option" onclick="selectOption(${i})" id="opt-${i}">${opt}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <div class="controls">
+      <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()" disabled>Submit Answer</button>
+    </div>
+  </div>`;
+}
+function selectOption(i){
+  if(quizAnswered) return;
+  selectedOption=i;
+  document.querySelectorAll('.quiz-option').forEach((b,idx)=>b.classList.toggle('selected',idx===i));
+  document.getElementById('submit-btn').disabled=false;
+}
+function submitAnswer(){
+  if(selectedOption===null||quizAnswered) return;
+  quizAnswered=true;
+  const q=quizCards[quizIndex];
+  const correct=selectedOption===q.answer;
+  if(correct) quizScore.correct++; else quizScore.incorrect++;
+  document.querySelectorAll('.quiz-option').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.answer) b.classList.add('reveal-correct');
+    if(idx===selectedOption&&!correct) b.classList.add('incorrect');
+    if(idx===selectedOption&&correct) b.classList.add('correct');
+  });
+  const fb=document.getElementById('quiz-feedback');
+  fb.className='quiz-feedback show '+(correct?'correct':'incorrect');
+  fb.innerHTML=`<div class="feedback-title">${correct?'✓ Correct!':'✗ Not quite — the answer is: '+q.options[q.answer]}</div>${q.explanation}`;
+  const sb=document.getElementById('submit-btn');
+  sb.textContent=quizIndex+1<quizCards.length?'Next Question →':'See Results';
+  sb.onclick=advanceQuiz;sb.disabled=false;
+}
+function advanceQuiz(){
+  quizIndex++;quizAnswered=false;selectedOption=null;
+  if(quizIndex>=quizCards.length) renderQuizFinal(); else render();
+}
+function renderQuizFinal(){
+  const total=quizCards.length;
+  const pct=Math.round(quizScore.correct/total*100);
+  document.getElementById('results-emoji').textContent=pct>=90?'🏆':pct>=70?'🎉':pct>=50?'📚':'💪';
+  document.getElementById('results-title').textContent=pct>=90?'Outstanding!':pct>=70?'Great Job!':pct>=50?'Good Effort!':'Keep Studying!';
+  document.getElementById('results-score').textContent=`${quizScore.correct}/${total}`;
+  document.getElementById('results-msg').textContent=pct>=90?'You have mastered this topic!':pct>=70?'Strong performance. Review the ones you missed.':pct>=50?'You\'re making progress. Review your flashcards and try again.':'Keep reviewing the flashcards — practice makes perfect!';
+  document.getElementById('results-overlay').classList.add('show');
+}
+function closeResults(){
+  document.getElementById('results-overlay').classList.remove('show');
+  quizIndex=0;quizAnswered=false;selectedOption=null;quizScore={correct:0,incorrect:0};quizCards=[];render();
+}
+ 
+// ============================================================
+// REFERENCE
+// ============================================================
+function renderReference(){
+  if(currentSubject==='propaganda') return renderPropRef();
+  if(currentSubject==='presidents') return renderPresRef();
+  if(currentSubject==='currentevents') return renderCERef();
+  return `<div class="ask-ai-box"><p style="color:var(--text-tertiary);text-align:center;padding:20px">Reference not available in this mode for this subject. Use Ask AI for Equations.</p></div>`;
+}
+ 
+// ——— PROPAGANDA: 6 section boxes → technique list → detail ———
+function renderPropRef(){
+  if(refState.propTech!==null){
+    const sec=PROP_SECTIONS[refState.propSection];
+    const tech=sec.techniques[refState.propTech];
+    return `<div class="card-area">
+      <div class="controls back-btn">
+        <button class="btn btn-glass" onclick="propBack('tech')">← Back to ${sec.title}</button>
+        <button class="btn btn-glass" onclick="propBack('section')">⬅ All Sections</button>
+      </div>
+      <div class="detail-panel">
+        <h2>${tech.name}</h2>
+        <span class="detail-section-badge" style="background:${sec.color}22;color:${sec.color}">${sec.label} – ${sec.title}</span>
+        <div class="detail-label">Definition</div>
+        <div class="detail-def">${tech.def}</div>
+        <div class="detail-label">Example</div>
+        <div class="detail-example">${tech.example}</div>
+        <div class="detail-label">How to Spot It</div>
+        <div class="detail-tip">${tech.tip}</div>
+      </div>
+    </div>`;
+  }
+  if(refState.propSection!==null){
+    const sec=PROP_SECTIONS[refState.propSection];
+    return `<div class="card-area">
+      <div class="controls back-btn">
+        <button class="btn btn-glass" onclick="propBack('section')">← All Sections</button>
+      </div>
+      <div class="technique-list-panel">
+        <h3><span>${sec.icon}</span> ${sec.label} — ${sec.title}</h3>
+        ${sec.techniques.map((t,i)=>`<button class="tech-btn" onclick="selectPropTech(${i})"><span>${t.name}</span><span class="arrow">›</span></button>`).join('')}
+      </div>
+    </div>`;
+  }
+  // 6-section grid
+  return `<div class="card-area">
+    <div class="ref-grid">
+      ${PROP_SECTIONS.map((s,i)=>`<div class="ref-section-card" onclick="selectPropSection(${i})">
+        <div class="ref-sec-icon">${s.icon}</div>
+        <div class="ref-sec-label" style="color:${s.color}">${s.label}</div>
+        <div class="ref-sec-title">${s.title}</div>
+        <div class="ref-sec-count">${s.techniques.length} techniques</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+function selectPropSection(i){refState.propSection=i;refState.propTech=null;render();}
+function selectPropTech(i){refState.propTech=i;render();}
+function propBack(level){
+  if(level==='tech') refState.propTech=null;
+  else if(level==='section'){refState.propSection=null;refState.propTech=null;}
+  render();
+}
+ 
+// ——— PRESIDENTS: era accordion → click name → detail ———
+function renderPresRef(){
+  if(refState.pres!==null){
+    const era=PRES_ERAS[refState.presEra];
+    const p=era.presidents[refState.pres];
+    const partyColor=p.party.includes('Democratic')?'#007AFF':p.party.includes('Republican')?'#FF3B30':p.party.includes('Whig')?'#34C759':'#AF52DE';
+    return `<div class="card-area">
+      <div class="controls back-btn">
+        <button class="btn btn-glass" onclick="presBack()">← Back to ${era.label}</button>
+      </div>
+      <div class="detail-panel">
+        <h2>#${p.n} — ${p.name}</h2>
+        <span class="detail-section-badge" style="background:${partyColor}22;color:${partyColor}">${p.party}</span>
+        <div class="pres-detail-grid">
+          <div class="pres-detail-item"><div class="pres-detail-label">Term</div><div class="pres-detail-value">${p.term}</div></div>
+          <div class="pres-detail-item"><div class="pres-detail-label">Born</div><div class="pres-detail-value">${p.born}</div></div>
+          <div class="pres-detail-item"><div class="pres-detail-label">Died</div><div class="pres-detail-value">${p.died}</div></div>
+          <div class="pres-detail-item"><div class="pres-detail-label">Vice President(s)</div><div class="pres-detail-value">${p.vp}</div></div>
+        </div>
+        <div class="detail-label" style="margin-top:4px">Game Clues (hardest → easiest)</div>
+        <div class="pres-clues">
+          ${p.clues.map((cl,i)=>`<div class="clue-item"><span class="clue-pts">${[6,4,2][i]}pt</span><span>${cl}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+  return `<div class="card-area">
+    ${PRES_ERAS.map((era,ei)=>`
+      <div class="pres-era">
+        <div class="pres-era-header" onclick="toggleEra(${ei})" id="era-hdr-${ei}">
+          <span style="color:${era.color}">${era.label}</span>
+          <span id="era-chev-${ei}">›</span>
+        </div>
+        <div class="pres-era-body" id="era-body-${ei}">
+          ${era.presidents.map((p,pi)=>`<div class="pres-row" onclick="selectPres(${ei},${pi})">
+            <span class="pres-num">${p.n}</span>
+            <span class="pres-name">${p.name}</span>
+            <span class="pres-party-tag">${p.party}</span>
+          </div>`).join('')}
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+function toggleEra(i){
+  const body=document.getElementById('era-body-'+i);
+  const chev=document.getElementById('era-chev-'+i);
+  chev.textContent=body.classList.toggle('open')?'∨':'›';
+}
+function selectPres(ei,pi){refState.presEra=ei;refState.pres=pi;render();}
+function presBack(){refState.pres=null;render();}
+ 
+// ——— CURRENT EVENTS: live-updated credible source list ———
+function renderCERef(){
+  const today=new Date();
+  const dateStr=today.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  return `<div class="card-area">
+    <div class="sources-intro">
+      <strong>📰 Top Credible Sources for AGLOA Current Events</strong><br>
+      Bookmark these sources and check them daily. Updated as of <strong>${dateStr}</strong>.
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">🇺🇸 U.S. National News</div>
+      <div class="source-cards">
+        <a class="source-card" href="https://apnews.com" target="_blank"><div class="source-name">AP News</div><div class="source-desc">Global wire service. Factual, bias-minimal reporting on every major story — the gold standard.</div><span class="source-tag">Wire Service</span></a>
+        <a class="source-card" href="https://reuters.com" target="_blank"><div class="source-name">Reuters</div><div class="source-desc">International wire service; excellent for U.S. and world news with minimal editorial spin.</div><span class="source-tag">Wire Service</span></a>
+        <a class="source-card" href="https://npr.org/news" target="_blank"><div class="source-name">NPR News</div><div class="source-desc">Public radio reporting. Strong on domestic policy, politics, science, and culture.</div><span class="source-tag">Public Radio</span></a>
+        <a class="source-card" href="https://pbsnewshour.org" target="_blank"><div class="source-name">PBS NewsHour</div><div class="source-desc">In-depth, balanced public television news. Great for understanding complex policy topics.</div><span class="source-tag">Public TV</span></a>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">🌍 World Affairs</div>
+      <div class="source-cards">
+        <a class="source-card" href="https://bbc.com/news/world" target="_blank"><div class="source-name">BBC News – World</div><div class="source-desc">Comprehensive international coverage from a globally respected public broadcaster.</div><span class="source-tag">International</span></a>
+        <a class="source-card" href="https://aljazeera.com" target="_blank"><div class="source-name">Al Jazeera English</div><div class="source-desc">Strong on Middle East, Africa, and Asia — perspectives often missing from U.S. outlets.</div><span class="source-tag">International</span></a>
+        <a class="source-card" href="https://foreignpolicy.com" target="_blank"><div class="source-name">Foreign Policy</div><div class="source-desc">In-depth analysis of international relations, diplomacy, and geopolitics.</div><span class="source-tag">Analysis</span></a>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">🏛️ U.S. Government & Politics</div>
+      <div class="source-cards">
+        <a class="source-card" href="https://congress.gov" target="_blank"><div class="source-name">Congress.gov</div><div class="source-desc">Official U.S. legislative database — track bills, legislation, and Congressional records.</div><span class="source-tag">Official</span></a>
+        <a class="source-card" href="https://whitehouse.gov/briefing-room" target="_blank"><div class="source-name">White House Briefings</div><div class="source-desc">Official press releases, executive orders, and statements from the current administration.</div><span class="source-tag">Official</span></a>
+        <a class="source-card" href="https://politico.com" target="_blank"><div class="source-name">Politico</div><div class="source-desc">Deep coverage of Washington politics, Congress, and policy.</div><span class="source-tag">Politics</span></a>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">💰 Economics & Business</div>
+      <div class="source-cards">
+        <a class="source-card" href="https://marketplace.org" target="_blank"><div class="source-name">Marketplace (APM)</div><div class="source-desc">Accessible daily economics journalism — GDP, inflation, jobs, and markets explained clearly.</div><span class="source-tag">Economics</span></a>
+        <a class="source-card" href="https://ft.com" target="_blank"><div class="source-name">Financial Times</div><div class="source-desc">Global financial and economic news from a highly respected newspaper.</div><span class="source-tag">Finance</span></a>
+        <a class="source-card" href="https://federalreserve.gov/newsevents.htm" target="_blank"><div class="source-name">Federal Reserve News</div><div class="source-desc">Official Fed announcements on interest rates, inflation, and monetary policy.</div><span class="source-tag">Official</span></a>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">🔬 Science, Tech & Environment</div>
+      <div class="source-cards">
+        <a class="source-card" href="https://scientificamerican.com/news" target="_blank"><div class="source-name">Scientific American</div><div class="source-desc">Accessible science journalism covering climate, AI, health, space, and more.</div><span class="source-tag">Science</span></a>
+        <a class="source-card" href="https://climate.nasa.gov" target="_blank"><div class="source-name">NASA Climate</div><div class="source-desc">The most authoritative source for climate change data, visuals, and explainers.</div><span class="source-tag">Climate</span></a>
+        <a class="source-card" href="https://technologyreview.com" target="_blank"><div class="source-name">MIT Tech Review</div><div class="source-desc">Deep, credible reporting on AI, technology trends, and their societal impact.</div><span class="source-tag">Technology</span></a>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">✅ Fact-Checking & Media Literacy</div>
+      <div class="source-cards">
+        <a class="source-card" href="https://politifact.com" target="_blank"><div class="source-name">PolitiFact</div><div class="source-desc">Pulitzer Prize-winning fact-checking of political statements and current events claims.</div><span class="source-tag">Fact-Check</span></a>
+        <a class="source-card" href="https://snopes.com" target="_blank"><div class="source-name">Snopes</div><div class="source-desc">The original internet fact-checker. Debunks viral misinformation and hoaxes quickly.</div><span class="source-tag">Fact-Check</span></a>
+        <a class="source-card" href="https://mediabiasfactcheck.com" target="_blank"><div class="source-name">Media Bias/Fact Check</div><div class="source-desc">Rates hundreds of outlets on bias and factual accuracy. Use to evaluate your sources.</div><span class="source-tag">Media Literacy</span></a>
+      </div>
+    </div>
+  </div>`;
+}
+ 
+// ============================================================
+// ASK AI — Equations ONLY available here
+// ============================================================
+const AI_PLACEHOLDERS={
+  propaganda:'e.g. "What is the difference between Post Hoc and Concurrency?" or "Give me a tricky example of Begging the Question" or "How do I tell Division from Composition?"',
+  presidents:'e.g. "Give me three game clues for James K. Polk (6pt, 4pt, 2pt)" or "Which presidents were assassinated and who succeeded them?" or "List all Whig party presidents in chronological order"',
+  equations:'e.g. "Explain the difference between a Now and a Never challenge" or "What happens when a player puts a cube in Forbidden by mistake?" or "Walk me through a sample Equations problem step by step"',
+  currentevents:'e.g. "Explain how the Electoral College works step by step" or "What is the difference between the House and the Senate?" or "Why does NATO\'s Article 5 matter in today\'s current events?"',
+};
+const AI_SUGGESTIONS={
+  propaganda:[
+    'What is the difference between Post Hoc and Concurrency?',
+    'Give me a real-life example of Begging the Question',
+    'How do I distinguish Division from Composition?',
+    'What makes a question Complex vs. Leading?',
+    'Example of Passing from the Acceptable to the Dubious',
+    'How is Rationalization different from Causal Oversimplification?',
+    'What is the difference between Slogans and Repetition?',
+    'Ad Hominem vs. Attacking a Straw Man — how to tell them apart?',
+  ],
+  presidents:[
+    'Give me 3 game clues for Abraham Lincoln (6pt, 4pt, 2pt)',
+    'Which U.S. presidents were assassinated in office?',
+    'List all Whig party presidents in chronological order',
+    'Key AGLOA game facts about Theodore Roosevelt',
+    'Which states have produced the most presidents?',
+    'Give me clues for the hardest-to-guess presidents',
+    'Which presidents served non-consecutive terms?',
+    'What were FDR\'s most important accomplishments for AGLOA?',
+  ],
+  equations:[
+    'Explain the difference between a Now and a Never challenge',
+    'What are the most common Equations variations?',
+    'How does scoring work in a shake?',
+    'What is the Permitted section for?',
+    'Walk me through a sample Equations problem step by step',
+    'What happens after a player offers a wrong solution?',
+    'How do exponent cubes work in Equations?',
+    'What is the Goal-setter\'s role in a shake?',
+  ],
+  currentevents:[
+    'How does the Electoral College work step by step?',
+    'What is the difference between the House and the Senate?',
+    'Explain inflation and how the Federal Reserve controls it',
+    'What is NATO\'s Article 5 and why does it matter right now?',
+    'What are the top current events topics for AGLOA this season?',
+    'Explain the three branches of U.S. government simply',
+    'What is the UN Security Council and what power does it have?',
+    'How does a bill become a law in the United States?',
+  ],
+};
+const AI_SYSTEM={
+  propaganda:`You are an expert AGLOA Academic Games tutor specializing in Propaganda. You know all 6 sections (A–F) and all 46 techniques perfectly. When explaining any technique, always include: (1) which section it belongs to, (2) a clear definition, (3) a concrete real-world example, and (4) a tip on how to spot it. When comparing two techniques, clearly explain the key distinguishing feature. Keep responses educational, clear, and well-formatted.`,
+  presidents:`You are an expert AGLOA Academic Games Presidents tutor. You know detailed facts about all 46 U.S. Presidents including party, birth state, key accomplishments, vice presidents, and major events. When generating game clues, give 3: first worth 6 points (hardest — obscure fact), second worth 4 points (medium), third worth 2 points (easiest). Format clues clearly and label point values.`,
+  equations:`You are an expert AGLOA Academic Games Equations tutor. You know the complete ruleset: the three mat sections (Forbidden, Permitted, Required), how the Goal is set, Now and Never challenges, all standard variations, scoring, and mathematical operations including exponents. Walk through examples step by step. Be precise and educational.`,
+  currentevents:`You are an expert AGLOA Current Events tutor. You have deep knowledge of U.S. government, world affairs, economics, science, and technology. Provide clear factual explanations appropriate for middle and high school academic competition preparation. Be thorough but accessible, and suggest related topics the student might study next.`,
+};
+ 
+function renderAsk(){
+  // Make sure equations button is visible in ask mode
+  document.getElementById('sbtn-equations').style.display='';
+  const names={propaganda:'Propaganda',presidents:'Presidents',equations:'Equations',currentevents:'Current Events'};
+  return `<div class="ask-ai-box">
+    <h3>✨ Ask AI about ${names[currentSubject]}</h3>
+    <div class="ai-placeholder">${AI_PLACEHOLDERS[currentSubject]}</div>
+    <textarea class="ai-textarea" id="ai-input" placeholder="Type your question here…"></textarea>
+    <div class="controls" style="margin-bottom:0;">
+      <button class="btn btn-primary" onclick="askAI()">Ask Question</button>
+      <button class="btn btn-glass" onclick="clearAI()">Clear</button>
+    </div>
+    <div class="ai-loading" id="ai-loading"><span class="spinner"></span>Thinking…</div>
+    <div class="ai-response" id="ai-response"></div>
+  </div>
+  <div class="ask-ai-box">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-bottom:10px;">Suggested Questions</div>
+    <div class="suggestions-wrap">
+      ${AI_SUGGESTIONS[currentSubject].map(s=>`<button class="sugg-btn" onclick="fillQuestion('${s.replace(/'/g,"\\'")}');return false;">${s}</button>`).join('')}
+    </div>
+  </div>`;
+}
+function fillQuestion(q){const el=document.getElementById('ai-input');if(el) el.value=q;}
+function clearAI(){
+  const el=document.getElementById('ai-input');if(el) el.value='';
+  const r=document.getElementById('ai-response');if(r){r.className='ai-response';r.textContent='';}
+}
+async function askAI(){
+  const input=(document.getElementById('ai-input')||{}).value?.trim();
+  if(!input) return;
+  document.getElementById('ai-loading').className='ai-loading show';
+  document.getElementById('ai-response').className='ai-response';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYSTEM[currentSubject],messages:[{role:'user',content:input}]})
+    });
+    const data=await res.json();
+    const text=data.content?.map(b=>b.text||'').join('')||'No response received. Please try again.';
+    document.getElementById('ai-loading').className='ai-loading';
+    document.getElementById('ai-response').className='ai-response show';
+    document.getElementById('ai-response').textContent=text;
+  }catch(e){
+    document.getElementById('ai-loading').className='ai-loading';
+    document.getElementById('ai-response').className='ai-response show';
+    document.getElementById('ai-response').textContent='Connection error. Please try again.';
+  }
+}
+ 
+// ============================================================
+// INIT
+// ============================================================
+render();
+</script>
+</body>
+</html>
+ 
