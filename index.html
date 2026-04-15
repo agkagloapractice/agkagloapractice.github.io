@@ -121,20 +121,7 @@
   .source-name{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
   .source-desc{font-size:12px;color:var(--text-tertiary);line-height:1.5;margin-bottom:6px}
   .source-tag{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;padding:2px 8px;border-radius:6px;background:rgba(0,122,255,0.12);color:var(--accent-blue)}
-  .ask-ai-box{background:rgba(255,255,255,0.45);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:20px;padding:20px;margin-bottom:14px;box-shadow:var(--glass-shadow)}
-  .ask-ai-box h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-  .ai-placeholder{font-size:12.5px;color:var(--text-tertiary);margin-bottom:10px;line-height:1.6;background:rgba(255,255,255,0.4);border-radius:10px;padding:10px 13px;border:1px dashed rgba(0,122,255,0.25);font-style:italic}
-  .ai-textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,0.65);font-family:inherit;font-size:14px;resize:vertical;min-height:76px;color:var(--text-primary);outline:none;transition:border-color 0.2s;margin-bottom:10px}
-  .ai-textarea:focus{border-color:var(--accent-blue)}
-  .ai-response{background:rgba(0,122,255,0.05);border:1.5px solid rgba(0,122,255,0.15);border-radius:14px;padding:15px;font-size:14px;line-height:1.7;color:var(--text-primary);margin-top:12px;display:none;animation:fadeIn 0.3s ease;white-space:pre-wrap}
-  .ai-response.show{display:block}
-  .ai-loading{display:none;text-align:center;padding:14px;color:var(--text-tertiary);font-size:14px}
-  .ai-loading.show{display:block}
-  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,122,255,0.3);border-top-color:var(--accent-blue);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .suggestions-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-  .sugg-btn{background:rgba(255,255,255,0.55);backdrop-filter:blur(12px);border:1.5px solid var(--glass-border);border-radius:10px;padding:7px 13px;font-family:inherit;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all 0.18s;font-weight:500}
-  .sugg-btn:hover{background:rgba(255,255,255,0.85);color:var(--accent-blue);border-color:rgba(0,122,255,0.3)}
+  .ask-ai-box{display:none}
   .results-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);display:none;place-items:center;z-index:1000}
   .results-overlay.show{display:grid}
   .results-modal{background:rgba(255,255,255,0.82);backdrop-filter:blur(30px);border:1.5px solid rgba(255,255,255,0.6);border-radius:24px;padding:34px 30px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.18);animation:popIn 0.33s cubic-bezier(.17,.89,.32,1.27)}
@@ -152,19 +139,18 @@
   <div class="header">
     <div class="header-badge">Academic Games Leagues of America</div>
     <h1>AGK AGLOA Flash Cards</h1>
-    <p>AI-powered flashcards, quizzes &amp; reference for Presidents, Propaganda, and Current Events.</p>
+    <p>Flashcards, quizzes &amp; reference for Presidents, Propaganda, and Current Events.</p>
   </div>
   <div class="nav">
     <button class="nav-tab active" onclick="switchMode('flashcards')">📇 Flashcards</button>
     <button class="nav-tab" onclick="switchMode('quiz')">🧠 Quiz</button>
     <button class="nav-tab" onclick="switchMode('reference')">📖 Reference</button>
-    <button class="nav-tab" onclick="switchMode('ask')">✨ Ask AI</button>
   </div>
   <div class="subject-row" id="subject-row">
     <button class="subject-btn active" onclick="setSubject('propaganda')" id="sbtn-propaganda"><span class="subject-icon">🗣️</span> Propaganda</button>
     <button class="subject-btn" onclick="setSubject('presidents')" id="sbtn-presidents"><span class="subject-icon">🎖️</span> Presidents</button>
     <button class="subject-btn" onclick="setSubject('currentevents')" id="sbtn-currentevents"><span class="subject-icon">🌍</span> Current Events</button>
-    <button class="subject-btn" id="sbtn-equations" onclick="setSubject('equations')" style="display:none"><span class="subject-icon">➗</span> Equations</button>
+
   </div>
   <div id="main-content"></div>
 </div>
@@ -427,14 +413,7 @@ let refState={propSection:null,propTech:null,presEra:null,pres:null};
 // ============================================================
 function switchMode(mode){
   currentMode=mode;
-  const eqBtn=document.getElementById('sbtn-equations');
-  eqBtn.style.display=(mode==='ask')?'':'none';
-  if(currentSubject==='equations'&&mode!=='ask'){
-    currentSubject='propaganda';
-    document.querySelectorAll('.subject-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById('sbtn-propaganda').classList.add('active');
-  }
-  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['flashcards','quiz','reference','ask'][i]===mode));
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['flashcards','quiz','reference'][i]===mode));
   cardIndex=0;isFlipped=false;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
   refState={propSection:null,propTech:null,presEra:null,pres:null};
   render();
@@ -452,7 +431,6 @@ function render(){
   if(currentMode==='flashcards') el.innerHTML=renderFlashcards();
   else if(currentMode==='quiz') el.innerHTML=renderQuiz();
   else if(currentMode==='reference') el.innerHTML=renderReference();
-  else el.innerHTML=renderAsk();
 }
  
 // ============================================================
@@ -742,112 +720,7 @@ function renderCERef(){
   </div>`;
 }
  
-// ============================================================
-// ASK AI — Equations ONLY available here
-// ============================================================
-const AI_PLACEHOLDERS={
-  propaganda:'e.g. "What is the difference between Post Hoc and Concurrency?" or "Give me a tricky example of Begging the Question" or "How do I tell Division from Composition?"',
-  presidents:'e.g. "Give me three game clues for James K. Polk (6pt, 4pt, 2pt)" or "Which presidents were assassinated and who succeeded them?" or "List all Whig party presidents in chronological order"',
-  equations:'e.g. "Explain the difference between a Now and a Never challenge" or "What happens when a player puts a cube in Forbidden by mistake?" or "Walk me through a sample Equations problem step by step"',
-  currentevents:'e.g. "Explain how the Electoral College works step by step" or "What is the difference between the House and the Senate?" or "Why does NATO\'s Article 5 matter in today\'s current events?"',
-};
-const AI_SUGGESTIONS={
-  propaganda:[
-    'What is the difference between Post Hoc and Concurrency?',
-    'Give me a real-life example of Begging the Question',
-    'How do I distinguish Division from Composition?',
-    'What makes a question Complex vs. Leading?',
-    'Example of Passing from the Acceptable to the Dubious',
-    'How is Rationalization different from Causal Oversimplification?',
-    'What is the difference between Slogans and Repetition?',
-    'Ad Hominem vs. Attacking a Straw Man — how to tell them apart?',
-  ],
-  presidents:[
-    'Give me 3 game clues for Abraham Lincoln (6pt, 4pt, 2pt)',
-    'Which U.S. presidents were assassinated in office?',
-    'List all Whig party presidents in chronological order',
-    'Key AGLOA game facts about Theodore Roosevelt',
-    'Which states have produced the most presidents?',
-    'Give me clues for the hardest-to-guess presidents',
-    'Which presidents served non-consecutive terms?',
-    'What were FDR\'s most important accomplishments for AGLOA?',
-  ],
-  equations:[
-    'Explain the difference between a Now and a Never challenge',
-    'What are the most common Equations variations?',
-    'How does scoring work in a shake?',
-    'What is the Permitted section for?',
-    'Walk me through a sample Equations problem step by step',
-    'What happens after a player offers a wrong solution?',
-    'How do exponent cubes work in Equations?',
-    'What is the Goal-setter\'s role in a shake?',
-  ],
-  currentevents:[
-    'How does the Electoral College work step by step?',
-    'What is the difference between the House and the Senate?',
-    'Explain inflation and how the Federal Reserve controls it',
-    'What is NATO\'s Article 5 and why does it matter right now?',
-    'What are the top current events topics for AGLOA this season?',
-    'Explain the three branches of U.S. government simply',
-    'What is the UN Security Council and what power does it have?',
-    'How does a bill become a law in the United States?',
-  ],
-};
-const AI_SYSTEM={
-  propaganda:`You are an expert AGLOA Academic Games tutor specializing in Propaganda. You know all 6 sections (A–F) and all 46 techniques perfectly. When explaining any technique, always include: (1) which section it belongs to, (2) a clear definition, (3) a concrete real-world example, and (4) a tip on how to spot it. When comparing two techniques, clearly explain the key distinguishing feature. Keep responses educational, clear, and well-formatted.`,
-  presidents:`You are an expert AGLOA Academic Games Presidents tutor. You know detailed facts about all 46 U.S. Presidents including party, birth state, key accomplishments, vice presidents, and major events. When generating game clues, give 3: first worth 6 points (hardest — obscure fact), second worth 4 points (medium), third worth 2 points (easiest). Format clues clearly and label point values.`,
-  equations:`You are an expert AGLOA Academic Games Equations tutor. You know the complete ruleset: the three mat sections (Forbidden, Permitted, Required), how the Goal is set, Now and Never challenges, all standard variations, scoring, and mathematical operations including exponents. Walk through examples step by step. Be precise and educational.`,
-  currentevents:`You are an expert AGLOA Current Events tutor. You have deep knowledge of U.S. government, world affairs, economics, science, and technology. Provide clear factual explanations appropriate for middle and high school academic competition preparation. Be thorough but accessible, and suggest related topics the student might study next.`,
-};
- 
-function renderAsk(){
-  // Make sure equations button is visible in ask mode
-  document.getElementById('sbtn-equations').style.display='';
-  const names={propaganda:'Propaganda',presidents:'Presidents',equations:'Equations',currentevents:'Current Events'};
-  return `<div class="ask-ai-box">
-    <h3>✨ Ask AI about ${names[currentSubject]}</h3>
-    <div class="ai-placeholder">${AI_PLACEHOLDERS[currentSubject]}</div>
-    <textarea class="ai-textarea" id="ai-input" placeholder="Type your question here…"></textarea>
-    <div class="controls" style="margin-bottom:0;">
-      <button class="btn btn-primary" onclick="askAI()">Ask Question</button>
-      <button class="btn btn-glass" onclick="clearAI()">Clear</button>
-    </div>
-    <div class="ai-loading" id="ai-loading"><span class="spinner"></span>Thinking…</div>
-    <div class="ai-response" id="ai-response"></div>
-  </div>
-  <div class="ask-ai-box">
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-tertiary);margin-bottom:10px;">Suggested Questions</div>
-    <div class="suggestions-wrap">
-      ${AI_SUGGESTIONS[currentSubject].map(s=>`<button class="sugg-btn" onclick="fillQuestion('${s.replace(/'/g,"\\'")}');return false;">${s}</button>`).join('')}
-    </div>
-  </div>`;
-}
-function fillQuestion(q){const el=document.getElementById('ai-input');if(el) el.value=q;}
-function clearAI(){
-  const el=document.getElementById('ai-input');if(el) el.value='';
-  const r=document.getElementById('ai-response');if(r){r.className='ai-response';r.textContent='';}
-}
-async function askAI(){
-  const input=(document.getElementById('ai-input')||{}).value?.trim();
-  if(!input) return;
-  document.getElementById('ai-loading').className='ai-loading show';
-  document.getElementById('ai-response').className='ai-response';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYSTEM[currentSubject],messages:[{role:'user',content:input}]})
-    });
-    const data=await res.json();
-    const text=data.content?.map(b=>b.text||'').join('')||'No response received. Please try again.';
-    document.getElementById('ai-loading').className='ai-loading';
-    document.getElementById('ai-response').className='ai-response show';
-    document.getElementById('ai-response').textContent=text;
-  }catch(e){
-    document.getElementById('ai-loading').className='ai-loading';
-    document.getElementById('ai-response').className='ai-response show';
-    document.getElementById('ai-response').textContent='Connection error. Please try again.';
-  }
-}
+
  
 // ============================================================
 // INIT
