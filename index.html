@@ -72,6 +72,10 @@
   .score-chip.correct-chip{color:var(--accent-green);border-color:rgba(52,199,89,0.32)}
   .score-chip.incorrect-chip{color:var(--accent-red);border-color:rgba(255,59,48,0.28)}
   .score-chip.total-chip{color:var(--accent-blue);border-color:rgba(0,122,255,0.28)}
+  .section-filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .sect-btn{padding:7px 12px;border-radius:10px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,0.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:var(--text-secondary);transition:all 0.18s ease;white-space:nowrap}
+  .sect-btn.active{background:rgba(0,122,255,0.12);border-color:var(--accent-blue);color:var(--accent-blue);font-weight:600}
+  .sect-btn:hover:not(.active){background:rgba(255,255,255,0.75)}
   /* Reference */
   .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px;margin-bottom:8px}
   .ref-section-card{background:rgba(255,255,255,0.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:16px;padding:18px;cursor:pointer;transition:all 0.2s ease}
@@ -131,20 +135,620 @@
   .results-modal p{color:var(--text-secondary);font-size:14px;line-height:1.5;margin-bottom:18px}
   .results-score{font-size:42px;font-weight:800;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
   @media(max-width:600px){.pres-detail-grid{grid-template-columns:1fr}.nav-tab{font-size:11px;padding:8px 9px}}
+
+  /* ===== AUTH PAGE ===== */
+  .auth-overlay{position:fixed;inset:0;background:var(--bg-gradient);background-attachment:fixed;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.4s ease}
+  .auth-overlay.hidden{display:none}
+  .auth-card{background:rgba(255,255,255,0.72);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1.5px solid rgba(255,255,255,0.7);border-radius:28px;padding:40px 36px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,0.14);animation:popIn 0.4s cubic-bezier(.17,.89,.32,1.27)}
+  .auth-logo{text-align:center;margin-bottom:28px}
+  .auth-logo-badge{display:inline-block;background:rgba(0,122,255,0.12);color:var(--accent-blue);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1px solid rgba(0,122,255,0.22);margin-bottom:10px}
+  .auth-logo h1{font-size:26px;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#007AFF,#AF52DE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .auth-logo p{font-size:13px;color:var(--text-tertiary);margin-top:4px}
+  .auth-tabs{display:flex;background:rgba(0,0,0,0.05);border-radius:12px;padding:4px;margin-bottom:26px;gap:4px}
+  .auth-tab{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-tertiary);cursor:pointer;transition:all 0.2s}
+  .auth-tab.active{background:#fff;color:var(--accent-blue);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.09)}
+  .auth-form{display:flex;flex-direction:column;gap:14px}
+  .auth-field{display:flex;flex-direction:column;gap:5px}
+  .auth-field label{font-size:12px;font-weight:600;color:var(--text-secondary);letter-spacing:0.03em}
+  .auth-field input{padding:12px 14px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.7);font-family:inherit;font-size:14px;color:var(--text-primary);outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+  .auth-field input:focus{border-color:var(--accent-blue);box-shadow:0 0 0 3px rgba(0,122,255,0.12)}
+  .auth-field input::placeholder{color:var(--text-tertiary)}
+  .auth-field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .auth-submit{margin-top:4px;padding:13px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(0,122,255,0.32)}
+  .auth-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,122,255,0.4)}
+  .auth-divider{display:flex;align-items:center;gap:10px;margin:2px 0}
+  .auth-divider-line{flex:1;height:1px;background:rgba(0,0,0,0.1)}
+  .auth-divider span{font-size:11px;color:var(--text-tertiary);font-weight:500}
+  .auth-guest{padding:11px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.5);font-family:inherit;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.18s;text-align:center;width:100%}
+  .auth-guest:hover{background:rgba(255,255,255,0.85);border-color:rgba(0,0,0,0.18)}
+  .auth-error{background:rgba(255,59,48,0.08);border:1.5px solid rgba(255,59,48,0.28);border-radius:10px;padding:10px 13px;font-size:13px;color:#8a1a1a;display:none}
+  .auth-error.show{display:block}
+  .auth-success{background:rgba(52,199,89,0.1);border:1.5px solid rgba(52,199,89,0.3);border-radius:10px;padding:10px 13px;font-size:13px;color:#1a6e2e;display:none}
+  .auth-success.show{display:block}
+  .password-strength{height:4px;border-radius:2px;margin-top:5px;transition:all 0.3s;background:rgba(0,0,0,0.08)}
+  .password-strength.weak{background:linear-gradient(90deg,var(--accent-red) 33%,rgba(0,0,0,0.08) 33%)}
+  .password-strength.medium{background:linear-gradient(90deg,var(--accent-orange) 66%,rgba(0,0,0,0.08) 66%)}
+  .password-strength.strong{background:linear-gradient(90deg,var(--accent-green) 100%,rgba(0,0,0,0.08) 100%)}
+  .password-strength-label{font-size:11px;margin-top:3px}
+  .password-strength-label.weak{color:var(--accent-red)}
+  .password-strength-label.medium{color:var(--accent-orange)}
+  .password-strength-label.strong{color:var(--accent-green)}
+
+  /* ===== HEADER USER CHIP ===== */
+  .header-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .header-actions{display:flex;gap:8px;align-items:center}
+  .user-chip{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 7px;border-radius:20px;background:rgba(255,255,255,0.55);border:1.5px solid var(--glass-border);cursor:pointer;transition:all 0.2s;font-size:13px;font-weight:600;color:var(--text-primary)}
+  .user-chip:hover{background:rgba(255,255,255,0.85)}
+  .user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+  .settings-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.55);border:1.5px solid var(--glass-border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:17px;flex-shrink:0}
+  .settings-btn:hover{background:rgba(255,255,255,0.85);transform:rotate(30deg)}
+
+  /* ===== SETTINGS MODAL ===== */
+  .settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;place-items:center;z-index:1500;padding:20px}
+  .settings-overlay.show{display:grid}
+  .settings-modal{background:rgba(255,255,255,0.88);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1.5px solid rgba(255,255,255,0.7);border-radius:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.16);animation:popIn 0.3s cubic-bezier(.17,.89,.32,1.27)}
+  .settings-header{padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between}
+  .settings-header h2{font-size:20px;font-weight:800;background:linear-gradient(135deg,#007AFF,#AF52DE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .settings-close{width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.07);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.18s;flex-shrink:0;color:var(--text-secondary)}
+  .settings-close:hover{background:rgba(255,59,48,0.12);color:var(--accent-red)}
+  .settings-body{padding:18px 24px 28px}
+  .settings-section{margin-bottom:22px}
+  .settings-section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-tertiary);margin-bottom:10px;padding-left:2px}
+  .settings-group{background:rgba(255,255,255,0.6);border:1.5px solid var(--glass-border);border-radius:16px;overflow:hidden}
+  .settings-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid rgba(0,0,0,0.06)}
+  .settings-row:last-child{border-bottom:none}
+  .settings-row-left{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+  .settings-row-title{font-size:14px;font-weight:600;color:var(--text-primary)}
+  .settings-row-desc{font-size:11.5px;color:var(--text-tertiary);line-height:1.4}
+  .settings-row-right{flex-shrink:0;margin-left:12px}
+  /* Toggle switch */
+  .toggle{position:relative;display:inline-flex;width:44px;height:26px;cursor:pointer}
+  .toggle input{opacity:0;width:0;height:0;position:absolute}
+  .toggle-track{position:absolute;inset:0;border-radius:13px;background:rgba(0,0,0,0.15);transition:background 0.25s}
+  .toggle input:checked~.toggle-track{background:var(--accent-blue)}
+  .toggle-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.2);transition:transform 0.25s cubic-bezier(.4,0,.2,1)}
+  .toggle input:checked~.toggle-thumb{transform:translateX(18px)}
+  /* Select */
+  .settings-select{padding:7px 10px;border-radius:9px;border:1.5px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.7);font-family:inherit;font-size:13px;color:var(--text-primary);outline:none;cursor:pointer;transition:border-color 0.2s}
+  .settings-select:focus{border-color:var(--accent-blue)}
+  /* Profile edit */
+  .profile-avatar-row{display:flex;align-items:center;gap:14px;padding:14px 16px}
+  .profile-avatar-big{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0;position:relative;cursor:pointer;overflow:hidden}
+  .profile-avatar-big img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+  .avatar-upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.42);display:flex;align-items:center;justify-content:center;font-size:15px;opacity:0;transition:opacity 0.18s;border-radius:50%}
+  .profile-avatar-big:hover .avatar-upload-overlay{opacity:1}
+  .user-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+  .profile-avatar-info{flex:1}
+  .profile-avatar-name{font-size:16px;font-weight:700;color:var(--text-primary)}
+  .profile-avatar-email{font-size:12px;color:var(--text-tertiary)}
+  .settings-inline-input{padding:8px 11px;border-radius:10px;border:1.5px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.7);font-family:inherit;font-size:13px;color:var(--text-primary);outline:none;transition:border-color 0.2s;width:100%}
+  .settings-inline-input:focus{border-color:var(--accent-blue)}
+  .settings-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(0,122,255,0.28);margin-top:8px}
+  .settings-save-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,122,255,0.36)}
+  .settings-danger-btn{width:100%;padding:11px;border-radius:12px;border:1.5px solid rgba(255,59,48,0.3);background:rgba(255,59,48,0.07);color:var(--accent-red);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:6px}
+  .settings-danger-btn:hover{background:rgba(255,59,48,0.14);border-color:var(--accent-red)}
+  .color-swatch-row{display:flex;gap:8px;flex-wrap:wrap}
+  .color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.18s;flex-shrink:0}
+  .color-swatch.active,.color-swatch:hover{border-color:var(--text-primary);transform:scale(1.15)}
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+  .stat-chip{background:rgba(255,255,255,0.6);border:1.5px solid var(--glass-border);border-radius:12px;padding:11px 13px;text-align:center}
+  .stat-chip-val{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .stat-chip-lbl{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+  /* Dark mode overrides */
+  body.dark-mode{--text-primary:#F2F2F7;--text-secondary:#EBEBF5;--text-tertiary:#AEAEB2;--glass-bg:rgba(30,30,40,0.55);--glass-border:rgba(255,255,255,0.10);--glass-shadow:0 8px 32px rgba(0,0,0,0.4);--bg-gradient:linear-gradient(135deg,#0d1117 0%,#0d1b2e 30%,#1a0d2e 65%,#1a0a1a 100%)}
+  body.dark-mode .auth-card,body.dark-mode .settings-modal{background:rgba(28,28,36,0.92);border-color:rgba(255,255,255,0.1)}
+  body.dark-mode .auth-field input,body.dark-mode .settings-inline-input,body.dark-mode .settings-select{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:#F2F2F7}
+  body.dark-mode .auth-tabs{background:rgba(255,255,255,0.07)}
+  body.dark-mode .auth-tab.active{background:rgba(255,255,255,0.12);color:#5AC8FA}
+  body.dark-mode .settings-group{background:rgba(255,255,255,0.06)}
+  body.dark-mode .settings-row{border-bottom-color:rgba(255,255,255,0.07)}
+  body.dark-mode .user-chip,body.dark-mode .settings-btn{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.12)}
+  body.dark-mode .auth-guest{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.12);color:#EBEBF5}
+  /* Large text mode */
+  body.large-text .card-content{font-size:clamp(17px,2.6vw,22px)}
+  body.large-text .quiz-q-text{font-size:18px}
+  body.large-text .quiz-option{font-size:15.5px}
+
+  /* ===== FEEDBACK ===== */
+  .feedback-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(0,0,0,0.08);background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all 0.18s;flex-shrink:0;padding:0}
+  .feedback-btn:hover{background:rgba(255,255,255,0.85);transform:scale(1.08)}
+  .feedback-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:1600;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.22s}
+  .feedback-overlay.show{opacity:1;pointer-events:all}
+  .feedback-modal{background:rgba(255,255,255,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1.5px solid rgba(255,255,255,0.7);border-radius:24px;width:100%;max-width:480px;box-shadow:0 24px 60px rgba(0,0,0,0.18);overflow:hidden}
+  .feedback-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 0;margin-bottom:12px}
+  .feedback-modal-title{font-size:18px;font-weight:700;color:var(--text-primary)}
+  .modal-close-btn{width:30px;height:30px;border-radius:50%;border:none;background:rgba(0,0,0,0.07);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all 0.15s;flex-shrink:0;padding:0}
+  .modal-close-btn:hover{background:rgba(0,0,0,0.14)}
+  .feedback-modal-body{padding:0 22px}
+  .feedback-desc{font-size:13px;color:var(--text-secondary);margin-bottom:12px;line-height:1.5}
+  .feedback-modal-body textarea{width:100%;box-sizing:border-box;min-height:110px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.12);padding:12px;font-family:inherit;font-size:14px;color:var(--text-primary);background:rgba(255,255,255,0.8);resize:vertical;transition:border 0.15s;outline:none}
+  .feedback-modal-body textarea:focus{border-color:var(--accent-blue)}
+  .feedback-file-label{display:flex;align-items:center;gap:8px;margin-top:12px;padding:11px 14px;background:rgba(0,122,255,0.07);border:1.5px dashed rgba(0,122,255,0.28);border-radius:12px;cursor:pointer;font-size:13px;color:var(--accent-blue);font-weight:500;transition:all 0.16s;user-select:none}
+  .feedback-file-label:hover{background:rgba(0,122,255,0.12)}
+  .feedback-file-label input[type="file"]{display:none}
+  .feedback-file-name{font-size:12px;color:var(--text-tertiary);margin-top:5px;min-height:16px}
+  .feedback-form-err{font-size:13px;color:#FF3B30;margin-top:8px;min-height:16px;display:none}
+  .feedback-form-err.show{display:block}
+  .feedback-modal-footer{display:flex;gap:10px;justify-content:flex-end;padding:16px 22px}
+  /* Admin Panel */
+  .admin-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.22s}
+  .admin-panel-overlay.show{opacity:1;pointer-events:all}
+  .admin-panel-modal{background:rgba(255,255,255,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1.5px solid rgba(255,255,255,0.8);border-radius:24px;width:100%;max-width:600px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 28px 70px rgba(0,0,0,0.22);overflow:hidden}
+  .admin-panel-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 16px;border-bottom:1px solid rgba(0,0,0,0.08);flex-shrink:0}
+  .admin-panel-title{font-size:18px;font-weight:700;color:var(--text-primary)}
+  .admin-unread-badge{font-size:12px;font-weight:700;background:rgba(255,59,48,0.12);color:#FF3B30;border-radius:20px;padding:3px 10px;margin-left:8px}
+  .admin-fb-list{overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .admin-fb-empty{color:var(--text-tertiary);font-size:14px;text-align:center;padding:40px}
+  .admin-fb-entry{border-radius:14px;padding:14px 16px;border:1.5px solid rgba(0,0,0,0.07);transition:background 0.15s}
+  .admin-fb-unread{background:rgba(0,122,255,0.05);border-color:rgba(0,122,255,0.2)}
+  .admin-fb-read{background:rgba(0,0,0,0.025)}
+  .admin-fb-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px}
+  .admin-fb-name{font-weight:700;font-size:14px;color:var(--text-primary)}
+  .admin-fb-email{font-size:12px;color:var(--text-tertiary)}
+  .admin-fb-date{font-size:12px;color:var(--text-tertiary);margin-left:auto}
+  .admin-fb-badge{font-size:11px;font-weight:700;border-radius:20px;padding:2px 9px}
+  .unread-badge{background:rgba(0,122,255,0.15);color:var(--accent-blue)}
+  .read-badge{background:rgba(52,199,89,0.13);color:#34C759}
+  .admin-fb-message{font-size:13px;color:var(--text-secondary);line-height:1.55;margin-bottom:8px;white-space:pre-wrap;word-break:break-word}
+  .admin-fb-thumb{max-width:100%;max-height:180px;border-radius:10px;margin:6px 0 8px;display:block;cursor:pointer;border:1px solid rgba(0,0,0,0.08)}
+  .admin-fb-mark-btn{margin-top:4px;padding:7px 16px;font-size:12px}
+  /* Toast */
+  .feedback-toast{position:fixed;bottom:28px;right:24px;background:linear-gradient(135deg,#34C759,#30D158);color:#fff;border-radius:16px;padding:14px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(52,199,89,0.35);z-index:3000;opacity:0;transform:translateY(16px);transition:opacity 0.28s,transform 0.28s;pointer-events:none;max-width:320px}
+  .feedback-toast.show{opacity:1;transform:translateY(0)}
+  .feedback-toast-icon{font-size:22px;flex-shrink:0}
+  .feedback-toast-title{font-size:14px;font-weight:700;margin-bottom:2px}
+  .feedback-toast-msg{font-size:12px;opacity:0.9}
+  /* Review notification */
+  .feedback-review-popup{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-12px);background:rgba(255,255,255,0.97);border:1.5px solid rgba(0,122,255,0.22);border-radius:16px;padding:14px 18px 14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.14);z-index:3000;opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;max-width:360px;width:calc(100vw - 48px)}
+  .feedback-review-popup.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .frp-icon{font-size:24px;flex-shrink:0}
+  .frp-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+  .frp-msg{font-size:12px;color:var(--text-secondary)}
+  .frp-close{margin-left:auto;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.07);cursor:pointer;font-size:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0}
+  body.dark-mode .feedback-modal,body.dark-mode .admin-panel-modal{background:rgba(28,28,38,0.98);border-color:rgba(255,255,255,0.1)}
+  body.dark-mode .feedback-modal-body textarea{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.13);color:#f0f0f5}
+  body.dark-mode .admin-fb-entry{border-color:rgba(255,255,255,0.09)}
+  body.dark-mode .admin-fb-unread{background:rgba(0,122,255,0.1)}
+  body.dark-mode .admin-fb-read{background:rgba(255,255,255,0.04)}
+  body.dark-mode .feedback-review-popup{background:rgba(28,28,38,0.98);border-color:rgba(0,122,255,0.3)}
+
+  /* ===== COMPETE ===== */
+  .compete-lobby{background:rgba(255,255,255,0.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--glass-border);border-radius:20px;padding:28px;text-align:center;margin-bottom:16px}
+  .compete-trophy{font-size:44px;margin-bottom:8px}
+  .compete-lobby-title{font-size:22px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+  .compete-lobby-desc{font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.5}
+  .compete-start-btn{font-size:15px;padding:14px 32px;letter-spacing:0.3px}
+  .compete-lb-section{background:rgba(255,255,255,0.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--glass-border);border-radius:20px;padding:20px}
+  .compete-lb-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:14px;letter-spacing:0.2px}
+  .compete-lb-empty{color:var(--text-tertiary);font-size:13px;text-align:center;padding:24px}
+  .compete-lb-table{display:flex;flex-direction:column;gap:4px}
+  .compete-lb-header{display:grid;grid-template-columns:36px 1fr 40px 40px 52px 64px 90px;gap:6px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+  .compete-lb-row{display:grid;grid-template-columns:36px 1fr 40px 40px 52px 64px 90px;gap:6px;padding:10px 12px;background:rgba(255,255,255,0.45);border-radius:11px;font-size:13px;align-items:center;transition:background 0.15s}
+  .compete-lb-row:hover{background:rgba(255,255,255,0.78)}
+  .compete-lb-row.lb-me{background:rgba(0,122,255,0.1);border:1.5px solid var(--accent-blue)}
+  .lb-rank{font-weight:700;color:var(--text-secondary);text-align:center;font-size:14px}
+  .lb-name{font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lb-correct{color:#34C759;font-weight:700;text-align:center}
+  .lb-wrong{color:#FF3B30;font-weight:700;text-align:center}
+  .lb-total,.lb-time,.lb-date{color:var(--text-secondary);text-align:center;font-size:12px}
+  .compete-timer-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:14px;padding:12px 18px;margin-bottom:10px}
+  .compete-timer{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent-blue);letter-spacing:1px}
+  .compete-progress-text{font-size:14px;font-weight:600;color:var(--text-secondary)}
+  .compete-score-mini{font-size:13px;font-weight:600;color:var(--text-secondary)}
+  .compete-result-card{background:rgba(255,255,255,0.65);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1.5px solid var(--glass-border);border-radius:24px;padding:36px 28px;text-align:center}
+  .compete-result-emoji{font-size:56px;margin-bottom:10px}
+  .compete-result-title{font-size:24px;font-weight:800;color:var(--text-primary);margin-bottom:6px}
+  .compete-result-score{font-size:44px;font-weight:900;color:var(--accent-blue);margin-bottom:20px}
+  .compete-result-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+  .compete-result-stat{background:rgba(255,255,255,0.6);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}
+  .cr-label{font-size:11px;color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.4px}
+  .cr-val{font-size:20px;font-weight:800;color:var(--text-primary)}
+  .correct-color{color:#34C759}.incorrect-color{color:#FF3B30}
+  .compete-result-saved{font-size:13px;color:#34C759;font-weight:600;margin-bottom:20px;background:rgba(52,199,89,0.1);border-radius:8px;padding:8px 16px;display:inline-block}
+  body.dark-mode .compete-lobby,body.dark-mode .compete-lb-section{background:rgba(255,255,255,0.06)}
+  body.dark-mode .compete-lb-row{background:rgba(255,255,255,0.07)}
+  body.dark-mode .compete-lb-row:hover{background:rgba(255,255,255,0.13)}
+  body.dark-mode .compete-timer-bar,body.dark-mode .compete-result-card{background:rgba(255,255,255,0.07)}
+  body.dark-mode .compete-result-stat{background:rgba(255,255,255,0.07)}
+  @media(max-width:600px){
+    .compete-lb-header,.compete-lb-row{grid-template-columns:28px 1fr 32px 32px 44px 54px}
+    .lb-date{display:none}
+    .compete-result-stats{grid-template-columns:1fr 1fr}
+  }
 </style>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+
+<!-- ===== AUTH OVERLAY ===== -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-badge">AGK AGLOA Practice</div>
+      <h1>Welcome Back</h1>
+      <p>Sign in to save your progress and settings</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('signin')" id="auth-tab-signin">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')" id="auth-tab-signup">Sign Up</button>
+    </div>
+    <!-- Sign In Form -->
+    <div id="auth-signin-form">
+      <div class="auth-form">
+        <div class="auth-field">
+          <label>Email address</label>
+          <input type="email" id="signin-email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="signin-password" placeholder="Your password" autocomplete="current-password" />
+        </div>
+        <div class="auth-error" id="signin-error"></div>
+        <button class="auth-submit" onclick="handleSignIn()">Sign In →</button>
+      </div>
+    </div>
+    <!-- Sign Up Form -->
+    <div id="auth-signup-form" style="display:none">
+      <div class="auth-form">
+        <div class="auth-field-row">
+          <div class="auth-field">
+            <label>First name</label>
+            <input type="text" id="signup-first" placeholder="First" autocomplete="given-name" />
+          </div>
+          <div class="auth-field">
+            <label>Last name</label>
+            <input type="text" id="signup-last" placeholder="Last" autocomplete="family-name" />
+          </div>
+        </div>
+        <div class="auth-field">
+          <label>Email address</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="Create a password" autocomplete="new-password" oninput="checkPasswordStrength(this.value)" />
+          <div class="password-strength" id="pw-strength-bar"></div>
+          <div class="password-strength-label" id="pw-strength-label"></div>
+        </div>
+        <div class="auth-field">
+          <label>Confirm password</label>
+          <input type="password" id="signup-confirm" placeholder="Repeat password" autocomplete="new-password" />
+        </div>
+        <div class="auth-error" id="signup-error"></div>
+        <div class="auth-success" id="signup-success"></div>
+        <button class="auth-submit" onclick="handleSignUp()">Create Account →</button>
+      </div>
+    </div>
+    <div class="auth-divider" style="margin-top:18px"><div class="auth-divider-line"></div><span>admin</span><div class="auth-divider-line"></div></div>
+    <button class="auth-guest" onclick="promptDevCode()" style="margin-top:10px">🛡️ Review Feedback</button>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettingsOnBackdrop(event)">
+  <div class="settings-modal" id="settings-modal">
+    <div class="settings-header">
+      <h2>⚙️ Settings</h2>
+      <button class="settings-close" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="settings-body">
+
+      <!-- Profile -->
+      <div class="settings-section">
+        <div class="settings-section-label">Profile</div>
+        <div class="settings-group">
+          <div class="profile-avatar-row">
+            <div class="profile-avatar-big" id="settings-avatar-big" onclick="document.getElementById('avatar-file-input').click()" title="Change profile picture">
+              A
+              <div class="avatar-upload-overlay">📷</div>
+              <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="saveProfilePic(this)" />
+            </div>
+            <div class="profile-avatar-info">
+              <div class="profile-avatar-name" id="settings-display-name">Guest</div>
+              <div class="profile-avatar-email" id="settings-display-email">Not signed in</div>
+            </div>
+          </div>
+          <div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:8px">
+            <input class="settings-inline-input" id="settings-name-input" type="text" placeholder="Display name" />
+            <button class="settings-save-btn" onclick="saveProfileName()">Save Name</button>
+            <button class="settings-danger-btn" onclick="handleSignOut()" id="settings-signout-btn">Sign Out</button>
+            <button class="settings-danger-btn" onclick="handleDeleteAccount()" id="settings-delete-btn" style="display:none">Delete Account</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance -->
+      <div class="settings-section">
+        <div class="settings-section-label">Appearance</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Dark Mode</div>
+              <div class="settings-row-desc">Switch to a dark color scheme</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-dark" onchange="applyDarkMode(this.checked)" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Large Text</div>
+              <div class="settings-row-desc">Increase card &amp; quiz font size</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-large-text" onchange="applyLargeText(this.checked)" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Accent Color</div>
+              <div class="settings-row-desc">Choose your highlight color</div>
+            </div>
+            <div class="settings-row-right">
+              <div class="color-swatch-row" id="color-swatches">
+                <div class="color-swatch active" style="background:#007AFF" onclick="setAccent('#007AFF','#5AC8FA')" title="Blue"></div>
+                <div class="color-swatch" style="background:#AF52DE" onclick="setAccent('#AF52DE','#FF6B9D')" title="Purple"></div>
+                <div class="color-swatch" style="background:#34C759" onclick="setAccent('#34C759','#30D158')" title="Green"></div>
+                <div class="color-swatch" style="background:#FF9500" onclick="setAccent('#FF9500','#FFCC00')" title="Orange"></div>
+                <div class="color-swatch" style="background:#FF3B30" onclick="setAccent('#FF3B30','#FF6961')" title="Red"></div>
+                <div class="color-swatch" style="background:#5AC8FA" onclick="setAccent('#5AC8FA','#64D2FF')" title="Teal"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Study Preferences -->
+      <div class="settings-section">
+        <div class="settings-section-label">Study Preferences</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Auto-flip Cards</div>
+              <div class="settings-row-desc">Automatically flip to answer after a delay</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-autoflip" onchange="savePrefs()" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Auto-flip Delay</div>
+              <div class="settings-row-desc">Seconds before auto-flip triggers</div>
+            </div>
+            <div class="settings-row-right">
+              <select class="settings-select" id="select-autoflip-delay" onchange="savePrefs()">
+                <option value="3">3 s</option>
+                <option value="5" selected>5 s</option>
+                <option value="8">8 s</option>
+                <option value="12">12 s</option>
+              </select>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Shuffle on Load</div>
+              <div class="settings-row-desc">Automatically shuffle flashcard deck</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-shuffle" onchange="savePrefs()" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Show Section Tags</div>
+              <div class="settings-row-desc">Display section labels on flashcards</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-section-tags" checked onchange="savePrefs()" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Quiz Question Order</div>
+              <div class="settings-row-desc">How questions are presented in quizzes</div>
+            </div>
+            <div class="settings-row-right">
+              <select class="settings-select" id="select-quiz-order" onchange="savePrefs()">
+                <option value="random" selected>Random</option>
+                <option value="sequential">Sequential</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications / Sound -->
+      <div class="settings-section">
+        <div class="settings-section-label">Feedback</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Sound Effects</div>
+              <div class="settings-row-desc">Play sounds on correct / incorrect answers</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-sounds" onchange="savePrefs()" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Show Explanations</div>
+              <div class="settings-row-desc">Display answer explanations in quiz</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-explanations" checked onchange="savePrefs()" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="settings-section">
+        <div class="settings-section-label">Your Stats</div>
+        <div class="stats-grid">
+          <div class="stat-chip"><div class="stat-chip-val" id="stat-sessions">0</div><div class="stat-chip-lbl">Sessions</div></div>
+          <div class="stat-chip"><div class="stat-chip-val" id="stat-cards">0</div><div class="stat-chip-lbl">Cards Reviewed</div></div>
+          <div class="stat-chip"><div class="stat-chip-val" id="stat-correct">0</div><div class="stat-chip-lbl">Quiz Correct</div></div>
+          <div class="stat-chip"><div class="stat-chip-val" id="stat-streak">0</div><div class="stat-chip-lbl">Day Streak 🔥</div></div>
+        </div>
+        <div style="margin-top:10px">
+          <button class="settings-danger-btn" onclick="confirmResetStats()">Reset All Stats</button>
+        </div>
+      </div>
+
+      <!-- Data & Privacy -->
+      <div class="settings-section">
+        <div class="settings-section-label">Data &amp; Privacy</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Save Progress Locally</div>
+              <div class="settings-row-desc">Store stats and settings in your browser</div>
+            </div>
+            <div class="settings-row-right">
+              <label class="toggle">
+                <input type="checkbox" id="toggle-save-local" checked onchange="savePrefs()" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">Delete All Data</div>
+              <div class="settings-row-desc">Wipe all local data and reset the app</div>
+            </div>
+            <div class="settings-row-right">
+              <button class="settings-danger-btn" style="width:auto;padding:7px 13px;margin:0;font-size:12px" onclick="confirmDeleteData()">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="settings-section" style="margin-bottom:0">
+        <div class="settings-section-label">About</div>
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-row-title">AGK AGLOA Practice</div>
+              <div class="settings-row-desc">Built by Adithan G. · Version 1.5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEEDBACK OVERLAY ===== -->
+<div class="feedback-overlay" id="feedback-overlay" onclick="closeFeedbackBackdrop(event)">
+  <div class="feedback-modal">
+    <div class="feedback-modal-header">
+      <div class="feedback-modal-title">💬 Send Feedback</div>
+      <button class="modal-close-btn" onclick="closeFeedback()">✕</button>
+    </div>
+    <div class="feedback-modal-body">
+      <div class="feedback-desc">Share a bug, suggestion, or anything on your mind. We read every message!</div>
+      <textarea id="feedback-text" placeholder="Write your feedback here…"></textarea>
+      <label class="feedback-file-label" for="feedback-file">
+        <span>📎 Attach a screenshot</span>
+        <input type="file" id="feedback-file" accept="image/*" onchange="updateFeedbackFileLabel(this)" />
+      </label>
+      <div class="feedback-file-name" id="feedback-file-name"></div>
+      <div class="feedback-form-err" id="feedback-form-err"></div>
+    </div>
+    <div class="feedback-modal-footer">
+      <button class="btn btn-secondary" onclick="closeFeedback()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitFeedback()">Send Feedback →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN FEEDBACK PANEL ===== -->
+<div class="admin-panel-overlay" id="admin-panel-overlay" onclick="closeAdminPanelBackdrop(event)">
+  <div class="admin-panel-modal">
+    <div class="admin-panel-header">
+      <div style="display:flex;align-items:center">
+        <div class="admin-panel-title">🛡️ Feedback Inbox</div>
+        <span class="admin-unread-badge" id="admin-unread-count"></span>
+      </div>
+      <button class="modal-close-btn" onclick="closeAdminPanel()">✕</button>
+    </div>
+    <div class="admin-fb-list" id="admin-fb-list"></div>
+  </div>
+</div>
+
+<!-- ===== FEEDBACK SENT TOAST ===== -->
+<div class="feedback-toast" id="feedback-toast">
+  <div class="feedback-toast-icon">✓</div>
+  <div>
+    <div class="feedback-toast-title">Your feedback is sent!</div>
+    <div class="feedback-toast-msg">Thank you for helping this website grow!</div>
+  </div>
+</div>
+
+<!-- ===== FEEDBACK REVIEWED POPUP ===== -->
+<div class="feedback-review-popup" id="feedback-review-popup">
+  <div class="frp-icon">💬</div>
+  <div>
+    <div class="frp-title">Your feedback has been reviewed</div>
+    <div class="frp-msg">Thanks for helping us improve AGK AGLOA Practice!</div>
+  </div>
+  <button class="frp-close" onclick="document.getElementById('feedback-review-popup').classList.remove('show')">✕</button>
+</div>
+
 <div class="app">
   <div class="header">
-    <div class="header-badge">Academic Games Leagues of America</div>
-    <h1>AGK AGLOA Flash Cards</h1>
-    <p>Flashcards, quizzes &amp; reference for Presidents, Propaganda, and Current Events.</p>
+    <div class="header-top-row">
+      <div class="header-badge">AGK Agloa Practice ~Adithan G.</div>
+      <div class="header-actions">
+        <button class="feedback-btn" onclick="openFeedback()" title="Send Feedback">💬</button>
+        <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
+        <div class="user-chip" onclick="openSettings()" id="user-chip">
+          <div class="user-avatar" id="user-avatar-chip">G</div>
+          <span id="user-chip-name">Guest</span>
+        </div>
+      </div>
+    </div>
+    <h1>AGK AGLOA Practice</h1>
+    <p>Flashcards, quizzes &amp; reference for Presidents, Propaganda, and Current Events. This tool is designed and built by Adithan G.</p>
   </div>
   <div class="nav">
-    <button class="nav-tab active" onclick="switchMode('flashcards')">📇 Flashcards</button>
-    <button class="nav-tab" onclick="switchMode('quiz')">🧠 Quiz</button>
-    <button class="nav-tab" onclick="switchMode('reference')">📖 Reference</button>
+    <button class="nav-tab active" onclick="switchMode('flashcards')">Flashcards</button>
+    <button class="nav-tab" onclick="switchMode('quiz')">Quiz</button>
+    <button class="nav-tab" onclick="switchMode('reference')">Reference</button>
+    <button class="nav-tab" onclick="switchMode('compete')">🏆 Compete</button>
   </div>
   <div class="subject-row" id="subject-row">
     <button class="subject-btn active" onclick="setSubject('propaganda')" id="sbtn-propaganda"><span class="subject-icon">🗣️</span> Propaganda</button>
@@ -332,24 +936,112 @@ const FLASHCARD_DATA={
     {q:'What is Attacking a Straw Man?',a:'Misrepresenting an opponent\'s argument in a weaker or distorted form, then defeating that distorted version.',section:'Section F – Maneuver'},
     {q:'What is a Complex Question?',a:'A question that contains a hidden assumption, forcing the answerer to accept that assumption just by responding.',section:'Section F – Maneuver'},
     {q:'What is Diversion in propaganda?',a:'Changing the subject or introducing an irrelevant topic to distract attention from the real issue.',section:'Section F – Maneuver'},
+    // ── Section A extra cards ──
+    {q:'What is Academic Detachment?',a:'When a decision is demanded, you argue both sides but refuse to commit to either position or take action. The key signal is inaction when a choice is actually required.',section:'Section A – Self-Deception'},
+    {q:'What is Not Drawing the Line?',a:'Continuously extending limits "just a little more," over-indulging because each step is only a small increase. The opposite of Drawing the Line — a slippery slope of small increments.',section:'Section A – Self-Deception'},
+    {q:'What is Conservatism (as a propaganda technique)?',a:'Always preferring the old way regardless of the merit of each case. Radicalism always prefers what is new; Moderatism always chooses the middle ground. All three judge ideas by habit or position rather than by logic.',section:'Section A – Self-Deception'},
+    {q:'What is Tabloid Thinking?',a:'Stereotyping people or issues with simple catchphrases; preferring quick summaries over deep analysis. Oversimplified labels stand in for complex reality.',section:'Section A – Self-Deception'},
+    {q:'What is Inconceivability?',a:'Rejecting an idea simply because you cannot personally imagine or conceive of it being true. The speaker\'s own inability to picture something is treated as evidence against it.',section:'Section A – Self-Deception'},
+    {q:'Example: "I\'ve weighed all the arguments — there are good points on both sides — so I\'m not going to make a decision." What technique?',a:'Academic Detachment — when a choice is required, the speaker presents both sides but refuses to commit or act. The inaction in the face of a required decision is the telltale sign.',section:'Section A – Self-Deception'},
+    {q:'Example: "I\'ll just have one more — it\'s only a little more each time." (Said repeatedly all night.) What technique?',a:'Not Drawing the Line — each increment seems small, but no firm stopping point is ever set. The cumulative effect is excessive. This is the opposite of Drawing the Line.',section:'Section A – Self-Deception'},
+    {q:'Example: "We\'ve always done it this way, and that\'s good enough for me." What technique?',a:'Conservatism — the old way is preferred simply because it is old, not because it has been shown to be better or more logical.',section:'Section A – Self-Deception'},
+    {q:'Example: "All teenagers are just addicted to their phones." (One dismissive label applied to millions.) What technique?',a:'Tabloid Thinking — a complex group is reduced to a single catchphrase stereotype. No evidence or nuance is offered; the label does all the work.',section:'Section A – Self-Deception'},
+    {q:'How do Rationalization and Wishful Thinking differ?',a:'Rationalization: you act FIRST, then invent a justification afterward. Wishful Thinking: you believe something without evidence purely because you WANT it to be true — no prior action is needed.',section:'Section A – Self-Deception'},
+    {q:'Example: "That\'s impossible — I simply cannot imagine how it could ever work." What technique?',a:'Inconceivability — the speaker rejects an idea based solely on their own failure to imagine it. Personal imagination is not evidence.',section:'Section A – Self-Deception'},
+    // ── Section B extra cards ──
+    {q:'What is Metaphor and Simile in propaganda?',a:'Claiming a likeness between two things that does not really exist or is irrelevant to the argument. The comparison sounds vivid but breaks down under close examination.',section:'Section B – Language'},
+    {q:'What is Emphasis as a propaganda technique?',a:'Quoting someone but stressing certain words so as to change the meaning of what was originally said. The same words mean very different things depending on which one is stressed.',section:'Section B – Language'},
+    {q:'What are Abstract Terms in propaganda?',a:'Using vague, high-level concepts like "freedom" or "justice" that mean different things to different people. Listeners fill in their own meaning, allowing the speaker to appeal to everyone while committing to nothing specific.',section:'Section B – Language'},
+    {q:'What is the key difference between Vagueness and Ambiguity?',a:'Vagueness: language is so imprecise no specific meaning is possible ("more of what you want"). Ambiguity: a word or phrase has two or more distinct meanings and the speaker doesn\'t clarify which is intended.',section:'Section B – Language'},
+    {q:'What is the key difference between Ambiguity and Shift of Meaning?',a:'Ambiguity: one phrase used once carries two possible meanings at the same time. Shift of Meaning: the SAME word is used TWICE in the same argument but with a different meaning each time.',section:'Section B – Language'},
+    {q:'Example: "The economy is a garden — we need to prune the weeds of regulation." What technique?',a:'Metaphor and Simile — the economy is compared to a garden. The comparison sounds vivid but economies and gardens function on fundamentally different principles.',section:'Section B – Language'},
+    {q:'Example: "I never said SHE stole the money." (Emphasis on "she" implies someone else did.) What technique?',a:'Emphasis — stressing a specific word changes the implication of the entire sentence without altering any actual words.',section:'Section B – Language'},
+    {q:'Example: "We stand for Freedom, Justice, and the American Way!" What technique?',a:'Abstract Terms — these high-level concepts mean different things to different listeners. The speaker appeals broadly while committing to nothing specific.',section:'Section B – Language'},
+    {q:'Example: A candidate\'s quote "War is sometimes necessary" is published as "War is necessary." What technique?',a:'Quotation Out of Context — removing the word "sometimes" completely changes the meaning from a qualified statement to an absolute one.',section:'Section B – Language'},
+    // ── Section C extra cards ──
+    {q:'What is Appearance as a propaganda technique?',a:'Judging someone or something solely on how they look rather than on the substance of their argument or qualifications. Physical appearance is irrelevant to the truth of a claim.',section:'Section C – Irrelevance'},
+    {q:'What is Manner as a propaganda technique?',a:'Judging on how something is delivered — confidence, charm, speaking style — rather than on the actual content of what is said. Different from Appearance: this is about delivery, not physical looks.',section:'Section C – Irrelevance'},
+    {q:'What is Degrees and Titles as a propaganda technique?',a:'Using impressive credentials that are irrelevant to the topic being discussed. A Nobel Prize in chemistry does not confer expertise in economics or foreign policy.',section:'Section C – Irrelevance'},
+    {q:'What is Numbers as a propaganda technique?',a:'Using statistics or impressive quantities to mislead without proper context. Always ask: what is the sample size, and is the statistic contextually meaningful?',section:'Section C – Irrelevance'},
+    {q:'What is Status as a propaganda technique?',a:'Using a person\'s high social position or fame to substitute for a logical argument. Social rank or celebrity status confers no logical authority on any specific factual claim.',section:'Section C – Irrelevance'},
+    {q:'What is a Sophistical Formula?',a:'Using misleading but logical-sounding phrases — like "Everybody knows that..." or "It goes without saying that..." — to assert agreement without actually providing any evidence.',section:'Section C – Irrelevance'},
+    {q:'How do Manner and Appearance differ from each other?',a:'Appearance judges based on how someone looks physically (clothing, face, body). Manner judges based on how someone speaks or presents themselves — confidence, charm, tone, and delivery style.',section:'Section C – Irrelevance'},
+    {q:'Example: "She speaks with such authority — she must really know what she\'s talking about." What technique?',a:'Manner — the speaker\'s confident delivery style is used as a substitute for evaluating the actual content of the argument.',section:'Section C – Irrelevance'},
+    {q:'Example: "As a Nobel Prize-winning chemist, I can tell you this economic policy is wrong." What technique?',a:'Degrees and Titles — chemistry expertise does not transfer to economics. The impressive credential is real but entirely irrelevant to the topic.',section:'Section C – Irrelevance'},
+    {q:'Example: "99% of users loved our product!" (Survey of 12 company employees.) What technique?',a:'Numbers — an impressive-sounding statistic is presented without the context needed to evaluate it. The sample is tiny and biased, making the number meaningless.',section:'Section C – Irrelevance'},
+    {q:'Example: "Everybody knows that hard work always leads to success." What technique?',a:'Sophistical Formula — "Everybody knows that" asserts universal agreement without providing any evidence. The formula creates the illusion of consensus.',section:'Section C – Irrelevance'},
+    {q:'Example: "He can\'t be a good leader — look at how he dresses." What technique?',a:'Appearance — the speaker judges the candidate\'s fitness based solely on physical appearance and clothing, which are entirely irrelevant to leadership ability.',section:'Section C – Irrelevance'},
+    // ── Section D extra cards ──
+    {q:'What is Appeal to Flattery?',a:'Praising the audience in order to make them more receptive to accepting your argument or product. Complimenting listeners lowers their critical resistance.',section:'Section D – Exploitation'},
+    {q:'What is Appeal to Ridicule?',a:'Making an opponent\'s argument seem absurd or laughable rather than engaging with its substance. Laughter replaces logic — no actual counter-argument is offered.',section:'Section D – Exploitation'},
+    {q:'What is Appeal to Prejudice?',a:'Exploiting existing biases or prejudices in the audience to win support. It uses the audience\'s pre-existing bias as the engine of persuasion rather than logic or evidence.',section:'Section D – Exploitation'},
+    {q:'What is Bargain Appeal?',a:'Persuading someone to accept something based on its low cost or great value rather than its actual truth or quality. Price or value is presented as the primary reason to believe a claim.',section:'Section D – Exploitation'},
+    {q:'What is Appeal to Practical Consequences?',a:'Arguing that you should believe something is true because believing it produces beneficial practical results. The usefulness of a belief does not equal the truth of a belief.',section:'Section D – Exploitation'},
+    {q:'What is Passing from the Acceptable to the Dubious?',a:'Starting with a widely accepted premise and linking it step by step to a questionable conclusion. Each step seems small; the final destination would never have been accepted if stated at the outset.',section:'Section D – Exploitation'},
+    {q:'How do Appeal to Prestige and Appeal to Flattery differ?',a:'Appeal to Prestige uses a famous or high-status THIRD PARTY to endorse an idea. Appeal to Flattery praises the AUDIENCE directly to lower their critical resistance.',section:'Section D – Exploitation'},
+    {q:'Example: "Someone as intelligent as you can clearly see that this investment is superior." What technique?',a:'Appeal to Flattery — the listener is complimented on their intelligence to lower their critical guard. The compliment is designed to make them more receptive to the claim.',section:'Section D – Exploitation'},
+    {q:'Example: "Ha! My opponent actually thinks we should negotiate with them — what a joke!" What technique?',a:'Appeal to Ridicule — the argument is mocked rather than engaged with logically. No counter-argument is offered; ridicule substitutes for evidence.',section:'Section D – Exploitation'},
+    {q:'Example: "For only $19.99 — less than a cup of coffee a day!" What technique?',a:'Bargain Appeal — the low price is presented as the persuasive reason to accept the product, not any evidence of its actual quality or effectiveness.',section:'Section D – Exploitation'},
+    {q:'Example: "You should believe in positive thinking — it will bring you success and happiness." What technique?',a:'Appeal to Practical Consequences — the beneficial results of holding the belief are offered as reasons to accept it as true. Usefulness ≠ truth.',section:'Section D – Exploitation'},
+    {q:'Example: "We all agree safety matters → all risk must be eliminated → therefore all outdoor sports should be banned." What technique?',a:'Passing from the Acceptable to the Dubious — starts with a sensible premise (safety matters) and gradually links to an extreme conclusion (ban outdoor sports) that no one would have accepted from the start.',section:'Section D – Exploitation'},
+    // ── Section E extra cards ──
+    {q:'What is Selected Instances?',a:'Choosing only the examples that support your point while ignoring the many examples that contradict it. Always ask: how many examples were NOT shown?',section:'Section E – Form'},
+    {q:'How do Post Hoc and Concurrency differ?',a:'Post Hoc: Event A came BEFORE Event B, so A is wrongly assumed to have caused B. Concurrency: Events A and B happen AT THE SAME TIME and are wrongly assumed to be causally connected.',section:'Section E – Form'},
+    {q:'Example: "Just look at these five success stories — this program clearly works!" What technique?',a:'Selected Instances — only the successes are highlighted while failures or neutral outcomes are ignored. The sample is cherry-picked.',section:'Section E – Form'},
+    {q:'Example: "My headaches started the same week the new cell tower was installed." What technique?',a:'Concurrency — the headaches and the tower installation happened simultaneously. Simultaneous occurrence is not the same as a causal relationship.',section:'Section E – Form'},
+    {q:'Example: "Running a country is just like running a business — cut the losers and maximize profit." What technique?',a:'Faulty Analogy — countries and businesses are similar in some ways but differ critically in the ways that matter. Citizens cannot be "cut" the way employees can.',section:'Section E – Form'},
+    // ── Section F extra cards ──
+    {q:'What is Disproving a Minor Point?',a:'Defeating a trivial detail in an opponent\'s argument and then acting as if the entire argument has been refuted. A minor factual error does not invalidate a larger argument.',section:'Section F – Maneuver'},
+    {q:'What is Appeal to Ignorance?',a:'Claiming something is true because it has not been proven false, or false because it has not been proven true. The absence of disproof is not proof.',section:'Section F – Maneuver'},
+    {q:'What is a Leading Question?',a:'A question phrased in a way that suggests the desired answer, steering the respondent toward agreeing. Different from Complex Question: a Leading Question nudges toward an answer but does not embed a hidden accusation inside the structure of the question itself.',section:'Section F – Maneuver'},
+    {q:'What is an Inconsequent Argument?',a:'Presenting an argument that simply does not bear on the issue being debated. The argument may be valid in itself but is entirely irrelevant to the question at hand.',section:'Section F – Maneuver'},
+    {q:'What is Victory by Definition?',a:'Redefining terms so that your conclusion is true by definition, with no need for evidence. The speaker adjusts the meaning of words to exclude inconvenient counter-cases.',section:'Section F – Maneuver'},
+    {q:'What is the difference between Leading Question and Complex Question?',a:'Leading Question: phrased to nudge toward a desired answer ("Don\'t you think X?"). Complex Question: contains a hidden assumption built into the question that any yes/no answer forces the respondent to accept ("Have you stopped lying?").',section:'Section F – Maneuver'},
+    {q:'Example: "She said the meeting was at 3pm — it was actually 3:05pm! Her entire proposal is invalid." What technique?',a:'Disproving a Minor Point — a trivial error (5 minutes) is used to dismiss an entire proposal. The small error is irrelevant to the substance of the argument.',section:'Section F – Maneuver'},
+    {q:'Example: "No one has proven aliens don\'t exist — therefore they definitely exist." What technique?',a:'Appeal to Ignorance — the absence of disproof is treated as proof. The burden of proof is improperly reversed.',section:'Section F – Maneuver'},
+    {q:'Example: "No true Scotsman would ever do such a thing." (Redefines "true Scotsman" to exclude anyone who does.) What technique?',a:'Victory by Definition — the definition is adjusted to exclude counterexamples, making the conclusion true by definition rather than by evidence.',section:'Section F – Maneuver'},
+    {q:'Example: Q: "Should we raise the minimum wage?" A: "Our city has a great parks department." What technique?',a:'Inconsequent Argument — the response may be true but has absolutely nothing to do with the question asked. Unlike Diversion, which actively redirects, this argument simply fails to address the issue.',section:'Section F – Maneuver'},
   ],
   presidents:[
-    {q:'Who was the 1st U.S. President and what was his party?',a:'George Washington (1789–1797) — No political party. Born in Virginia. Set the two-term precedent.',section:'Founding Era'},
-    {q:'Which president purchased the Louisiana Territory and sent Lewis & Clark westward?',a:'Thomas Jefferson (3rd President, 1801–1809) — Democratic-Republican.',section:'Founding Era'},
-    {q:'Who is called the "Father of the Constitution"?',a:'James Madison (4th President, 1809–1817). He also co-authored The Federalist Papers.',section:'Founding Era'},
-    {q:'Which president issued the Monroe Doctrine, warning Europe not to colonize the Americas?',a:'James Monroe (5th President, 1817–1825).',section:'Founding Era'},
-    {q:'Which president served the shortest term — only 31 days — and died of pneumonia?',a:'William Henry Harrison (9th President, 1841).',section:'Antebellum Era'},
-    {q:'Who issued the Emancipation Proclamation and was assassinated at Ford\'s Theatre?',a:'Abraham Lincoln (16th President, 1861–1865). Assassinated by John Wilkes Booth on April 14, 1865.',section:'Civil War Era'},
-    {q:'Which president was the first to be impeached?',a:'Andrew Johnson (17th President). Impeached in 1868, acquitted by the Senate by one vote.',section:'Civil War Era'},
-    {q:'Who was the only president to serve two non-consecutive terms?',a:'Grover Cleveland — served as both the 22nd (1885–1889) and 24th (1893–1897) President.',section:'Gilded Age'},
-    {q:'Which president is known for trust-busting, the Rough Riders, and the Nobel Peace Prize?',a:'Theodore Roosevelt (26th President, 1901–1909).',section:'Progressive Era'},
-    {q:'Who led the U.S. during WWI and proposed the League of Nations?',a:'Woodrow Wilson (28th President, 1913–1921).',section:'Progressive Era'},
-    {q:'Who was the only president elected four times and led the country through WWII?',a:'Franklin D. Roosevelt (32nd President, 1933–1945).',section:'Modern Era'},
-    {q:'Which president authorized the atomic bombings of Japan to end WWII?',a:'Harry S. Truman (33rd President, 1945–1953).',section:'Modern Era'},
-    {q:'Who was the youngest person elected president and the first Catholic president?',a:'John F. Kennedy (35th President, 1961–1963), elected at age 43.',section:'Modern Era'},
-    {q:'Which president signed the Civil Rights Act (1964) and Voting Rights Act (1965)?',a:'Lyndon B. Johnson (36th President, 1963–1969).',section:'Modern Era'},
-    {q:'Who was the only U.S. president to resign from office?',a:'Richard Nixon (37th President) — resigned August 9, 1974, due to the Watergate scandal.',section:'Modern Era'},
-    {q:'Who was the first African American president of the United States?',a:'Barack Obama (44th President, 2009–2017). Born in Hawaii.',section:'Modern Era'},
+    {q:'Who was the 1st U.S. President and what was his party?',a:'George Washington (1789–1797) — No political party. Born in Virginia. Set the two-term precedent.',section:'Founding Era',group:['1-17']},
+    {q:'Which president purchased the Louisiana Territory and sent Lewis & Clark westward?',a:'Thomas Jefferson (3rd President, 1801–1809) — Democratic-Republican.',section:'Founding Era',group:['1-17']},
+    {q:'Who is called the "Father of the Constitution"?',a:'James Madison (4th President, 1809–1817). He also co-authored The Federalist Papers.',section:'Founding Era',group:['1-17']},
+    {q:'Which president issued the Monroe Doctrine, warning Europe not to colonize the Americas?',a:'James Monroe (5th President, 1817–1825).',section:'Founding Era',group:['1-17']},
+    {q:'Which president served the shortest term — only 31 days — and died of pneumonia?',a:'William Henry Harrison (9th President, 1841).',section:'Antebellum Era',group:['1-17']},
+    {q:'Who issued the Emancipation Proclamation and was assassinated at Ford\'s Theatre?',a:'Abraham Lincoln (16th President, 1861–1865). Assassinated by John Wilkes Booth on April 14, 1865.',section:'Civil War Era',group:['1-17','16-33']},
+    {q:'Which president was the first to be impeached?',a:'Andrew Johnson (17th President). Impeached in 1868, acquitted by the Senate by one vote.',section:'Civil War Era',group:['1-17','16-33']},
+    {q:'Who was the only president to serve two non-consecutive terms?',a:'Grover Cleveland — served as both the 22nd (1885–1889) and 24th (1893–1897) President.',section:'Gilded Age',group:['16-33']},
+    {q:'Which president is known for trust-busting, the Rough Riders, and the Nobel Peace Prize?',a:'Theodore Roosevelt (26th President, 1901–1909).',section:'Progressive Era',group:['16-33']},
+    {q:'Who led the U.S. during WWI and proposed the League of Nations?',a:'Woodrow Wilson (28th President, 1913–1921).',section:'Progressive Era',group:['16-33','28-46']},
+    {q:'Who was the only president elected four times and led the country through WWII?',a:'Franklin D. Roosevelt (32nd President, 1933–1945).',section:'Modern Era',group:['16-33','28-46']},
+    {q:'Which president authorized the atomic bombings of Japan to end WWII?',a:'Harry S. Truman (33rd President, 1945–1953).',section:'Modern Era',group:['16-33','28-46']},
+    {q:'Who was the youngest person elected president and the first Catholic president?',a:'John F. Kennedy (35th President, 1961–1963), elected at age 43.',section:'Modern Era',group:['28-46']},
+    {q:'Which president signed the Civil Rights Act (1964) and Voting Rights Act (1965)?',a:'Lyndon B. Johnson (36th President, 1963–1969).',section:'Modern Era',group:['28-46']},
+    {q:'Who was the only U.S. president to resign from office?',a:'Richard Nixon (37th President) — resigned August 9, 1974, due to the Watergate scandal.',section:'Modern Era',group:['28-46']},
+    {q:'Who was the first African American president of the United States?',a:'Barack Obama (44th President, 2009–2017). Born in Hawaii.',section:'Modern Era',group:['28-46']},
+    {q:'Who was the 2nd U.S. President and the first to live in the White House?',a:'John Adams (1797–1801), a Federalist. His son John Quincy Adams became the 6th president — the first father-son presidential pair.',section:'Founding Era',group:['1-17']},
+    {q:'Which president presided over the "Era of Good Feelings" and issued the Monroe Doctrine?',a:'James Monroe (5th President, 1817–1825). The Monroe Doctrine (1823) warned Europe against colonizing the Western Hemisphere.',section:'Founding Era',group:['1-17']},
+    {q:'Who won the disputed 1824 "Corrupt Bargain" election decided by the House of Representatives?',a:'John Quincy Adams (6th President). He won despite Andrew Jackson winning the popular vote. After his presidency, he served 17 years in the House — the only ex-president to do so.',section:'Founding Era',group:['1-17']},
+    {q:'Which president was the first "dark horse" candidate and pledged to serve only one term?',a:'James K. Polk (11th President, 1845–1849). He presided over the Mexican-American War and kept his one-term pledge.',section:'Antebellum Era',group:['1-17']},
+    {q:'Who was the first president born as a U.S. citizen, and what economic crisis struck his term?',a:'Martin Van Buren (8th President, 1837–1841). The Panic of 1837 economic depression struck immediately after he took office.',section:'Founding Era',group:['1-17']},
+    {q:'Which "Whig" president was expelled by his own party while still serving?',a:'John Tyler (10th President, 1841–1845), nicknamed "His Accidency." He assumed office after Harrison\'s death and was promptly expelled by the Whigs.',section:'Antebellum Era',group:['1-17']},
+    {q:'Which president signed the Kansas-Nebraska Act, reigniting the slavery debate?',a:'Franklin Pierce (14th President, 1853–1857). The act triggered "Bleeding Kansas" violence and is considered a major cause of the Civil War.',section:'Antebellum Era',group:['1-17']},
+    {q:'Who was the only president never to have married, and from which state?',a:'James Buchanan (15th President, 1857–1861) — the only bachelor president, and the only president from Pennsylvania.',section:'Antebellum Era',group:['1-17']},
+    {q:'Which president won the Nobel Peace Prize for mediating the Russo-Japanese War?',a:'Theodore Roosevelt (26th President, 1901–1909). He mediated the 1905 Treaty of Portsmouth, earning the Nobel Peace Prize in 1906.',section:'Progressive Era',group:['16-33']},
+    {q:'Which president served as both President and Chief Justice of the Supreme Court?',a:'William Howard Taft (27th President). He served as President (1909–1913) and later as Chief Justice (1921–1930) — the only person in U.S. history to hold both offices.',section:'Progressive Era',group:['16-33']},
+    {q:'Who led the U.S. into WWI and proposed the League of Nations?',a:'Woodrow Wilson (28th President, 1913–1921). His Fourteen Points and League of Nations proposal shaped post-war diplomacy.',section:'Progressive Era',group:['16-33']},
+    {q:'Which president created the New Deal programs to combat the Great Depression?',a:'Franklin D. Roosevelt (32nd President, 1933–1945). The New Deal established Social Security, the FDIC, the SEC, and many relief programs.',section:'Modern Era',group:['16-33','28-46']},
+    {q:'Which president authorized the atomic bombings of Hiroshima and Nagasaki?',a:'Harry S. Truman (33rd President, 1945–1953). The bombings on August 6 and 9, 1945, ended WWII in the Pacific.',section:'Modern Era',group:['16-33','28-46']},
+    {q:'Which president desegregated the U.S. armed forces by executive order?',a:'Harry S. Truman issued Executive Order 9981 in 1948, mandating equal treatment regardless of race in the military.',section:'Modern Era',group:['28-46']},
+    {q:'Which president planned D-Day and later warned of the "military-industrial complex"?',a:'Dwight D. Eisenhower (34th President, 1953–1961). He commanded the D-Day invasion as Supreme Allied Commander and delivered his famous farewell warning in 1961.',section:'Modern Era',group:['28-46']},
+    {q:'Who navigated the Cuban Missile Crisis of 1962?',a:'John F. Kennedy (35th President). His careful diplomacy in October 1962 prevented a nuclear exchange between the U.S. and USSR.',section:'Modern Era',group:['28-46']},
+    {q:'Which president opened diplomatic relations with China in 1972?',a:'Richard Nixon (37th President). His historic visit to China in February 1972 was a turning point in Cold War geopolitics.',section:'Modern Era',group:['28-46']},
+    {q:'Who was the only person to become both Vice President and President without being elected to either office?',a:'Gerald Ford (38th President, 1974–1977). He was appointed VP when Spiro Agnew resigned, then became President when Nixon resigned.',section:'Modern Era',group:['28-46']},
+    {q:'Which president brokered the Camp David Accords between Egypt and Israel?',a:'Jimmy Carter (39th President, 1977–1981). The 1978 peace agreement between Anwar Sadat and Menachem Begin was a landmark diplomatic achievement.',section:'Modern Era',group:['28-46']},
+    {q:'Which president is known for "Reaganomics" — sweeping tax cuts and a Cold War military buildup?',a:'Ronald Reagan (40th President, 1981–1989). His economic policy combined deregulation, tax cuts, and a massive defense spending increase.',section:'Modern Era',group:['28-46']},
+    {q:'Who led the 35-nation coalition in Operation Desert Storm (Gulf War, 1991)?',a:'George H.W. Bush (41st President). He successfully liberated Kuwait from Iraqi occupation.',section:'Modern Era',group:['28-46']},
+    {q:'Which president won re-election by the largest electoral margin in modern history, carrying 49 of 50 states?',a:'Richard Nixon (37th President) in 1972, defeating George McGovee in one of the largest landslides in U.S. history.',section:'Modern Era',group:['28-46']},
+    {q:'Who was the oldest person inaugurated as U.S. President?',a:'Joe Biden (46th President), inaugurated at age 78 in 2021. Ronald Reagan previously held the record at age 69.',section:'Modern Era',group:['28-46']},
   ],
   currentevents:[
     {q:'What is the Electoral College and how many votes are needed to win?',a:'The system that formally elects the U.S. president. A candidate needs 270 of 538 electoral votes to win.',section:'U.S. Government'},
@@ -362,6 +1054,50 @@ const FLASHCARD_DATA={
     {q:'What is the United Nations and how many member states does it have?',a:'An international organization with 193 member states, founded in 1945 to promote peace, security, and human rights.',section:'World Affairs'},
     {q:'What is climate change and why is it prominent in current events?',a:'Long-term shifts in global temperatures driven by greenhouse gases. Causes sea-level rise, extreme weather, and ecosystem disruption.',section:'Science'},
     {q:'What is artificial intelligence (AI) and why is it newsworthy?',a:'Computer systems performing tasks that normally require human intelligence. AI\'s rapid growth raises major societal, ethical, and economic questions.',section:'Technology'},
+    // ── U.S. Government extras ──
+    {q:'What are the requirements to become President of the United States?',a:'Must be a natural-born U.S. citizen, at least 35 years old, and a resident of the United States for at least 14 years.',section:'U.S. Government'},
+    {q:'How many senators does each state have, and what is their term length?',a:'Every state has exactly 2 senators regardless of population. Senators serve 6-year terms, with one-third of Senate seats up for election every 2 years.',section:'U.S. Government'},
+    {q:'What is the difference between the House of Representatives and the Senate?',a:'House: 435 members, 2-year terms, representation based on state population. Senate: 100 members (2 per state), 6-year terms; must approve treaties and confirm presidential appointments.',section:'U.S. Government'},
+    {q:'What does the 25th Amendment address?',a:'Presidential succession and disability. It provides a mechanism for the VP to become Acting President if the President is incapacitated, and allows the VP and Cabinet to remove the President.',section:'U.S. Government'},
+    {q:'What is the filibuster in the U.S. Senate?',a:'A procedural tactic where a senator delays or blocks a vote by speaking at length. It takes 60 votes (cloture) to end a filibuster, giving the minority party significant blocking power.',section:'U.S. Government'},
+    {q:'What are the Bill of Rights?',a:'The first 10 amendments to the U.S. Constitution (ratified 1791), protecting individual rights: freedom of speech, religion, press, the right to bear arms, and protections against unreasonable searches and self-incrimination.',section:'U.S. Government'},
+    {q:'What is gerrymandering?',a:'Manipulation of electoral district boundaries to favor a particular political party. Named after Governor Elbridge Gerry, who approved a strangely shaped district in Massachusetts in 1812.',section:'U.S. Government'},
+    {q:'What is the War Powers Resolution of 1973?',a:'A law requiring the President to notify Congress within 48 hours of committing U.S. forces to military action. Troops must be withdrawn within 60 days unless Congress authorizes continued engagement.',section:'U.S. Government'},
+    // ── Economics extras ──
+    {q:'What is the difference between the national debt and the federal deficit?',a:'The deficit is the annual gap when government spending exceeds revenue (a yearly figure). The national debt is the total accumulated amount the government owes from all past deficits combined.',section:'Economics'},
+    {q:'What is a recession, and how is it commonly defined?',a:'A period of significant economic decline. Commonly defined as two consecutive quarters of negative GDP growth. The NBER officially determines when U.S. recessions begin and end.',section:'Economics'},
+    {q:'What is the unemployment rate and how is it measured?',a:'The percentage of people in the labor force who are actively looking for work but cannot find it. Measured monthly by the Bureau of Labor Statistics through the Current Population Survey.',section:'Economics'},
+    {q:'What is the Consumer Price Index (CPI)?',a:'A measure of the average change over time in prices paid by consumers for a typical basket of goods and services. The most commonly used gauge of inflation in the United States.',section:'Economics'},
+    {q:'What is a tariff and why do governments impose them?',a:'A tax on imported goods. Governments use tariffs to protect domestic industries from foreign competition, raise revenue, or as leverage in trade negotiations.',section:'Economics'},
+    {q:'What is quantitative easing (QE)?',a:'A monetary policy where a central bank buys government bonds and other assets to inject money into the economy, lower long-term interest rates, and stimulate economic activity.',section:'Economics'},
+    {q:'What is the stock market and why does it matter for the economy?',a:'A marketplace where shares of publicly traded companies are bought and sold. It signals investor confidence, helps companies raise capital, and affects retirement accounts and consumer wealth.',section:'Economics'},
+    // ── World Affairs extras ──
+    {q:'What is the G7 and who are its members?',a:'A group of seven major advanced economies: USA, UK, Canada, France, Germany, Italy, and Japan. They meet annually to coordinate on economic policy, security, and global challenges.',section:'World Affairs'},
+    {q:'What is the difference between the UN Security Council and the General Assembly?',a:'Security Council: 15 members (5 permanent with veto power); handles peace and security decisions. General Assembly: all 193 members, one vote each; debates international issues but resolutions are non-binding.',section:'World Affairs'},
+    {q:'Who are the five permanent members of the UN Security Council?',a:'The United States, United Kingdom, France, Russia, and China. Each holds veto power — a single "no" vote from any of them can block a Security Council resolution.',section:'World Affairs'},
+    {q:'What is the International Monetary Fund (IMF)?',a:'An international organization of 190 countries that promotes global monetary cooperation, financial stability, and economic growth. It provides emergency loans to countries facing financial crises.',section:'World Affairs'},
+    {q:'What is the difference between a refugee and an asylum seeker?',a:'A refugee has been formally recognized by the UN as fleeing persecution or war. An asylum seeker has applied for that status but their claim is still being reviewed.',section:'World Affairs'},
+    {q:'What is the Two-State Solution in the Israeli-Palestinian conflict?',a:'A proposed peace framework creating an independent Palestinian state in the West Bank and Gaza Strip, existing peacefully alongside Israel. It remains the dominant international framework but is unimplemented.',section:'World Affairs'},
+    {q:'What caused Russia\'s 2022 invasion of Ukraine?',a:'Russia invaded Ukraine in February 2022, citing opposition to NATO expansion and disputing Ukrainian sovereignty. The conflict has caused massive casualties, displacement, and reshaped European security policy.',section:'World Affairs'},
+    // ── Science extras ──
+    {q:'What is the greenhouse effect and which gases cause it?',a:'Atmospheric gases (CO₂, methane, water vapor, nitrous oxide) trap heat from the sun, warming Earth\'s surface. Human activities have intensified this effect, driving climate change.',section:'Science'},
+    {q:'What is CRISPR and why is it significant?',a:'CRISPR-Cas9 is a gene-editing technology allowing scientists to precisely cut and modify DNA sequences. It has revolutionary potential for treating genetic diseases, but raises ethical concerns about designer babies and bioweapons.',section:'Science'},
+    {q:'What is mRNA vaccine technology?',a:'mRNA vaccines (like COVID-19 vaccines) deliver genetic instructions teaching cells to produce a protein that triggers an immune response. They cannot alter DNA and are rapidly broken down by the body.',section:'Science'},
+    {q:'What is a climate "tipping point"?',a:'A threshold beyond which a change in the climate system becomes self-reinforcing and potentially irreversible — such as melting Arctic permafrost releasing methane, or collapse of major ice sheets.',section:'Science'},
+    {q:'What is biodiversity and why does it matter?',a:'The variety of life on Earth — species, genetic diversity, and ecosystems. High biodiversity makes ecosystems more resilient, supports food security, provides medicines, and helps stabilize climate.',section:'Science'},
+    {q:'What is the James Webb Space Telescope?',a:'NASA\'s most powerful space telescope, launched December 2021. It observes in infrared light, allowing scientists to study the earliest galaxies after the Big Bang and analyze exoplanet atmospheres.',section:'Science'},
+    {q:'What is the Paris Agreement and what does it aim to achieve?',a:'A 2015 international climate treaty signed by nearly 200 nations, committing them to reduce greenhouse gas emissions to limit global warming to 1.5–2°C above pre-industrial levels.',section:'Science'},
+    {q:'What is antibiotic resistance and why is it a global health concern?',a:'When bacteria evolve to survive antibiotic treatment, making infections harder or impossible to treat. Overuse and misuse of antibiotics accelerates this process. The WHO considers it one of the greatest threats to global health.',section:'Science'},
+    // ── Technology extras ──
+    {q:'What is machine learning and how is it different from traditional programming?',a:'Machine learning trains algorithms on large datasets to find patterns and make predictions, rather than following explicit rules written by programmers. It underlies most modern AI applications.',section:'Technology'},
+    {q:'What is cybersecurity, and what is ransomware?',a:'Cybersecurity protects computer systems and data from theft and damage. Ransomware is malicious software that encrypts a victim\'s files and demands payment (often cryptocurrency) to restore access.',section:'Technology'},
+    {q:'What is social media\'s role in spreading misinformation?',a:'Algorithms maximize engagement, which often amplifies sensational or false content. False stories spread faster than corrections, making social media a primary vector for misinformation and propaganda.',section:'Technology'},
+    {q:'What is net neutrality?',a:'The principle that internet service providers must treat all internet traffic equally, without favoring or blocking specific websites or services. Its repeal or enforcement is debated for impacts on competition and free expression.',section:'Technology'},
+    {q:'What is blockchain technology?',a:'A decentralized digital ledger that records transactions across many computers simultaneously. It underlies cryptocurrencies like Bitcoin and is used in supply chain tracking, smart contracts, and voting systems.',section:'Technology'},
+    {q:'What are large language models (LLMs)?',a:'AI systems trained on massive text datasets that can generate human-like text, answer questions, write code, and complete complex tasks. Examples include GPT-4 and Claude. They power tools like ChatGPT.',section:'Technology'},
+    {q:'What is generative AI and why is it transformative?',a:'AI that can create original content — text, images, audio, and video — from simple prompts. It is transformative because it automates creative and knowledge work, raising questions about jobs, copyright, and misinformation.',section:'Technology'},
+    {q:'What is a "deepfake" and why is it a concern?',a:'AI-generated synthetic media — realistic fake videos, images, or audio of real people saying or doing things they never did. Deepfakes threaten personal reputation, election integrity, and the ability to trust digital evidence.',section:'Technology'},
+    {q:'What is the "digital divide"?',a:'The gap in access to internet and digital technology between wealthy and lower-income populations or between urban and rural areas. Digital access is increasingly essential for education, employment, and civic participation.',section:'Technology'},
   ],
 };
  
@@ -380,15 +1116,76 @@ const QUIZ_DATA={
     {q:'"Don\'t listen to her — she got a speeding ticket last year!" Which technique?',section:'Section F',options:['Diversion','Attacking a Straw Man','Ad Hominem','Appeal to Ridicule'],answer:2,explanation:'Ad Hominem: the speaker attacks the person\'s character or behavior rather than engaging with her argument. The speeding ticket has no bearing on the validity of her ideas.'},
     {q:'"This is the best team in the state, so every player must be the best at their position." Which technique?',section:'Section E',options:['Composition','Division','Hasty Generalization','Selected Instances'],answer:1,explanation:'Division: what is true of the whole (best team in state) is assumed to be true of each individual part (each player). A team can be excellent through coordination even if individual players are not the absolute best at their positions.'},
     {q:'Buy SkinGlow — your favorite celebrities love it! Which technique?',section:'Section D',options:['Appeal to Prestige','Folksy Appeal','Join the Bandwagon','Appeal to Flattery'],answer:0,explanation:'Appeal to Prestige: celebrity status is used to endorse a product. Celebrities have no dermatological expertise, so their fame is entirely irrelevant to evaluating the product\'s actual quality.'},
+    // ── Section A extras ──
+    {q:'"I\'ve thought about it from every angle — there are good arguments on both sides, so I\'m not going to make a decision." Which technique?',section:'Section A',options:['Rationalization','Drawing the Line','Academic Detachment','Wishful Thinking'],answer:2,explanation:'Academic Detachment: when a decision is required, the speaker presents all sides but refuses to commit or act. The key is that inaction occurs when action is actually demanded. Compare with Rationalization, which requires a prior action to justify.'},
+    {q:'"I\'ve only had a little to drink. Just one more won\'t hurt — it\'s only a little." (Said repeatedly all evening.) Which technique?',section:'Section A',options:['Not Drawing the Line','Academic Detachment','Drawing the Line','Causal Oversimplification'],answer:0,explanation:'Not Drawing the Line: the speaker keeps extending limits "just a little more," never setting a firm stopping point. Each increment seems small, but the cumulative effect is excessive — the opposite of Drawing the Line.'},
+    {q:'"That\'s impossible — I simply cannot picture how it would ever work." Which technique?',section:'Section A',options:['Wishful Thinking','Tabloid Thinking','Inconceivability','Academic Detachment'],answer:2,explanation:'Inconceivability: the speaker rejects an idea based solely on their inability to imagine it. Personal imagination is not evidence. This differs from Wishful Thinking (belief driven by desire) and from Tabloid Thinking (oversimplified labeling).'},
+    {q:'"We\'ve always done it this way — why change now?" Which technique?',section:'Section A',options:['Tabloid Thinking','Conservatism','Rationalization','Academic Detachment'],answer:1,explanation:'Conservatism: the old way is preferred simply because it is old, not because it has been evaluated as superior. The idea is judged by habit rather than by its actual merits.'},
+    {q:'"All politicians are crooks. That\'s all you need to know." Which technique?',section:'Section A',options:['Causal Oversimplification','Prejudice','Tabloid Thinking','Inconceivability'],answer:2,explanation:'Tabloid Thinking: a complex group is dismissed with a single catchphrase label. No evidence is offered; the slogan stands in for complex analysis. This differs from Prejudice, which involves acting on prejudgment rather than just labeling.'},
+    // ── Section B extras ──
+    {q:'"This brutal, heartless policy will shatter innocent families." Which technique?',section:'Section B',options:['Abstract Terms','Vagueness','Emotional Terms','Shift of Meaning'],answer:2,explanation:'Emotional Terms: "brutal," "heartless," and "shatter" load the sentence with powerful negative emotion far beyond what the facts warrant. The language is designed to arouse feeling rather than inform.'},
+    {q:'"We stand for Freedom, Justice, and the American Way!" Which technique?',section:'Section B',options:['Slogans','Vagueness','Abstract Terms','Emotional Terms'],answer:2,explanation:'Abstract Terms: "freedom," "justice," and "the American way" are high-level concepts that mean different things to different listeners. The speaker appeals broadly while committing to nothing specific. Slogans are catchy phrases — Abstract Terms specifically exploit conceptual vagueness.'},
+    {q:'A politician\'s full quote: "War is sometimes necessary." The campaign ad quotes: "War is necessary." Which technique?',section:'Section B',options:['Emphasis','Abstract Terms','Quotation Out of Context','Ambiguity'],answer:2,explanation:'Quotation Out of Context: removing "sometimes" completely transforms a qualified statement into an absolute one. The surrounding context changed the meaning — always ask what surrounded a quote.'},
+    {q:'"I\'ll make sure you get what\'s coming to you." (Could be a threat or a promise of reward.) Which technique?',section:'Section B',options:['Vagueness','Ambiguity','Shift of Meaning','Emotional Terms'],answer:1,explanation:'Ambiguity: the phrase has two distinct meanings — threat or reward — and the speaker leaves it deliberately unclear which is intended. Vagueness is imprecise language; Ambiguity involves a specific double meaning.'},
+    {q:'"The economy is a garden — we must prune the weeds of government regulation." Which technique?',section:'Section B',options:['Metaphor and Simile','Abstract Terms','Slogans','Vagueness'],answer:0,explanation:'Metaphor and Simile: the economy is compared to a garden in a way that sounds vivid but breaks down under examination. Economies and gardens operate on fundamentally different principles; the analogy is used to make deregulation seem naturally necessary.'},
+    {q:'"I never said SHE stole the money." (The emphasis implies someone else did.) Which technique?',section:'Section B',options:['Quotation Out of Context','Ambiguity','Emphasis','Shift of Meaning'],answer:2,explanation:'Emphasis: stressing a specific word changes the implication of the entire sentence without changing any actual words. Different stressed words produce completely different implied meanings.'},
+    // ── Section C extras ──
+    {q:'"He can\'t be a good leader — look at how he dresses!" Which technique?',section:'Section C',options:['Manner','Appearance','Status','Degrees and Titles'],answer:1,explanation:'Appearance: the speaker judges the candidate based entirely on physical looks and clothing, which are irrelevant to leadership ability. Manner would apply if the criticism were about how he speaks or presents himself rather than how he looks.'},
+    {q:'"She speaks with such authority — she clearly knows what she\'s talking about." Which technique?',section:'Section C',options:['Appearance','Status','Manner','Numbers'],answer:2,explanation:'Manner: the speaker is swayed by confident delivery style rather than the actual content of the argument. This differs from Appearance (physical looks) — it is about how she speaks, not how she looks.'},
+    {q:'"Everybody knows that you get what you pay for." Which technique?',section:'Section C',options:['Slogans','Vagueness','Sophistical Formula','Repetition'],answer:2,explanation:'Sophistical Formula: "Everybody knows that" is a classic formula — it asserts widespread agreement without providing any actual evidence. It creates the illusion of consensus without establishing it.'},
+    {q:'"99.7% of customers are satisfied!" (Survey of 30 company volunteers.) Which technique?',section:'Section C',options:['Status','Numbers','Selected Instances','Repetition'],answer:1,explanation:'Numbers: an impressive percentage is presented without the context that makes it meaningful. The sample is tiny and biased. The number sounds authoritative but the methodology is deeply flawed.'},
+    {q:'"As a Grammy-winning musician, I can tell you that this politician\'s economic plan is brilliant." Which technique?',section:'Section C',options:['Status','Appeal to Prestige','Degrees and Titles','Manner'],answer:2,explanation:'Degrees and Titles: the credential (Grammy winner) is real but entirely irrelevant to evaluating economic policy. Musical achievement confers no expertise in economics. Status (Section C) uses social position generally; Degrees and Titles specifically misuses credentials.'},
+    // ── Section D extras ──
+    {q:'"Someone as smart and savvy as you can clearly see this product is superior." Which technique?',section:'Section D',options:['Appeal to Flattery','Appeal to Prestige','Join the Bandwagon','Folksy Appeal'],answer:0,explanation:'Appeal to Flattery: the speaker compliments the audience\'s intelligence to lower their critical defenses. Once flattered, the listener is more receptive to the claim. Appeal to Prestige uses a third-party celebrity; Appeal to Flattery praises the audience directly.'},
+    {q:'"Ha! My opponent thinks we should negotiate with them? That\'s absurd!" Which technique?',section:'Section D',options:['Ad Hominem','Appeal to Ridicule','Diversion','Attacking a Straw Man'],answer:1,explanation:'Appeal to Ridicule: the opponent\'s position is laughed at rather than engaged with logically. No counter-argument is offered; mockery substitutes for evidence. Ad Hominem attacks the person, not the position.'},
+    {q:'"You should believe in positive thinking — it will bring you comfort and success." Which technique?',section:'Section D',options:['Appeal to Practical Consequences','Wishful Thinking','Bargain Appeal','Appeal to Pity'],answer:0,explanation:'Appeal to Practical Consequences: the useful result of the belief (comfort, success) is offered as the reason to hold it as true. The practical benefit of believing something does not make it factually correct.'},
+    {q:'"We all agree safety matters → all risk must be eliminated → therefore all outdoor activities should be banned." Which technique?',section:'Section D',options:['Faulty Analogy','Passing from the Acceptable to the Dubious','Begging the Question','Non Sequitur'],answer:1,explanation:'Passing from the Acceptable to the Dubious: the argument starts with a reasonable premise (safety matters) and through small logical steps arrives at an extreme conclusion (ban outdoor activities) that no one would have accepted from the start.'},
+    // ── Section E extras ──
+    {q:'"Just look at these five success stories — this program clearly works for everyone!" Which technique?',section:'Section E',options:['Hasty Generalization','Selected Instances','Composition','Faulty Analogy'],answer:1,explanation:'Selected Instances: only successes are shown while failures are hidden. If we saw a broad representative sample, the program might look very different. This differs from Hasty Generalization in that the issue is specifically the cherry-picking of favorable examples.'},
+    {q:'"Every member of this committee is brilliant, so the committee\'s report must be flawless." Which technique?',section:'Section E',options:['Division','Composition','Selected Instances','Hasty Generalization'],answer:1,explanation:'Composition: what is true of the individual parts (each member is brilliant) is assumed to be true of the whole (the report is flawless). Brilliant individuals can still produce flawed group work due to groupthink or coordination failures.'},
+    {q:'"My headaches started the same week the new cell tower was installed — the tower must be causing them." Which technique?',section:'Section E',options:['Post Hoc','Concurrency','Causal Oversimplification','Selected Instances'],answer:1,explanation:'Concurrency: the headaches and the tower installation happened at the same time — not sequentially. Because they are simultaneous rather than one before the other, this is Concurrency rather than Post Hoc.'},
+    {q:'"Running a country is just like running a business — cut the losers and maximize profit." Which technique?',section:'Section E',options:['Composition','Faulty Analogy','Non Sequitur','Hasty Generalization'],answer:1,explanation:'Faulty Analogy: countries and businesses are superficially similar but differ critically on the points that matter. Citizens cannot be "cut" the way employees can; governments have obligations that corporations do not.'},
+    // ── Section F extras ──
+    {q:'"Don\'t you agree that reducing military funding is the most reckless idea of our time?" Which technique?',section:'Section F',options:['Complex Question','Leading Question','Begging the Question','Inconsequent Argument'],answer:1,explanation:'Leading Question: the question is phrased to steer the respondent toward agreeing ("yes, it\'s reckless"). It suggests the desired answer without containing an embedded hidden accusation, which distinguishes it from a Complex Question.'},
+    {q:'"No true American would ever criticize this country." Which technique?',section:'Section F',options:['Begging the Question','Victory by Definition','Attacking a Straw Man','Sophistical Formula'],answer:1,explanation:'Victory by Definition: "true American" is redefined to exclude anyone who criticizes, making the conclusion true by definition. No evidence is needed — the category itself is rigged.'},
+    {q:'Q: "Should we raise the minimum wage?" A: "Our city just built a beautiful new park!" Which technique?',section:'Section F',options:['Diversion','Inconsequent Argument','Non Sequitur','Disproving a Minor Point'],answer:1,explanation:'Inconsequent Argument: the response (the park) may be true but has nothing to do with the minimum wage question. Diversion actively redirects the conversation; an Inconsequent Argument simply fails to address the issue.'},
+    {q:'"She said the meeting was at 3pm — it was 3:05! Her entire proposal must be invalid." Which technique?',section:'Section F',options:['Ad Hominem','Disproving a Minor Point','Attacking a Straw Man','Diversion'],answer:1,explanation:'Disproving a Minor Point: a trivial error (5 minutes) is used to dismiss an entire proposal. The small factual error has no bearing on the substance of the argument. Ad Hominem attacks the person, not a detail of their argument.'},
+    {q:'"No one has proved that ghosts don\'t exist — therefore ghosts definitely exist." Which technique?',section:'Section F',options:['Begging the Question','Wishful Thinking','Appeal to Ignorance','Non Sequitur'],answer:2,explanation:'Appeal to Ignorance: the absence of disproof is treated as proof. The burden of proof is improperly reversed. Just because something cannot be disproven does not mean it is true.'},
   ],
   presidents:[
-    {q:'Who was the first U.S. President?',section:'Founding Era',options:['John Adams','Thomas Jefferson','George Washington','James Madison'],answer:2,explanation:'George Washington (1789–1797) served two terms with no party affiliation. He is called "Father of His Country" and set the two-term precedent voluntarily.'},
-    {q:'Which president issued the Emancipation Proclamation?',section:'Civil War Era',options:['Ulysses S. Grant','James Buchanan','Abraham Lincoln','Andrew Johnson'],answer:2,explanation:'Abraham Lincoln (16th President) issued the Emancipation Proclamation on January 1, 1863, declaring enslaved people in Confederate states free.'},
-    {q:'Which president served the shortest term in U.S. history?',section:'Founding Era',options:['Zachary Taylor','William Henry Harrison','John Tyler','James Garfield'],answer:1,explanation:'William Henry Harrison (9th President) served only 31 days before dying of pneumonia in 1841 — the shortest term of any U.S. president.'},
-    {q:'Who was the only president to serve two non-consecutive terms?',section:'Gilded Age',options:['Benjamin Harrison','James Buchanan','Grover Cleveland','Franklin Pierce'],answer:2,explanation:'Grover Cleveland served as both the 22nd (1885–1889) and 24th (1893–1897) President — the only president counted twice in the numbering.'},
-    {q:'Who was the only U.S. president to resign from office?',section:'Modern Era',options:['Gerald Ford','Richard Nixon','Lyndon B. Johnson','Jimmy Carter'],answer:1,explanation:'Richard Nixon (37th President) resigned on August 9, 1974, due to the Watergate scandal — the only president ever to do so.'},
-    {q:'Which president signed the Civil Rights Act of 1964?',section:'Modern Era',options:['John F. Kennedy','Dwight Eisenhower','Lyndon B. Johnson','Richard Nixon'],answer:2,explanation:'Lyndon B. Johnson (36th President) signed both the Civil Rights Act (1964) and the Voting Rights Act (1965), landmark legislation of the civil rights movement.'},
-    {q:'Who was the first African American president?',section:'Modern Era',options:['Bill Clinton','Barack Obama','Joe Biden','Jimmy Carter'],answer:1,explanation:'Barack Obama (44th President, 2009–2017) made history as the first African American elected to the presidency.'},
+    // --- #1 ---
+    {q:'Who was the first U.S. President?',section:'Founding Era',options:['John Adams','Thomas Jefferson','George Washington','James Madison'],answer:2,explanation:'George Washington (1789–1797) served two terms with no party affiliation. He is called "Father of His Country" and set the two-term precedent voluntarily.',group:['1-17']},
+    // --- #9 ---
+    {q:'Which president served the shortest term in U.S. history?',section:'Antebellum Era',options:['Zachary Taylor','William Henry Harrison','John Tyler','James Garfield'],answer:1,explanation:'William Henry Harrison (9th President) served only 31 days before dying of pneumonia in 1841 — the shortest term of any U.S. president.',group:['1-17']},
+    // --- #16 ---
+    {q:'Which president issued the Emancipation Proclamation?',section:'Civil War Era',options:['Ulysses S. Grant','James Buchanan','Abraham Lincoln','Andrew Johnson'],answer:2,explanation:'Abraham Lincoln (16th President) issued the Emancipation Proclamation on January 1, 1863, declaring enslaved people in Confederate states free.',group:['1-17','16-33']},
+    // --- #22/#24 ---
+    {q:'Who was the only president to serve two non-consecutive terms?',section:'Gilded Age',options:['Benjamin Harrison','James Buchanan','Grover Cleveland','Franklin Pierce'],answer:2,explanation:'Grover Cleveland served as both the 22nd (1885–1889) and 24th (1893–1897) President — the only president counted twice in the numbering.',group:['16-33']},
+    // --- #36 ---
+    {q:'Which president signed the Civil Rights Act of 1964?',section:'Modern Era',options:['John F. Kennedy','Dwight Eisenhower','Lyndon B. Johnson','Richard Nixon'],answer:2,explanation:'Lyndon B. Johnson (36th President) signed both the Civil Rights Act (1964) and the Voting Rights Act (1965), landmark legislation of the civil rights movement.',group:['28-46']},
+    // --- #37 ---
+    {q:'Who was the only U.S. president to resign from office?',section:'Modern Era',options:['Gerald Ford','Richard Nixon','Lyndon B. Johnson','Jimmy Carter'],answer:1,explanation:'Richard Nixon (37th President) resigned on August 9, 1974, due to the Watergate scandal — the only president ever to do so.',group:['28-46']},
+    // --- #44 ---
+    {q:'Who was the first African American president?',section:'Modern Era',options:['Bill Clinton','Barack Obama','Joe Biden','Jimmy Carter'],answer:1,explanation:'Barack Obama (44th President, 2009–2017) made history as the first African American elected to the presidency.',group:['28-46']},
+    // ── Additional presidents quiz questions ──
+    {q:'Which president issued the Monroe Doctrine?',section:'Founding Era',options:['John Quincy Adams','James Monroe','Andrew Jackson','James Madison'],answer:1,explanation:'James Monroe (5th President) issued the Monroe Doctrine in 1823, warning European powers not to colonize or interfere in the Western Hemisphere.',group:['1-17']},
+    {q:'Who is called the "Father of the Constitution"?',section:'Founding Era',options:['Thomas Jefferson','John Adams','James Madison','James Monroe'],answer:2,explanation:'James Madison (4th President, 1809–1817) is called the "Father of the Constitution" for his central role in drafting and promoting it. He also co-authored The Federalist Papers with Hamilton and Jay.',group:['1-17']},
+    {q:'Which president purchased the Louisiana Territory from France, doubling U.S. territory?',section:'Founding Era',options:['John Adams','James Madison','Thomas Jefferson','James Monroe'],answer:2,explanation:'Thomas Jefferson (3rd President) negotiated the Louisiana Purchase in 1803 for $15 million, and then sent Lewis & Clark to explore the new territory.',group:['1-17']},
+    {q:'Who was the first president to survive an assassination attempt, with both of his attacker\'s pistols misfiring?',section:'Antebellum Era',options:['Abraham Lincoln','Andrew Jackson','Millard Fillmore','James K. Polk'],answer:1,explanation:'Andrew Jackson (7th President) survived the first presidential assassination attempt in 1835. Richard Lawrence\'s two pistols both misfired, and the enraged Jackson beat him with his cane.',group:['1-17']},
+    {q:'Who was the first vice president to assume the presidency upon the death of a president?',section:'Antebellum Era',options:['Millard Fillmore','Andrew Johnson','Chester Arthur','John Tyler'],answer:3,explanation:'John Tyler (10th President) became the first VP to assume the presidency upon the death of William Henry Harrison in 1841. The Whig party later expelled him while he was still serving.',group:['1-17']},
+    {q:'Which president won the disputed 1824 election decided by the House of Representatives?',section:'Founding Era',options:['James Monroe','Andrew Jackson','John Quincy Adams','Martin Van Buren'],answer:2,explanation:'John Quincy Adams (6th President) won the 1824 election decided by the House, despite Andrew Jackson winning the popular vote — an event Jackson called the "Corrupt Bargain."',group:['1-17']},
+    {q:'Who was the only president to serve two non-consecutive terms?',section:'Gilded Age',options:['Benjamin Harrison','James Buchanan','Grover Cleveland','Franklin Pierce'],answer:2,explanation:'Grover Cleveland served as both the 22nd (1885–1889) and 24th (1893–1897) President — the only president counted twice in the numbering system.',group:['16-33']},
+    {q:'Which president served as both President and Chief Justice of the Supreme Court?',section:'Progressive Era',options:['Woodrow Wilson','Theodore Roosevelt','William Howard Taft','Warren Harding'],answer:2,explanation:'William Howard Taft (27th President) is the only person to serve as both President (1909–1913) and Chief Justice of the Supreme Court (1921–1930).',group:['16-33']},
+    {q:'Who was the only U.S. President elected four times?',section:'Modern Era',options:['Harry Truman','Dwight Eisenhower','Franklin D. Roosevelt','Woodrow Wilson'],answer:2,explanation:'Franklin D. Roosevelt (32nd President) was elected in 1932, 1936, 1940, and 1944. His four terms led to the 22nd Amendment (1951), which now limits presidents to two terms.',group:['16-33','28-46']},
+    {q:'Which president desegregated the U.S. armed forces by executive order in 1948?',section:'Modern Era',options:['Franklin D. Roosevelt','Harry S. Truman','Dwight Eisenhower','John F. Kennedy'],answer:1,explanation:'Harry S. Truman issued Executive Order 9981 in 1948, mandating equal treatment regardless of race in the U.S. military — a landmark step in civil rights.',group:['16-33','28-46']},
+    {q:'Which president commanded the D-Day Normandy invasion and later warned of the "military-industrial complex"?',section:'Modern Era',options:['Harry Truman','Dwight Eisenhower','John F. Kennedy','Lyndon Johnson'],answer:1,explanation:'Dwight D. Eisenhower commanded the D-Day invasion as Supreme Allied Commander in WWII, then delivered his famous farewell warning about the military-industrial complex in January 1961.',group:['28-46']},
+    {q:'Which president navigated the Cuban Missile Crisis of 1962, the closest the Cold War came to nuclear war?',section:'Modern Era',options:['Dwight Eisenhower','John F. Kennedy','Lyndon B. Johnson','Richard Nixon'],answer:1,explanation:'John F. Kennedy (35th President) managed the 13-day Cuban Missile Crisis in October 1962 through a naval blockade and back-channel diplomacy, avoiding nuclear war.',group:['28-46']},
+    {q:'Which president brokered the historic Camp David Accords between Egypt and Israel?',section:'Modern Era',options:['Gerald Ford','Jimmy Carter','Ronald Reagan','Richard Nixon'],answer:1,explanation:'Jimmy Carter (39th President) brokered the 1978 Camp David Accords between Egyptian President Anwar Sadat and Israeli Prime Minister Menachem Begin — a landmark peace agreement.',group:['28-46']},
+    {q:'Who was the 41st president and assembled a 35-nation coalition for the Gulf War?',section:'Modern Era',options:['Ronald Reagan','George H.W. Bush','Bill Clinton','George W. Bush'],answer:1,explanation:'George H.W. Bush (41st President) assembled the coalition for Operation Desert Storm (1991), successfully liberating Kuwait from Iraqi occupation.',group:['28-46']},
+    {q:'Which president signed the Affordable Care Act ("Obamacare") in 2010?',section:'Modern Era',options:['George W. Bush','Bill Clinton','Barack Obama','Joe Biden'],answer:2,explanation:'Barack Obama (44th President) signed the Affordable Care Act in 2010 — the largest U.S. healthcare reform in decades, extending coverage to millions of previously uninsured Americans.',group:['28-46']},
+    {q:'Who was the only president impeached twice, in 2019 and again in 2021?',section:'Modern Era',options:['Bill Clinton','Andrew Johnson','Donald Trump','Richard Nixon'],answer:2,explanation:'Donald Trump (45th President) was impeached by the House in December 2019 (Ukraine) and January 2021 (January 6th Capitol riot) — the only president impeached twice. He was acquitted by the Senate both times.',group:['28-46']},
+    {q:'Which president opened diplomatic relations with China in 1972?',section:'Modern Era',options:['Lyndon B. Johnson','Richard Nixon','Gerald Ford','Jimmy Carter'],answer:1,explanation:'Richard Nixon (37th President) made a historic visit to China in February 1972, opening diplomatic relations and fundamentally reshaping Cold War geopolitics.',group:['28-46']},
+    {q:'Who was the only person to become both Vice President and President without being elected to either office?',section:'Modern Era',options:['Spiro Agnew','Gerald Ford','Nelson Rockefeller','Walter Mondale'],answer:1,explanation:'Gerald Ford (38th President) was appointed VP when Spiro Agnew resigned in 1973, then became President when Nixon resigned in 1974 — never having been elected to either office.',group:['28-46']},
   ],
   currentevents:[
     {q:'How many electoral votes are needed to win the U.S. presidency?',section:'U.S. Government',options:['218','270','300','538'],answer:1,explanation:'A candidate needs 270 out of 538 total electoral votes. Each state gets electoral votes equal to its number of senators (always 2) plus its number of House representatives.'},
@@ -396,6 +1193,37 @@ const QUIZ_DATA={
     {q:'How many member states does the United Nations have?',section:'World Affairs',options:['150','175','193','210'],answer:2,explanation:'The United Nations has 193 member states. It was founded in 1945 after World War II to promote international peace, security, and cooperation.'},
     {q:'What does NATO\'s Article 5 mean?',section:'World Affairs',options:['Free trade among members','Nuclear sharing agreement','Collective defense — attack on one is attack on all','Environmental cooperation treaty'],answer:2,explanation:'Article 5 is NATO\'s collective defense clause. If one member is attacked, all other members consider it an attack on themselves and are obligated to respond.'},
     {q:'Which branch of U.S. government can declare laws unconstitutional?',section:'U.S. Government',options:['Executive','Legislative','Judicial','All three equally'],answer:2,explanation:'The Judicial branch, led by the Supreme Court, holds the power of judicial review — established in Marbury v. Madison (1803).'},
+    // ── U.S. Government extras ──
+    {q:'How many total members does the U.S. House of Representatives have?',section:'U.S. Government',options:['100','270','435','538'],answer:2,explanation:'The House of Representatives has 435 members. Each state\'s representation is based on its population, as determined by the census taken every 10 years. Representatives serve 2-year terms.'},
+    {q:'What is the purpose of the Senate\'s "advice and consent" role?',section:'U.S. Government',options:['Passing all federal legislation','Confirming presidential appointments and ratifying treaties','Declaring war','Overriding presidential vetoes'],answer:1,explanation:'The Senate provides "advice and consent" by confirming presidential nominees (judges, cabinet members, ambassadors) and ratifying treaties. Treaties require a two-thirds Senate majority.'},
+    {q:'What is the presidential veto and how can it be overridden?',section:'U.S. Government',options:['The president can permanently block any law','Congress overrides with a simple majority','Congress overrides with a two-thirds vote in both chambers','The Supreme Court can cancel a veto'],answer:2,explanation:'The President can veto (reject) legislation passed by Congress. Congress can override a veto by a two-thirds vote in both the House and Senate, in which case the bill becomes law without the president\'s signature.'},
+    {q:'What is the difference between a federal law and an executive order?',section:'U.S. Government',options:['They are the same thing','Federal laws require Congressional approval; executive orders are issued by the president alone and don\'t require Congressional approval','Executive orders are permanent; federal laws can be repealed','Only executive orders can be challenged in court'],answer:1,explanation:'Federal laws must pass both chambers of Congress and be signed by the president. Executive orders are directives issued by the president alone under executive authority, but they can be challenged in court or reversed by future presidents.'},
+    {q:'How many justices sit on the U.S. Supreme Court?',section:'U.S. Government',options:['7','9','11','13'],answer:1,explanation:'There are 9 justices on the Supreme Court: 1 Chief Justice and 8 Associate Justices. They are nominated by the president and confirmed by the Senate, serving lifetime appointments.'},
+    // ── Economics extras ──
+    {q:'What is the difference between monetary policy and fiscal policy?',section:'Economics',options:['Monetary controls spending; fiscal controls money supply','Monetary is set by Congress; fiscal is set by the Fed','Monetary policy controls the money supply (Fed); fiscal policy involves government spending and taxes (Congress)','They are the same thing'],answer:2,explanation:'Monetary policy is set by the Federal Reserve through interest rates and money supply controls. Fiscal policy is set by Congress and the President through taxation and government spending decisions.'},
+    {q:'What is a stock market index like the S&P 500?',section:'Economics',options:['A list of all publicly traded companies','A measure of government bond performance','A benchmark tracking the performance of a selected group of stocks','The official GDP measurement'],answer:2,explanation:'The S&P 500 tracks the stock performance of 500 large U.S. companies. It is widely used as a benchmark for the overall health of the U.S. stock market and the broader economy.'},
+    {q:'What caused the 2008 financial crisis?',section:'Economics',options:['Rising oil prices','A massive housing bubble, risky mortgage-backed securities, and overleveraged banks','Government overspending on social programs','The Federal Reserve raising interest rates too quickly'],answer:1,explanation:'The 2008 crisis was triggered by the collapse of a U.S. housing bubble, fueled by risky subprime mortgages bundled into complex securities and sold globally. When housing prices fell, the financial system nearly collapsed.'},
+    {q:'What is a tariff and what impact does it have?',section:'Economics',options:['A subsidy paid to domestic companies','A tax on imported goods that raises their price','A trade agreement between two countries','A type of government bond'],answer:1,explanation:'A tariff is a tax on imported goods. It makes foreign products more expensive, protecting domestic industries but also raising prices for consumers. Tariffs are used as economic policy tools and trade negotiation leverage.'},
+    // ── World Affairs extras ──
+    {q:'What is happening in the ongoing Russia-Ukraine war?',section:'World Affairs',options:['A trade dispute over natural gas pipelines','Russia\'s 2022 invasion of Ukraine over sovereignty and NATO expansion concerns','A civil war within Ukraine','A UN peacekeeping operation'],answer:1,explanation:'Russia invaded Ukraine in February 2022, citing opposition to NATO expansion and disputing Ukrainian sovereignty. The conflict has caused massive casualties, displacement, and reshaped European security alliances.'},
+    {q:'Who are the five permanent members of the UN Security Council with veto power?',section:'World Affairs',options:['USA, UK, France, Germany, Japan','USA, UK, France, Russia, China','USA, Russia, China, India, Brazil','USA, UK, France, Italy, Canada'],answer:1,explanation:'The five permanent members (P5) of the UN Security Council are the USA, UK, France, Russia, and China. Each holds veto power — a single "no" vote from any one of them can block a resolution.'},
+    {q:'What is the G7 group of nations?',section:'World Affairs',options:['Seven largest economies including China','Seven nuclear-armed nations','Seven major advanced democracies: USA, UK, Canada, France, Germany, Italy, Japan','Seven founding members of the United Nations'],answer:2,explanation:'The G7 consists of seven major advanced economies — USA, UK, Canada, France, Germany, Italy, and Japan — that coordinate on economic policy, security, and global challenges at annual summits.'},
+    {q:'What is the International Monetary Fund (IMF)?',section:'World Affairs',options:['A bank that only lends to private businesses','A military alliance of wealthy nations','An international organization that promotes financial stability and provides emergency loans to countries in crisis','A trade organization that negotiates tariff agreements'],answer:2,explanation:'The IMF is an international organization of 190 countries that promotes global monetary cooperation, financial stability, and economic growth. It provides emergency loans to countries facing financial crises with conditions for economic reform.'},
+    // ── Science questions ──
+    {q:'What is climate change and what primarily causes it?',section:'Science',options:['Natural variation in Earth\'s orbit, unrelated to human activity','Long-term shifts in global temperatures driven primarily by human greenhouse gas emissions','Volcanic activity releasing sulfur dioxide','Changes in solar output'],answer:1,explanation:'Climate change refers to long-term shifts in global temperatures and weather patterns. While some natural variation exists, the current rapid warming is primarily driven by human activities — burning fossil fuels releases CO₂ and other greenhouse gases that trap heat.'},
+    {q:'What is the significance of the Paris Agreement?',section:'Science',options:['An international trade deal reducing carbon tariffs','A 2015 climate treaty aiming to limit global warming to 1.5–2°C above pre-industrial levels','An agreement to ban nuclear weapons','A treaty establishing the carbon credit trading market'],answer:1,explanation:'The Paris Agreement (2015) is a landmark international climate treaty signed by nearly 200 nations, committing them to reduce greenhouse gas emissions to keep warming below 2°C — ideally 1.5°C — above pre-industrial levels.'},
+    {q:'What is CRISPR gene-editing technology?',section:'Science',options:['A method of mapping human DNA without editing it','A precise gene-editing tool that can cut and modify DNA sequences','A technique for cloning animals','A type of antibiotic resistant to bacteria'],answer:1,explanation:'CRISPR-Cas9 is a molecular tool that allows scientists to precisely edit DNA sequences by cutting them at specific locations. It has revolutionary potential for treating genetic diseases, but also raises serious ethical questions.'},
+    {q:'What is antibiotic resistance and why is it dangerous?',section:'Science',options:['When humans develop allergies to antibiotics','When bacteria evolve to survive antibiotic treatment, making infections harder or impossible to treat','When antibiotics break down in the environment and pollute water','When the immune system becomes dependent on antibiotics'],answer:1,explanation:'Antibiotic resistance occurs when bacteria evolve to survive antibiotic treatment. Overuse and misuse of antibiotics accelerates this process. The WHO considers it one of the greatest threats to global health, as common infections could become untreatable.'},
+    {q:'What is the greenhouse effect?',section:'Science',options:['The warming of greenhouses using solar panels','Atmospheric gases (CO₂, methane, etc.) trapping heat from the sun, warming Earth\'s surface','The effect of deforestation on local temperatures','A type of nuclear energy generation'],answer:1,explanation:'The greenhouse effect occurs when atmospheric gases — carbon dioxide, methane, water vapor, nitrous oxide — trap heat radiated from Earth\'s surface. This natural process keeps Earth habitable, but human activities have intensified it, causing global warming.'},
+    {q:'What is the James Webb Space Telescope known for?',section:'Science',options:['Observing weather patterns on Earth from orbit','Photographing the surface of Mars in detail','Observing the earliest galaxies in the universe and analyzing exoplanet atmospheres in infrared light','Tracking asteroids that could hit Earth'],answer:2,explanation:'Launched in December 2021, the James Webb Space Telescope is NASA\'s most powerful space telescope. It observes in infrared light, allowing it to peer through cosmic dust clouds to see the earliest galaxies and analyze the atmospheres of distant exoplanets.'},
+    {q:'What is mRNA vaccine technology, as used in COVID-19 vaccines?',section:'Science',options:['A vaccine made from weakened live viruses','A vaccine that delivers genetic instructions to cells to produce an immune response, without using live virus','A vaccine using antibodies extracted from recovered patients','A traditional killed-virus vaccine'],answer:1,explanation:'mRNA vaccines (like Pfizer-BioNTech and Moderna COVID-19 vaccines) deliver messenger RNA instructions teaching cells to produce a protein (like the spike protein) that triggers an immune response. The mRNA cannot alter DNA and is broken down rapidly by the body.'},
+    // ── Technology questions ──
+    {q:'What is artificial intelligence (AI) at its core?',section:'Technology',options:['Software that can only perform calculations faster than humans','Computer systems that perform tasks normally requiring human intelligence, such as reasoning, learning, and problem-solving','A hardware chip that speeds up internet connections','A database of human knowledge accessible via search'],answer:1,explanation:'AI refers to computer systems designed to perform tasks that typically require human intelligence — pattern recognition, language understanding, decision-making, and learning from data. Modern AI uses machine learning to improve from experience.'},
+    {q:'What is generative AI and why is it significant?',section:'Technology',options:['AI that can only classify existing data into categories','AI systems that create new content — text, images, audio, and video — from prompts','AI used exclusively in medical imaging','A type of network security software'],answer:1,explanation:'Generative AI (like GPT-4 or image generators like DALL-E) can produce original content in response to human prompts. It is significant because it automates creative and knowledge work, transforming industries while raising questions about jobs, copyright, and misinformation.'},
+    {q:'What is ransomware and why is it a major cybersecurity threat?',section:'Technology',options:['Software that speeds up computers by removing old files','Malicious software that encrypts a victim\'s data and demands payment (often cryptocurrency) to restore access','A type of antivirus software','Software used to monitor employee computer activity'],answer:1,explanation:'Ransomware is malware that locks or encrypts a victim\'s files, making them inaccessible. Attackers demand a ransom — often in cryptocurrency — for the decryption key. Major attacks have hit hospitals, pipelines, schools, and government agencies.'},
+    {q:'What is a "deepfake"?',section:'Technology',options:['A method of deep-sea data storage','AI-generated synthetic media — realistic fake videos, images, or audio of real people saying or doing things they never did','A form of quantum computing encryption','Software that detects fake news articles'],answer:1,explanation:'Deepfakes use deep learning AI to create convincingly realistic synthetic media of real people. They pose serious threats to personal reputation, election integrity, and the public\'s ability to trust video and audio evidence.'},
+    {q:'What is the "digital divide" and why does it matter?',section:'Technology',options:['The performance gap between old and new computers','The unequal access to internet and digital technology across income, geographic, and demographic lines','The difference between wired and wireless internet connections','The competition between major tech companies'],answer:1,explanation:'The digital divide is the gap in access to internet and digital tools between wealthy and lower-income populations, or between urban and rural areas. It matters because digital access is increasingly essential for education, employment, healthcare, and civic participation.'},
+    {q:'Why is social media a concern for spreading misinformation?',section:'Technology',options:['Social media platforms are too slow for news to spread','Algorithms that maximize engagement tend to amplify sensational or false content, since it spreads faster than corrections','Social media reaches too few people to matter','Social media companies fact-check all posts before they are published'],answer:1,explanation:'Social media algorithms optimize for engagement (likes, shares). Sensational or emotionally charged content — including misinformation — tends to spread faster than dry factual corrections. This creates environments where false information can reach millions before being debunked.'},
   ],
 };
  
@@ -405,6 +1233,7 @@ const QUIZ_DATA={
 let currentMode='flashcards';
 let currentSubject='propaganda';
 let cardIndex=0,isFlipped=false;
+let flashcardQueue=[],flashcardSection=null,quizSection=null;
 let quizIndex=0,quizAnswered=false,quizScore={correct:0,incorrect:0},quizCards=[],selectedOption=null;
 let refState={propSection:null,propTech:null,presEra:null,pres:null};
  
@@ -413,16 +1242,17 @@ let refState={propSection:null,propTech:null,presEra:null,pres:null};
 // ============================================================
 function switchMode(mode){
   currentMode=mode;
-  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['flashcards','quiz','reference'][i]===mode));
-  cardIndex=0;isFlipped=false;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['flashcards','quiz','reference','compete'][i]===mode));
+  cardIndex=0;isFlipped=false;flashcardQueue=[];flashcardSection=null;quizSection=null;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
   refState={propSection:null,propTech:null,presEra:null,pres:null};
+  if(mode!=='compete'){competeRunning=false;competeCards=[];competeIndex=0;competeScore={correct:0,wrong:0};clearCompeteTimer();}
   render();
 }
 function setSubject(s){
   currentSubject=s;
   document.querySelectorAll('.subject-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sbtn-'+s).classList.add('active');
-  cardIndex=0;isFlipped=false;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
+  cardIndex=0;isFlipped=false;flashcardQueue=[];flashcardSection=null;quizSection=null;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
   refState={propSection:null,propTech:null,presEra:null,pres:null};
   render();
 }
@@ -431,16 +1261,68 @@ function render(){
   if(currentMode==='flashcards') el.innerHTML=renderFlashcards();
   else if(currentMode==='quiz') el.innerHTML=renderQuiz();
   else if(currentMode==='reference') el.innerHTML=renderReference();
+  else if(currentMode==='compete') el.innerHTML=renderCompete();
+}
+ 
+// ============================================================
+// SECTION HELPERS
+// ============================================================
+function getSections(subject){
+  if(subject==='propaganda') return [
+    {key:'Section A',label:'A: Self-Deception'},
+    {key:'Section B',label:'B: Language'},
+    {key:'Section C',label:'C: Irrelevance'},
+    {key:'Section D',label:'D: Exploitation'},
+    {key:'Section E',label:'E: Form'},
+    {key:'Section F',label:'F: Maneuver'},
+  ];
+  if(subject==='currentevents') return [
+    {key:'U.S. Government',label:'U.S. Gov\'t'},
+    {key:'Economics',label:'Economics'},
+    {key:'World Affairs',label:'World Affairs'},
+    {key:'Science',label:'Science'},
+    {key:'Technology',label:'Technology'},
+  ];
+  if(subject==='presidents') return [
+    {key:'1-17',label:'Presidents 1\u201317'},
+    {key:'16-33',label:'Presidents 16\u201333'},
+    {key:'28-46',label:'Presidents 28\u201346'},
+  ];
+  return [];
+}
+function cardMatchesSection(card,section,subject){
+  if(!section) return true;
+  if(subject==='presidents') return card.group&&card.group.includes(section);
+  if(subject==='propaganda') return card.section===section||card.section.startsWith(section+' ');
+  return card.section===section;
+}
+function renderSectionFilter(section,subject,setter){
+  const sects=getSections(subject);
+  if(!sects.length) return '';
+  const allActive=!section?'active':'';
+  return `<div class="section-filter-row">
+    <button class="sect-btn ${allActive}" onclick="${setter}(null)">All</button>
+    ${sects.map(s=>`<button class="sect-btn ${section===s.key?'active':''}" onclick="${setter}('${s.key}')">${s.label}</button>`).join('')}
+  </div>`;
 }
  
 // ============================================================
 // FLASHCARDS
 // ============================================================
 function renderFlashcards(){
-  const cards=FLASHCARD_DATA[currentSubject];
+  if(flashcardQueue.length===0){
+    const all=FLASHCARD_DATA[currentSubject];
+    flashcardQueue=flashcardSection?all.filter(c=>cardMatchesSection(c,flashcardSection,currentSubject)):all.slice();
+    if(getPrefs().shuffle) flashcardQueue.sort(()=>Math.random()-0.5);
+    scheduleAutoFlip();
+  }
+  const cards=flashcardQueue;
+  if(!cards.length) return `<div class="card-area">${renderSectionFilter(flashcardSection,currentSubject,'setFlashSection')}<p style="text-align:center;padding:30px;color:var(--text-tertiary)">No cards for this section.</p></div>`;
+  if(cardIndex>=cards.length) cardIndex=0;
   const card=cards[cardIndex];
   const pct=((cardIndex+1)/cards.length*100).toFixed(0);
   return `<div class="card-area">
+    ${renderSectionFilter(flashcardSection,currentSubject,'setFlashSection')}
     <div class="card-counter">Card ${cardIndex+1} of ${cards.length}</div>
     <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
     <div class="flashcard-wrap">
@@ -465,10 +1347,15 @@ function renderFlashcards(){
     </div>
   </div>`;
 }
-function flipCard(){isFlipped=!isFlipped;render();}
-function nextCard(){const c=FLASHCARD_DATA[currentSubject];cardIndex=(cardIndex+1)%c.length;isFlipped=false;render();}
-function prevCard(){const c=FLASHCARD_DATA[currentSubject];cardIndex=(cardIndex-1+c.length)%c.length;isFlipped=false;render();}
-function shuffleCards(){FLASHCARD_DATA[currentSubject].sort(()=>Math.random()-0.5);cardIndex=0;isFlipped=false;render();}
+let _autoFlipTimer=null;
+function flipCard(){isFlipped=!isFlipped;if(!isFlipped) trackCardFlip();clearAutoFlip();render();}
+function clearAutoFlip(){if(_autoFlipTimer){clearTimeout(_autoFlipTimer);_autoFlipTimer=null;}}
+function scheduleAutoFlip(){clearAutoFlip();const p=getPrefs();if(!p.autoflip||isFlipped) return;const delay=(parseInt(p.autoflipDelay)||5)*1000;_autoFlipTimer=setTimeout(()=>{if(!isFlipped){isFlipped=true;trackCardFlip();render();}},delay);}
+function nextCard(){if(!flashcardQueue.length)return;cardIndex=(cardIndex+1)%flashcardQueue.length;isFlipped=false;render();scheduleAutoFlip();}
+function prevCard(){if(!flashcardQueue.length)return;cardIndex=(cardIndex-1+flashcardQueue.length)%flashcardQueue.length;isFlipped=false;render();scheduleAutoFlip();}
+function shuffleCards(){if(!flashcardQueue.length)return;flashcardQueue.sort(()=>Math.random()-0.5);cardIndex=0;isFlipped=false;render();}
+function setFlashSection(s){flashcardSection=s;flashcardQueue=[];cardIndex=0;isFlipped=false;clearAutoFlip();render();scheduleAutoFlip();}
+function setQuizSection(s){quizSection=s;quizIndex=0;quizAnswered=false;selectedOption=null;quizCards=[];quizScore={correct:0,incorrect:0};render();}
  
 // ============================================================
 // QUIZ
@@ -476,11 +1363,17 @@ function shuffleCards(){FLASHCARD_DATA[currentSubject].sort(()=>Math.random()-0.
 function renderQuiz(){
   if(!QUIZ_DATA[currentSubject]||QUIZ_DATA[currentSubject].length===0)
     return `<div class="ask-ai-box"><p style="color:var(--text-tertiary);text-align:center;padding:20px">No quiz available for this subject in this mode.</p></div>`;
-  if(quizCards.length===0) quizCards=[...QUIZ_DATA[currentSubject]].sort(()=>Math.random()-0.5);
-  if(quizIndex>=quizCards.length){renderQuizFinal();return '';}
+  if(quizCards.length===0){
+    const all=QUIZ_DATA[currentSubject];
+    const filtered=quizSection?all.filter(c=>cardMatchesSection(c,quizSection,currentSubject)):all;
+    if(!filtered.length) return `<div class="card-area">${renderSectionFilter(quizSection,currentSubject,'setQuizSection')}<p style="text-align:center;padding:30px;color:var(--text-tertiary)">No quiz questions for this section.</p></div>`;
+    const p=getPrefs();const qOrder=p.quizOrder||'random';quizCards=qOrder==='sequential'?[...filtered]:[...filtered].sort(()=>Math.random()-0.5);
+  }
+  if(quizIndex>=quizCards.length){renderQuizFinal();return `<div class="card-area">${renderSectionFilter(quizSection,currentSubject,'setQuizSection')}</div>`;}
   const q=quizCards[quizIndex];
   const pct=(quizIndex/quizCards.length*100).toFixed(0);
   return `<div class="card-area">
+    ${renderSectionFilter(quizSection,currentSubject,'setQuizSection')}
     <div class="score-bar">
       <div class="score-chip correct-chip">✓ ${quizScore.correct}</div>
       <div class="score-chip total-chip">${quizIndex}/${quizCards.length}</div>
@@ -512,7 +1405,7 @@ function submitAnswer(){
   quizAnswered=true;
   const q=quizCards[quizIndex];
   const correct=selectedOption===q.answer;
-  if(correct) quizScore.correct++; else quizScore.incorrect++;
+  if(correct){quizScore.correct++;trackQuizCorrect();}else quizScore.incorrect++;
   document.querySelectorAll('.quiz-option').forEach((b,idx)=>{
     b.disabled=true;
     if(idx===q.answer) b.classList.add('reveal-correct');
@@ -520,8 +1413,9 @@ function submitAnswer(){
     if(idx===selectedOption&&correct) b.classList.add('correct');
   });
   const fb=document.getElementById('quiz-feedback');
+  const showExp=(getPrefs().explanations??true);
   fb.className='quiz-feedback show '+(correct?'correct':'incorrect');
-  fb.innerHTML=`<div class="feedback-title">${correct?'✓ Correct!':'✗ Not quite — the answer is: '+q.options[q.answer]}</div>${q.explanation}`;
+  fb.innerHTML=`<div class="feedback-title">${correct?'✓ Correct!':'✗ Not quite — the answer is: '+q.options[q.answer]}</div>${showExp?q.explanation:''}`;
   const sb=document.getElementById('submit-btn');
   sb.textContent=quizIndex+1<quizCards.length?'Next Question →':'See Results';
   sb.onclick=advanceQuiz;sb.disabled=false;
@@ -722,10 +1616,650 @@ function renderCERef(){
  
 
  
+
+
+// ============================================================
+// COMPETE
+// ============================================================
+let competeSection=null,competeCards=[],competeIndex=0,competeAnswered=false;
+let competeScore={correct:0,wrong:0},competeSelectedOption=null,competeRunning=false;
+let _competeTimerStart=0,_competeTimerInterval=null,_competeElapsed=0;
+
+function getLeaderboard(){try{return JSON.parse(localStorage.getItem('agk_leaderboard')||'[]');}catch(e){return[];}}
+function saveLeaderboard(lb){localStorage.setItem('agk_leaderboard',JSON.stringify(lb));}
+function formatTime(sec){const m=Math.floor(sec/60);const s=sec%60;return `${m}:${String(s).padStart(2,'0')}`;}
+
+function renderCompete(){
+  if(competeRunning) return renderCompeteQuestion();
+  return renderCompeteLobby();
+}
+
+function renderCompeteLobby(){
+  const all=getLeaderboard().filter(e=>e.subject===currentSubject&&(!competeSection||e.section===(competeSection||'All')));
+  all.sort((a,b)=>(b.correct-a.correct)||(a.timeSeconds-b.timeSeconds));
+  const sectionHtml=renderSectionFilter(competeSection,currentSubject,'setCompeteSection');
+  const lbHtml=all.length===0
+    ?`<div class="compete-lb-empty">No scores yet for this subject. Be the first!</div>`
+    :`<div class="compete-lb-table">
+        <div class="compete-lb-header"><span class="lb-rank">#</span><span class="lb-name">Player</span><span class="lb-correct">✓</span><span class="lb-wrong">✗</span><span class="lb-total">Total</span><span class="lb-time">Time</span><span class="lb-date">Date</span></div>
+        ${all.slice(0,30).map((e,i)=>{
+          const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+          const user=getUser();
+          const isMe=user&&e.email&&user.email===e.email&&(Date.now()-e.ts<8000);
+          return `<div class="compete-lb-row${isMe?' lb-me':''}">
+            <span class="lb-rank">${medal||(i+1)}</span>
+            <span class="lb-name">${e.name}</span>
+            <span class="lb-correct">${e.correct}</span>
+            <span class="lb-wrong">${e.wrong}</span>
+            <span class="lb-total">${e.correct+e.wrong}</span>
+            <span class="lb-time">${formatTime(e.timeSeconds)}</span>
+            <span class="lb-date">${e.date}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+  return `<div class="card-area">
+    ${sectionHtml}
+    <div class="compete-lobby">
+      <div class="compete-trophy">🏆</div>
+      <div class="compete-lobby-title">Compete</div>
+      <div class="compete-lobby-desc">Answer all questions as fast as you can.<br>Your score and time are saved to the leaderboard.</div>
+      <button class="btn btn-primary compete-start-btn" onclick="startCompete()">Start Timed Test →</button>
+    </div>
+    <div class="compete-lb-section">
+      <div class="compete-lb-title">Leaderboard — ${currentSubject.charAt(0).toUpperCase()+currentSubject.slice(1)}${competeSection?' · '+competeSection:''}</div>
+      ${lbHtml}
+    </div>
+  </div>`;
+}
+
+function renderCompeteQuestion(){
+  const q=competeCards[competeIndex];
+  const total=competeCards.length;
+  const pct=(competeIndex/total*100).toFixed(0);
+  return `<div class="card-area">
+    <div class="compete-timer-bar">
+      <div class="compete-timer" id="compete-timer-display">0:00</div>
+      <div class="compete-progress-text">Q ${competeIndex+1} / ${total}</div>
+      <div class="compete-score-mini">✓ ${competeScore.correct} &nbsp; ✗ ${competeScore.wrong}</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-question-card">
+      <div class="quiz-q-label">Question ${competeIndex+1} of ${total}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-q-section">${q.section}</div>
+    </div>
+    <div class="quiz-options">
+      ${q.options.map((opt,i)=>`<button class="quiz-option" onclick="selectCompeteOption(${i})" id="copt-${i}">${opt}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="compete-feedback"></div>
+    <div class="controls">
+      <button class="btn btn-primary" id="compete-submit-btn" onclick="submitCompeteAnswer()" disabled>Submit Answer</button>
+    </div>
+  </div>`;
+}
+
+function setCompeteSection(s){
+  competeSection=s;competeRunning=false;competeCards=[];competeIndex=0;
+  competeScore={correct:0,wrong:0};clearCompeteTimer();render();
+}
+
+function startCompete(){
+  const all=QUIZ_DATA[currentSubject];
+  if(!all||!all.length){alert('No questions available for this subject.');return;}
+  const filtered=competeSection?all.filter(c=>cardMatchesSection(c,competeSection,currentSubject)):all;
+  if(!filtered.length){alert('No questions for this section.');return;}
+  competeCards=[...filtered].sort(()=>Math.random()-0.5);
+  competeIndex=0;competeScore={correct:0,wrong:0};
+  competeAnswered=false;competeSelectedOption=null;competeRunning=true;
+  _competeTimerStart=Date.now();_competeElapsed=0;
+  render();
+  _competeTimerInterval=setInterval(()=>{
+    _competeElapsed=Math.floor((Date.now()-_competeTimerStart)/1000);
+    const el=document.getElementById('compete-timer-display');
+    if(el) el.textContent=formatTime(_competeElapsed);
+  },500);
+}
+
+function clearCompeteTimer(){if(_competeTimerInterval){clearInterval(_competeTimerInterval);_competeTimerInterval=null;}}
+
+function selectCompeteOption(i){
+  if(competeAnswered) return;
+  competeSelectedOption=i;
+  document.querySelectorAll('.quiz-option').forEach((b,idx)=>b.classList.toggle('selected',idx===i));
+  document.getElementById('compete-submit-btn').disabled=false;
+}
+
+function submitCompeteAnswer(){
+  if(competeSelectedOption===null||competeAnswered) return;
+  competeAnswered=true;
+  const q=competeCards[competeIndex];
+  const correct=competeSelectedOption===q.answer;
+  if(correct){competeScore.correct++;}else{competeScore.wrong++;}
+  document.querySelectorAll('.quiz-option').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.answer) b.classList.add('reveal-correct');
+    if(idx===competeSelectedOption&&!correct) b.classList.add('incorrect');
+    if(idx===competeSelectedOption&&correct) b.classList.add('correct');
+  });
+  const fb=document.getElementById('compete-feedback');
+  fb.className='quiz-feedback show '+(correct?'correct':'incorrect');
+  fb.innerHTML=`<div class="feedback-title">${correct?'✓ Correct!':'✗ '+q.options[q.answer]}</div>`;
+  const sb=document.getElementById('compete-submit-btn');
+  sb.textContent=competeIndex+1<competeCards.length?'Next →':'Finish & See Results →';
+  sb.onclick=advanceCompete;sb.disabled=false;
+}
+
+function advanceCompete(){
+  competeIndex++;competeAnswered=false;competeSelectedOption=null;
+  if(competeIndex>=competeCards.length) finishCompete(); else render();
+}
+
+function finishCompete(){
+  clearCompeteTimer();
+  const elapsed=Math.floor((Date.now()-_competeTimerStart)/1000);
+  _competeElapsed=elapsed;competeRunning=false;
+  const user=getUser();
+  const parts=(user&&user.name)?user.name.trim().split(/\s+/):['-'];
+  const firstName=parts[0];
+  const lastInitial=parts.length>1?parts[parts.length-1][0].toUpperCase()+'.':'';
+  const displayName=lastInitial?`${firstName} ${lastInitial}`:firstName;
+  const entry={
+    name:displayName,email:user?user.email:'',
+    subject:currentSubject,section:competeSection||'All',
+    correct:competeScore.correct,wrong:competeScore.wrong,
+    timeSeconds:elapsed,
+    date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+    ts:Date.now()
+  };
+  const lb=getLeaderboard();lb.push(entry);saveLeaderboard(lb);
+  const total=competeCards.length;
+  const pct=Math.round(entry.correct/total*100);
+  const emoji=pct>=90?'🏆':pct>=70?'🎉':pct>=50?'📚':'💪';
+  const msg=pct>=90?'Outstanding!':pct>=70?'Great Job!':pct>=50?'Good Effort!':'Keep Studying!';
+  document.getElementById('main-content').innerHTML=`<div class="card-area">
+    <div class="compete-result-card">
+      <div class="compete-result-emoji">${emoji}</div>
+      <div class="compete-result-title">${msg}</div>
+      <div class="compete-result-score">${entry.correct} / ${total}</div>
+      <div class="compete-result-stats">
+        <div class="compete-result-stat"><span class="cr-label">✓ Correct</span><span class="cr-val correct-color">${entry.correct}</span></div>
+        <div class="compete-result-stat"><span class="cr-label">✗ Wrong</span><span class="cr-val incorrect-color">${entry.wrong}</span></div>
+        <div class="compete-result-stat"><span class="cr-label">⏱ Time</span><span class="cr-val">${formatTime(entry.timeSeconds)}</span></div>
+        <div class="compete-result-stat"><span class="cr-label">Accuracy</span><span class="cr-val">${pct}%</span></div>
+      </div>
+      <div class="compete-result-saved">✓ Score saved to leaderboard</div>
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="startCompete()">Try Again</button>
+        <button class="btn btn-primary" onclick="render()">View Leaderboard</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+const AUTH_KEY='agk_user';
+const PREFS_KEY='agk_prefs';
+const STATS_KEY='agk_stats';
+
+function getUser(){try{return JSON.parse(localStorage.getItem(AUTH_KEY))||null;}catch(e){return null;}}
+function saveUser(u){localStorage.setItem(AUTH_KEY,JSON.stringify(u));}
+function getPrefs(){try{return JSON.parse(localStorage.getItem(PREFS_KEY))||{};}catch(e){return {};}}
+function savePrefsData(p){localStorage.setItem(PREFS_KEY,JSON.stringify(p));}
+function getStats(){try{return JSON.parse(localStorage.getItem(STATS_KEY))||{sessions:0,cards:0,correct:0,streak:0,lastDate:''};}catch(e){return {sessions:0,cards:0,correct:0,streak:0,lastDate:''};}}
+function saveStatsData(s){localStorage.setItem(STATS_KEY,JSON.stringify(s));}
+
+function switchAuthTab(tab){
+  document.getElementById('auth-tab-signin').classList.toggle('active',tab==='signin');
+  document.getElementById('auth-tab-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('auth-signin-form').style.display=tab==='signin'?'block':'none';
+  document.getElementById('auth-signup-form').style.display=tab==='signup'?'block':'none';
+  clearAuthErrors();
+}
+
+function clearAuthErrors(){
+  ['signin-error','signup-error','signup-success'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.className=el.className.replace(' show','');el.textContent='';}
+  });
+}
+
+function handleSignIn(){
+  const email=document.getElementById('signin-email').value.trim().toLowerCase();
+  const pw=document.getElementById('signin-password').value;
+  const err=document.getElementById('signin-error');
+  if(!email||!pw){showAuthError(err,'Please fill in all fields.');return;}
+  if(!isValidEmail(email)){showAuthError(err,'Please enter a valid email address.');return;}
+  const existing=getStoredAccounts()[email];
+  if(!existing){showAuthError(err,'No account found with that email. Try signing up!');return;}
+  if(existing.pw!==hashSimple(pw)){showAuthError(err,'Incorrect password. Please try again.');return;}
+  signInUser({email,name:existing.name,isGuest:false});
+}
+
+function handleSignUp(){
+  const first=document.getElementById('signup-first').value.trim();
+  const last=document.getElementById('signup-last').value.trim();
+  const email=document.getElementById('signup-email').value.trim().toLowerCase();
+  const pw=document.getElementById('signup-password').value;
+  const confirm=document.getElementById('signup-confirm').value;
+  const err=document.getElementById('signup-error');
+  const suc=document.getElementById('signup-success');
+  if(!first||!email||!pw||!confirm){showAuthError(err,'Please fill in all required fields.');return;}
+  if(!isValidEmail(email)){showAuthError(err,'Please enter a valid email address.');return;}
+  if(pw.length<6){showAuthError(err,'Password must be at least 6 characters.');return;}
+  if(pw!==confirm){showAuthError(err,'Passwords do not match.');return;}
+  const accounts=getStoredAccounts();
+  if(accounts[email]){showAuthError(err,'An account with this email already exists. Sign in instead.');return;}
+  accounts[email]={name:first+(last?' '+last:''),pw:hashSimple(pw)};
+  localStorage.setItem('agk_accounts',JSON.stringify(accounts));
+  err.className='auth-error';err.textContent='';
+  suc.textContent='Account created! Signing you in…';suc.className='auth-success show';
+  setTimeout(()=>signInUser({email,name:first+(last?' '+last:''),isGuest:false}),900);
+}
+
+function continueAsGuest(){
+  signInUser({email:'',name:'Guest',isGuest:true});
+}
+
+function signInUser(user){
+  saveUser(user);
+  document.getElementById('auth-overlay').classList.add('hidden');
+  updateUserChip();
+  updateSettingsProfile();
+  updateStreak();
+  checkFeedbackNotification(user);
+  render();
+}
+
+function handleSignOut(){
+  if(!confirm('Sign out of your account?')) return;
+  localStorage.removeItem(AUTH_KEY);
+  closeSettings();
+  showAuthOverlay();
+}
+
+function handleDeleteAccount(){
+  const u=getUser();
+  if(!u||u.isGuest) return;
+  if(!confirm('Permanently delete your account? This cannot be undone.')) return;
+  const accounts=getStoredAccounts();
+  if(accounts[u.email]){delete accounts[u.email];localStorage.setItem('agk_accounts',JSON.stringify(accounts));}
+  localStorage.removeItem(AUTH_KEY);
+  closeSettings();
+  showAuthOverlay();
+}
+
+function promptDevCode(){
+  const code=prompt('Enter the developer code to access feedback:');
+  if(code===null) return;
+  if(code==='Developers26#'){openAdminPanel();}
+  else{alert('Incorrect code.');}
+}
+
+function showAuthOverlay(){
+  document.getElementById('auth-overlay').classList.remove('hidden');
+  clearAuthErrors();
+}
+
+function isValidEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
+function hashSimple(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return h.toString(36);}
+function getStoredAccounts(){try{return JSON.parse(localStorage.getItem('agk_accounts'))||{};}catch(e){return {};}}
+
+function showAuthError(el,msg){el.textContent=msg;el.className='auth-error show';}
+
+function checkPasswordStrength(pw){
+  const bar=document.getElementById('pw-strength-bar');
+  const lbl=document.getElementById('pw-strength-label');
+  if(!bar||!lbl) return;
+  if(!pw){bar.className='password-strength';lbl.className='password-strength-label';lbl.textContent='';return;}
+  const strong=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  const medium=/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
+  if(strong.test(pw)){bar.className='password-strength strong';lbl.className='password-strength-label strong';lbl.textContent='Strong';}
+  else if(medium.test(pw)){bar.className='password-strength medium';lbl.className='password-strength-label medium';lbl.textContent='Medium';}
+  else{bar.className='password-strength weak';lbl.className='password-strength-label weak';lbl.textContent='Weak';}
+}
+
+function updateUserChip(){
+  const u=getUser();
+  const name=u?u.name:'Guest';
+  const initial=(name[0]||'G').toUpperCase();
+  const chipName=document.getElementById('user-chip-name');
+  const chipAvatar=document.getElementById('user-avatar-chip');
+  if(chipName) chipName.textContent=u&&!u.isGuest?name:'Guest';
+  if(chipAvatar){
+    if(u&&u.photo){
+      chipAvatar.innerHTML=`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />`;
+    } else {
+      chipAvatar.textContent=initial;
+    }
+  }
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function openSettings(){
+  document.getElementById('settings-overlay').classList.add('show');
+  updateSettingsProfile();
+  loadPrefsToUI();
+  loadStatsToUI();
+}
+function closeSettings(){document.getElementById('settings-overlay').classList.remove('show');}
+function closeSettingsOnBackdrop(e){if(e.target===document.getElementById('settings-overlay')) closeSettings();}
+
+function updateSettingsProfile(){
+  const u=getUser();
+  const name=u?u.name:'Guest';
+  const email=u&&!u.isGuest?u.email:'Not signed in';
+  const initial=(name[0]||'G').toUpperCase();
+  const el=id=>document.getElementById(id);
+  const avatarEl=el('settings-avatar-big');
+  if(avatarEl){
+    if(u&&u.photo){
+      avatarEl.innerHTML=`<img src="${u.photo}" /><div class="avatar-upload-overlay">📷</div><input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="saveProfilePic(this)" />`;
+    } else {
+      avatarEl.innerHTML=`${initial}<div class="avatar-upload-overlay">📷</div><input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="saveProfilePic(this)" />`;
+    }
+  }
+  if(el('settings-display-name')) el('settings-display-name').textContent=name;
+  if(el('settings-display-email')) el('settings-display-email').textContent=email;
+  if(el('settings-name-input')) el('settings-name-input').value=name==='Guest'?'':name;
+  const btn=el('settings-signout-btn');
+  if(btn){btn.textContent=u&&!u.isGuest?'Sign Out':'Sign In / Sign Up';
+    btn.onclick=u&&!u.isGuest?handleSignOut:()=>{closeSettings();showAuthOverlay();};}
+  const delBtn=el('settings-delete-btn');
+  if(delBtn) delBtn.style.display=u&&!u.isGuest?'block':'none';
+}
+
+function saveProfileName(){
+  const input=document.getElementById('settings-name-input');
+  if(!input||!input.value.trim()) return;
+  const u=getUser()||{name:'Guest',isGuest:true,email:''};
+  u.name=input.value.trim();
+  saveUser(u);
+  updateSettingsProfile();
+  updateUserChip();
+  // Flash confirmation
+  input.style.borderColor='var(--accent-green)';
+  setTimeout(()=>input.style.borderColor='',1200);
+}
+
+function saveProfilePic(input){
+  const file=input.files[0];
+  if(!file) return;
+  const MAX=3*1024*1024;
+  if(file.size>MAX){alert('Image is too large (max 3 MB). Please choose a smaller image.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const u=getUser()||{name:'Guest',isGuest:true,email:''};
+    u.photo=e.target.result;
+    saveUser(u);
+    updateSettingsProfile();
+    updateUserChip();
+  };
+  reader.readAsDataURL(file);
+}
+
+
+function savePrefs(){
+  const p={
+    dark:document.getElementById('toggle-dark')?.checked||false,
+    largeText:document.getElementById('toggle-large-text')?.checked||false,
+    autoflip:document.getElementById('toggle-autoflip')?.checked||false,
+    autoflipDelay:document.getElementById('select-autoflip-delay')?.value||'5',
+    shuffle:document.getElementById('toggle-shuffle')?.checked||false,
+    sectionTags:document.getElementById('toggle-section-tags')?.checked??true,
+    quizOrder:document.getElementById('select-quiz-order')?.value||'random',
+    sounds:document.getElementById('toggle-sounds')?.checked||false,
+    explanations:document.getElementById('toggle-explanations')?.checked??true,
+    saveLocal:document.getElementById('toggle-save-local')?.checked??true,
+    accent:document.getElementById('color-swatches')?.dataset.accent||'#007AFF',
+    accentGrad:document.getElementById('color-swatches')?.dataset.accentGrad||'#5AC8FA',
+  };
+  savePrefsData(p);
+}
+
+function loadPrefsToUI(){
+  const p=getPrefs();
+  const set=(id,val)=>{const el=document.getElementById(id);if(el&&val!==undefined){if(el.type==='checkbox')el.checked=val;else el.value=val;}};
+  set('toggle-dark',p.dark||false);
+  set('toggle-large-text',p.largeText||false);
+  set('toggle-autoflip',p.autoflip||false);
+  set('select-autoflip-delay',p.autoflipDelay||'5');
+  set('toggle-shuffle',p.shuffle||false);
+  set('toggle-section-tags',p.sectionTags??true);
+  set('select-quiz-order',p.quizOrder||'random');
+  set('toggle-sounds',p.sounds||false);
+  set('toggle-explanations',p.explanations??true);
+  set('toggle-save-local',p.saveLocal??true);
+  // Accent
+  if(p.accent){
+    applyAccentColor(p.accent,p.accentGrad||'#5AC8FA');
+    const swatches=document.querySelectorAll('.color-swatch');
+    swatches.forEach(s=>s.classList.toggle('active',s.style.background===p.accent||s.style.backgroundColor===p.accent));
+    const sw=document.getElementById('color-swatches');
+    if(sw){sw.dataset.accent=p.accent;sw.dataset.accentGrad=p.accentGrad||'#5AC8FA';}
+  }
+  applyDarkMode(p.dark||false,true);
+  applyLargeText(p.largeText||false,true);
+}
+
+function loadStatsToUI(){
+  const s=getStats();
+  const set=(id,v)=>{const el=document.getElementById(id);if(el) el.textContent=v;};
+  set('stat-sessions',s.sessions||0);
+  set('stat-cards',s.cards||0);
+  set('stat-correct',s.correct||0);
+  set('stat-streak',s.streak||0);
+}
+
+function applyDarkMode(on,silent){
+  document.body.classList.toggle('dark-mode',on);
+  if(!silent) savePrefs();
+}
+function applyLargeText(on,silent){
+  document.body.classList.toggle('large-text',on);
+  if(!silent) savePrefs();
+}
+
+function setAccent(color,grad){
+  applyAccentColor(color,grad);
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.toggle('active',s.title===document.documentElement.style.getPropertyValue('--current-accent-title')));
+  // mark active swatch
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const sw=document.getElementById('color-swatches');
+  if(sw){sw.dataset.accent=color;sw.dataset.accentGrad=grad;}
+  savePrefs();
+}
+
+function applyAccentColor(color,grad){
+  document.documentElement.style.setProperty('--accent-blue',color);
+  document.documentElement.style.setProperty('--accent-teal',grad);
+}
+
+function confirmResetStats(){
+  if(!confirm('Reset all your stats to zero? This cannot be undone.')) return;
+  saveStatsData({sessions:0,cards:0,correct:0,streak:0,lastDate:''});
+  loadStatsToUI();
+}
+
+function confirmDeleteData(){
+  if(!confirm('This will delete ALL local data — your account, settings, and stats. Are you sure?')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+function updateStreak(){
+  const s=getStats();
+  const today=new Date().toDateString();
+  if(s.lastDate===today) return;
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  s.streak=s.lastDate===yesterday?(s.streak||0)+1:1;
+  s.lastDate=today;
+  s.sessions=(s.sessions||0)+1;
+  saveStatsData(s);
+}
+
+function trackCardFlip(){
+  const s=getStats();
+  s.cards=(s.cards||0)+1;
+  saveStatsData(s);
+}
+
+function trackQuizCorrect(){
+  const s=getStats();
+  s.correct=(s.correct||0)+1;
+  saveStatsData(s);
+}
+
+// ============================================================
+// FEEDBACK
+// ============================================================
+const FB_KEY='agk_feedback';
+
+function getFeedback(){try{return JSON.parse(localStorage.getItem(FB_KEY)||'[]');}catch(e){return[];}}
+function saveFeedback(arr){localStorage.setItem(FB_KEY,JSON.stringify(arr));}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+
+function openFeedback(){
+  document.getElementById('feedback-text').value='';
+  document.getElementById('feedback-file').value='';
+  document.getElementById('feedback-file-name').textContent='';
+  document.getElementById('feedback-form-err').className='feedback-form-err';
+  document.getElementById('feedback-overlay').classList.add('show');
+}
+function closeFeedback(){document.getElementById('feedback-overlay').classList.remove('show');}
+function closeFeedbackBackdrop(e){if(e.target===document.getElementById('feedback-overlay'))closeFeedback();}
+
+function updateFeedbackFileLabel(input){
+  const name=input.files[0]?input.files[0].name:'';
+  document.getElementById('feedback-file-name').textContent=name?'📎 '+name:'';
+}
+
+function submitFeedback(){
+  const msg=document.getElementById('feedback-text').value.trim();
+  const errEl=document.getElementById('feedback-form-err');
+  if(!msg){errEl.textContent='Please write something before sending.';errEl.className='feedback-form-err show';return;}
+  errEl.className='feedback-form-err';
+  const fileInput=document.getElementById('feedback-file');
+  const file=fileInput.files[0];
+  const u=getUser();
+  const parts=(u&&u.name)?u.name.trim().split(/\s+/):['-'];
+  const firstName=parts[0];
+  const lastInitial=parts.length>1?parts[parts.length-1][0].toUpperCase()+'.':'';
+  const displayName=lastInitial?`${firstName} ${lastInitial}`:firstName;
+  const saveEntry=(attachment)=>{
+    const fb=getFeedback();
+    fb.push({
+      id:genId(),
+      name:displayName,
+      email:u?u.email:'',
+      message:msg,
+      attachment:attachment||null,
+      date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+      ts:Date.now(),
+      read:false,
+      userNotified:false
+    });
+    saveFeedback(fb);
+    closeFeedback();
+    const toast=document.getElementById('feedback-toast');
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),4500);
+  };
+  if(file){
+    const MAX=2*1024*1024; // 2 MB limit for localStorage safety
+    if(file.size>MAX){errEl.textContent='Image is too large (max 2 MB). Please choose a smaller file.';errEl.className='feedback-form-err show';return;}
+    const reader=new FileReader();
+    reader.onload=e=>saveEntry(e.target.result);
+    reader.onerror=()=>saveEntry(null);
+    reader.readAsDataURL(file);
+  } else {
+    saveEntry(null);
+  }
+}
+
+// Admin panel
+function openAdminPanel(){
+  document.getElementById('admin-panel-overlay').classList.add('show');
+  renderAdminFeedbackList();
+}
+function closeAdminPanel(){document.getElementById('admin-panel-overlay').classList.remove('show');}
+function closeAdminPanelBackdrop(e){if(e.target===document.getElementById('admin-panel-overlay'))closeAdminPanel();}
+
+function renderAdminFeedbackList(){
+  const fb=getFeedback().slice().sort((a,b)=>{
+    // Unread comes before read; within same read-state, newer first
+    if(a.read!==b.read) return a.read?1:-1;
+    return b.ts-a.ts;
+  });
+  const listEl=document.getElementById('admin-fb-list');
+  const countEl=document.getElementById('admin-unread-count');
+  if(!listEl) return;
+  const unread=fb.filter(f=>!f.read).length;
+  if(countEl) countEl.textContent=unread?unread+' unread':'';
+  if(!fb.length){listEl.innerHTML='<div class="admin-fb-empty">No feedback submitted yet.</div>';return;}
+  listEl.innerHTML=fb.map(f=>`
+    <div class="admin-fb-entry ${f.read?'admin-fb-read':'admin-fb-unread'}" id="afb-${f.id}">
+      <div class="admin-fb-meta">
+        <span class="admin-fb-name">${escHtml(f.name||'Anonymous')}</span>
+        <span class="admin-fb-email">${escHtml(f.email||'')}</span>
+        <span class="admin-fb-date">${escHtml(f.date)}</span>
+        ${f.read?'<span class="admin-fb-badge read-badge">Read</span>':'<span class="admin-fb-badge unread-badge">Unread</span>'}
+      </div>
+      <div class="admin-fb-message">${escHtml(f.message)}</div>
+      ${f.attachment?`<img src="${f.attachment}" class="admin-fb-thumb" alt="Screenshot" onclick="window.open(this.src,'_blank')" />`:''}
+      ${!f.read?`<button class="btn btn-secondary admin-fb-mark-btn" onclick="markFeedbackRead('${escHtml(f.id)}')">✓ Mark as Read</button>`:''}
+    </div>
+  `).join('');
+}
+
+function markFeedbackRead(id){
+  const fb=getFeedback();
+  const entry=fb.find(f=>f.id===id);
+  if(entry){entry.read=true;saveFeedback(fb);}
+  renderAdminFeedbackList();
+}
+
+// Called on sign-in to show "your feedback was reviewed" notification
+function checkFeedbackNotification(user){
+  if(!user||!user.email||user.isAdmin) return;
+  const fb=getFeedback();
+  const pending=fb.filter(f=>f.email===user.email&&f.read&&!f.userNotified);
+  if(!pending.length) return;
+  pending.forEach(f=>f.userNotified=true);
+  saveFeedback(fb);
+  const popup=document.getElementById('feedback-review-popup');
+  if(!popup) return;
+  popup.classList.add('show');
+  setTimeout(()=>popup.classList.remove('show'),7000);
+}
+
 // ============================================================
 // INIT
 // ============================================================
-render();
+// Load prefs immediately (dark mode, etc.)
+(function initPrefs(){
+  const p=getPrefs();
+  if(p.dark) document.body.classList.add('dark-mode');
+  if(p.largeText) document.body.classList.add('large-text');
+  if(p.accent) applyAccentColor(p.accent,p.accentGrad||'#5AC8FA');
+})();
+
+const startUser=getUser();
+if(!startUser){
+  // show auth
+  document.getElementById('auth-overlay').classList.remove('hidden');
+} else {
+  document.getElementById('auth-overlay').classList.add('hidden');
+  updateUserChip();
+  updateStreak();
+  checkFeedbackNotification(startUser);
+  render();
+}
 </script>
 </body>
 </html>
