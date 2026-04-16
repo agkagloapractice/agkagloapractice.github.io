@@ -769,6 +769,9 @@
 </div>
 
 <!-- ===== FIREBASE SDKs ===== -->
+<script>
+  window._fbReadyPromise = new Promise(res => { window._fbReadyResolve = res; });
+</script>
 <script type="module">
 // ────────────────────────────────────────────────────────────
 // FIREBASE CONFIG — replace the values below with your own.
@@ -851,6 +854,7 @@ window._fbLoadProfile = async function(){
   return await _loadCloudProfile(u.uid);
 };
 window._fbReady = true;
+if(window._fbReadyResolve) window._fbReadyResolve();
 
 // ── listen for auth state so a refresh keeps the user signed in ──
 onAuthStateChanged(_auth, async fbUser => {
@@ -1944,6 +1948,7 @@ function handleSignIn(){
   if(!isValidEmail(email)){showAuthError(err,'Please enter a valid email address.');return;}
   const btn=document.querySelector('#auth-signin-form .auth-submit');
   if(btn){btn.disabled=true;btn.textContent='Signing in…';}
+  (window._fbReadyPromise||Promise.resolve()).then(()=>{
   if(window._fbReady && window._fbSignIn){
     window._fbSignIn(email,pw).then(({fbUser,cloud})=>{
       const user={email,name:cloud.name||fbUser.displayName||'User',photo:cloud.photo||null,isGuest:false,uid:fbUser.uid};
@@ -1964,6 +1969,7 @@ function handleSignIn(){
     if(existing.pw!==hashSimple(pw)){showAuthError(err,'Incorrect password. Please try again.');return;}
     signInUser({email,name:existing.name,isGuest:false});
   }
+  }); // end _fbReadyPromise
 }
 
 function handleSignUp(){
@@ -1982,6 +1988,7 @@ function handleSignUp(){
   const btn=document.querySelector('#auth-signup-form .auth-submit');
   if(btn){btn.disabled=true;btn.textContent='Creating account…';}
   err.className='auth-error';err.textContent='';
+  (window._fbReadyPromise||Promise.resolve()).then(()=>{
   if(window._fbReady && window._fbSignUp){
     window._fbSignUp(email,pw,displayName).then(fbUser=>{
       suc.textContent='Account created! Signing you in…';suc.className='auth-success show';
@@ -2003,6 +2010,7 @@ function handleSignUp(){
     if(btn){btn.disabled=false;btn.textContent='Create Account →';}
     setTimeout(()=>signInUser({email,name:displayName,isGuest:false}),900);
   }
+  }); // end _fbReadyPromise
 }
 
 function continueAsGuest(){
