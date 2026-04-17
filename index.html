@@ -2287,10 +2287,13 @@ function handleDeleteAccount(){
   showAuthOverlay();
 }
 
-function promptDevCode(){
+async function promptDevCode(){
   const code=prompt('Enter the developer code to access feedback:');
   if(code===null) return;
-  if(code==='Developers26#'){openAdminPanel();}
+  const _h='d53b3bb6dddc8e94747025aa5562bb9d37a5b1d2681d3ab2e3a3bc8776f2391d';
+  async function sha256hex(s){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+  const hex=await sha256hex(await sha256hex(code));
+  if(hex===_h){openAdminPanel();}
   else{alert('Incorrect code.');}
 }
 
