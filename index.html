@@ -658,7 +658,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">Version 1.7.0 Alpha</div>
+              <div class="settings-row-desc">Version 1.7.1 Alpha</div>
             </div>
           </div>
         </div>
@@ -847,6 +847,16 @@ window._fbLoadProfile = async function(){
   if(!u) return null;
   return await _loadCloudProfile(u.uid);
 };
+// ── leaderboard Firestore helpers ──
+window._fbAddScore = async function(entry){
+  await addDoc(collection(_db,'leaderboard'), entry);
+};
+window._fbGetScores = async function(subject){
+  const q = query(collection(_db,'leaderboard'));
+  const snap = await getDocs(q);
+  return snap.docs.map(d=>({id:d.id,...d.data()})).filter(e=>e.subject===subject);
+};
+
 // ── feedback Firestore helpers ──
 window._fbAddFeedback = async function(entry){
   await addDoc(collection(_db,'feedback'), entry);
@@ -1952,6 +1962,19 @@ let _competeTimerStart=0,_competeTimerInterval=null,_competeElapsed=0;
 
 function getLeaderboard(){try{return JSON.parse(localStorage.getItem('agk_leaderboard')||'[]');}catch(e){return[];}}
 function saveLeaderboard(lb){localStorage.setItem('agk_leaderboard',JSON.stringify(lb));}
+async function getLeaderboardMerged(subject){
+  let entries=getLeaderboard().filter(e=>e.subject===subject);
+  if(window._fbReady&&window._fbGetScores){
+    try{
+      const cloud=await window._fbGetScores(subject);
+      // Merge: use cloud as authoritative, keep local entries not yet in cloud (ts within last 10s)
+      const cloudTs=new Set(cloud.map(e=>e.ts));
+      const localOnly=entries.filter(e=>!cloudTs.has(e.ts)&&(Date.now()-e.ts)<10000);
+      entries=[...cloud,...localOnly];
+    }catch(e){ /* stay local */ }
+  }
+  return entries;
+}
 function formatTime(sec){const m=Math.floor(sec/60);const s=sec%60;return `${m}:${String(s).padStart(2,'0')}`;}
 
 function renderCompete(){
@@ -1959,15 +1982,16 @@ function renderCompete(){
   return renderCompeteLobby();
 }
 
-function renderCompeteLobby(){
-  const all=getLeaderboard().filter(e=>e.subject===currentSubject&&(!competeSection||e.section===(competeSection||'All')));
-  all.sort((a,b)=>(b.correct-a.correct)||(a.timeSeconds-b.timeSeconds));
+async function renderCompeteLobby(){
+  const all=await getLeaderboardMerged(currentSubject);
+  const filtered=all.filter(e=>!competeSection||e.section===(competeSection||'All'));
+  filtered.sort((a,b)=>(b.correct-a.correct)||(a.timeSeconds-b.timeSeconds));
   const sectionHtml=renderSectionFilter(competeSection,currentSubject,'setCompeteSection');
-  const lbHtml=all.length===0
+  const lbHtml=filtered.length===0
     ?`<div class="compete-lb-empty">No scores yet for this subject. Be the first!</div>`
     :`<div class="compete-lb-table">
         <div class="compete-lb-header"><span class="lb-rank">#</span><span class="lb-name">Player</span><span class="lb-correct">✓</span><span class="lb-wrong">✗</span><span class="lb-total">Total</span><span class="lb-time">Time</span><span class="lb-date">Date</span></div>
-        ${all.slice(0,30).map((e,i)=>{
+        ${filtered.slice(0,30).map((e,i)=>{
           const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
           const user=getUser();
           const isMe=user&&e.email&&user.email===e.email&&(Date.now()-e.ts<8000);
@@ -2097,6 +2121,9 @@ function finishCompete(){
     ts:Date.now()
   };
   const lb=getLeaderboard();lb.push(entry);saveLeaderboard(lb);
+  if(window._fbReady&&window._fbAddScore){
+    window._fbAddScore(entry).catch(e=>console.warn('Firestore score write failed',e));
+  }
   const total=competeCards.length;
   const pct=Math.round(entry.correct/total*100);
   const emoji=pct>=90?'🏆':pct>=70?'🎉':pct>=50?'📚':'💪';
