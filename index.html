@@ -173,6 +173,11 @@
   .password-strength-label.weak{color:var(--accent-red)}
   .password-strength-label.medium{color:var(--accent-orange)}
   .password-strength-label.strong{color:var(--accent-green)}
+  .auth-privacy{display:flex;align-items:flex-start;gap:8px;background:rgba(52,199,89,0.08);border:1px solid rgba(52,199,89,0.25);border-radius:10px;padding:10px 12px;margin-top:2px}
+  .auth-privacy-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+  .auth-privacy-text{font-size:11.5px;color:#1a6e2e;line-height:1.5}
+  body.dark-mode .auth-privacy{background:rgba(52,199,89,0.1);border-color:rgba(52,199,89,0.2)}
+  body.dark-mode .auth-privacy-text{color:#4cd97b}
 
   /* ===== HEADER USER CHIP ===== */
   .header-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -248,6 +253,32 @@
   body.large-text .card-content{font-size:clamp(17px,2.6vw,22px)}
   body.large-text .quiz-q-text{font-size:18px}
   body.large-text .quiz-option{font-size:15.5px}
+
+  /* ===== TUTORIAL OVERLAY ===== */
+  .tutorial-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.52);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:3500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s}
+  .tutorial-overlay.show{opacity:1;pointer-events:all}
+  .tutorial-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1.5px solid rgba(255,255,255,0.7);border-radius:28px;width:100%;max-width:480px;box-shadow:0 28px 70px rgba(0,0,0,0.22);overflow:hidden;animation:popIn 0.35s cubic-bezier(.17,.89,.32,1.27)}
+  body.dark-mode .tutorial-card{background:rgba(28,28,38,0.98);border-color:rgba(255,255,255,0.1)}
+  .tutorial-header{padding:28px 28px 0;text-align:center}
+  .tutorial-icon{font-size:52px;margin-bottom:12px;display:block;line-height:1}
+  .tutorial-title{font-size:22px;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#007AFF,#AF52DE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+  .tutorial-body{padding:0 28px 8px;min-height:110px}
+  .tutorial-desc{font-size:14.5px;color:var(--text-secondary);line-height:1.7;text-align:center}
+  .tutorial-desc strong{color:var(--text-primary)}
+  .tutorial-highlight{display:inline-flex;align-items:center;gap:5px;background:rgba(0,122,255,0.10);border:1px solid rgba(0,122,255,0.2);border-radius:8px;padding:3px 10px;font-size:13px;font-weight:600;color:var(--accent-blue);margin:0 2px;white-space:nowrap}
+  .tutorial-dots{display:flex;gap:6px;justify-content:center;padding:14px 0 4px}
+  .tutorial-dot{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,0.14);transition:all 0.25s}
+  .tutorial-dot.active{background:var(--accent-blue);width:20px;border-radius:4px}
+  body.dark-mode .tutorial-dot{background:rgba(255,255,255,0.2)}
+  body.dark-mode .tutorial-dot.active{background:var(--accent-blue)}
+  .tutorial-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 22px 22px;gap:10px}
+  .tutorial-skip{background:none;border:none;font-family:inherit;font-size:13px;color:var(--text-tertiary);cursor:pointer;padding:6px 8px;border-radius:8px;transition:all 0.18s}
+  .tutorial-skip:hover{color:var(--text-secondary);background:rgba(0,0,0,0.05)}
+  .tutorial-nav{display:flex;gap:8px;margin-left:auto}
+  .tutorial-back-btn{padding:10px 18px;border-radius:12px;border:1.5px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.6);font-family:inherit;font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all 0.18s}
+  .tutorial-back-btn:hover{background:rgba(255,255,255,0.9)}
+  .tutorial-next-btn{padding:10px 22px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(0,122,255,0.32)}
+  .tutorial-next-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,122,255,0.4)}
 
   /* ===== FEEDBACK ===== */
   .feedback-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(0,0,0,0.08);background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all 0.18s;flex-shrink:0;padding:0}
@@ -381,6 +412,7 @@
           <input type="password" id="signin-password" placeholder="Your password" autocomplete="current-password" />
         </div>
         <div class="auth-error" id="signin-error"></div>
+        <div class="auth-privacy"><span class="auth-privacy-icon">🔒</span><span class="auth-privacy-text">Your data is saved securely in the cloud. None of your details will be visible to anyone else but Google (You know how secure Google is)</span></div>
         <button class="auth-submit" onclick="handleSignIn()">Sign In →</button>
       </div>
     </div>
@@ -413,6 +445,7 @@
         </div>
         <div class="auth-error" id="signup-error"></div>
         <div class="auth-success" id="signup-success"></div>
+        <div class="auth-privacy"><span class="auth-privacy-icon">🔒</span><span class="auth-privacy-text">Your data is saved securely in the cloud. None of your details will be visible to anyone else but Google (You know how secure Google is)</span></div>
         <button class="auth-submit" onclick="handleSignUp()">Create Account →</button>
       </div>
     </div>
@@ -658,7 +691,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">Version 1.7.2 Alpha</div>
+              <div class="settings-row-desc">Version 1.7.3</div>
             </div>
           </div>
         </div>
@@ -718,6 +751,27 @@
     <div class="frp-msg">Thanks for helping us improve AGK AGLOA Practice!</div>
   </div>
   <button class="frp-close" onclick="document.getElementById('feedback-review-popup').classList.remove('show')">✕</button>
+</div>
+
+<!-- ===== TUTORIAL OVERLAY ===== -->
+<div class="tutorial-overlay" id="tutorial-overlay">
+  <div class="tutorial-card" id="tutorial-card">
+    <div class="tutorial-header">
+      <span class="tutorial-icon" id="tutorial-icon">👋</span>
+      <div class="tutorial-title" id="tutorial-title">Welcome!</div>
+    </div>
+    <div class="tutorial-body">
+      <div class="tutorial-desc" id="tutorial-desc"></div>
+    </div>
+    <div class="tutorial-dots" id="tutorial-dots"></div>
+    <div class="tutorial-footer">
+      <button class="tutorial-skip" id="tutorial-skip-btn" onclick="closeTutorial()">Skip tutorial</button>
+      <div class="tutorial-nav">
+        <button class="tutorial-back-btn" id="tutorial-back-btn" onclick="tutorialPrev()" style="display:none">← Back</button>
+        <button class="tutorial-next-btn" id="tutorial-next-btn" onclick="tutorialNext()">Next →</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="app">
@@ -2632,6 +2686,7 @@ function handleSignUp(){
   if(window._fbReady && window._fbSignUp){
     window._fbSignUp(email,pw,displayName).then(fbUser=>{
       suc.textContent='Account created! Signing you in…';suc.className='auth-success show';
+      window._pendingTutorial=true;
       setTimeout(()=>signInUser({email,name:displayName,photo:null,isGuest:false,uid:fbUser.uid}),900);
     }).catch(e=>{
       if(btn){btn.disabled=false;btn.textContent='Create Account →';}
@@ -2648,6 +2703,7 @@ function handleSignUp(){
     localStorage.setItem('agk_accounts',JSON.stringify(accounts));
     suc.textContent='Account created! Signing you in…';suc.className='auth-success show';
     if(btn){btn.disabled=false;btn.textContent='Create Account →';}
+    window._pendingTutorial=true;
     setTimeout(()=>signInUser({email,name:displayName,isGuest:false}),900);
   }
   }); // end _fbReadyPromise
@@ -2665,6 +2721,10 @@ function signInUser(user){
   updateStreak();
   checkFeedbackNotification(user);
   render();
+  if(window._pendingTutorial){
+    window._pendingTutorial=false;
+    setTimeout(startTutorial, 400);
+  }
 }
 
 function handleSignOut(){
@@ -3056,6 +3116,112 @@ function checkFeedbackNotification(user){
   if(!popup) return;
   popup.classList.add('show');
   setTimeout(()=>popup.classList.remove('show'),7000);
+}
+
+// ============================================================
+// TUTORIAL
+// ============================================================
+const TUTORIAL_STEPS=[
+  {
+    icon:'👋',
+    title:'Welcome to AGK AGLOA Practice!',
+    desc:'Hey! Please take this tutorial to understand my app. <strong>I\'m Adithan G., a 6th grader, and I built this myself!</strong><br><br>Let me walk you through everything in just a minute.'
+  },
+  {
+    icon:'�',
+    title:'Sending Feedback',
+    desc:'First things first — your feedback means a lot to me! Click the <span class="tutorial-highlight">💬</span> button in the <strong>top-right corner</strong> at any time.<br><br>Found a bug? Have a suggestion? Type your message and hit <strong>Send Feedback</strong>. <strong>I will personally read every message</strong> and mark yours as reviewed!'
+  },
+  {
+    icon:'�🗂️',
+    title:'Navigating the App',
+    desc:'I built four study modes for you! Use the <span class="tutorial-highlight">Flashcards</span> <span class="tutorial-highlight">Quiz</span> <span class="tutorial-highlight">Reference</span> <span class="tutorial-highlight">🏆 Compete</span> tabs at the top to switch between them.<br><br>Then pick your subject — Propaganda, Presidents, Current Events, Theme, or LinguiSHTIK — using the buttons below.'
+  },
+  {
+    icon:'🃏',
+    title:'Flashcards',
+    desc:'This is my favorite mode! <strong>Click any card</strong> to flip it and reveal the answer.<br><br>Use the <strong>← →</strong> buttons to move between cards, <strong>Shuffle</strong> to mix things up, and the section filter to focus on the topics you need most.'
+  },
+  {
+    icon:'🧠',
+    title:'Quiz Mode',
+    desc:'I made quiz mode to really test your knowledge with <strong>multiple-choice questions</strong>. Choose an answer and get instant feedback — green for correct, red for incorrect, plus a full explanation.<br><br>Your score is shown at the end and I save it to your stats!'
+  },
+  {
+    icon:'📚',
+    title:'Reference',
+    desc:'I put together <strong>detailed write-ups</strong> for every propaganda technique and president clue card. Tap a category, then a technique or name, to read the full definition, examples, and my personal study tips.'
+  },
+  {
+    icon:'🏆',
+    title:'Compete Mode',
+    desc:'This is my most exciting feature — race against the clock! Answer as many questions as you can in <strong>timed mode</strong>.<br><br>Your score gets saved to the <strong>leaderboard</strong> so you can see how you rank against everyone else!'
+  },
+  {
+    icon:'⚙️',
+    title:'Settings',
+    desc:'I added a ton of ways to customize the app. Click the <span class="tutorial-highlight">⚙️</span> gear icon in the top-right to open Settings.<br><br>Turn on <strong>Dark Mode</strong>, change the <strong>Accent Color</strong>, enable <strong>Large Text</strong>, set auto-flip delay, and more. I save your preferences automatically!'
+  },
+  {
+    icon:'🎉',
+    title:'You\'re All Set!',
+    desc:'Thanks so much for using my app — it really means a lot to me! I hope it helps you ace your AGLOA competition. 🏅<br><br>And remember, <strong>I personally read every piece of feedback</strong>, so don\'t hesitate to reach out. Good luck! — <strong>Adithan G.</strong>'
+  }
+];
+
+let _tutorialStep=0;
+
+function startTutorial(){
+  _tutorialStep=0;
+  _renderTutorialStep();
+  document.getElementById('tutorial-overlay').classList.add('show');
+}
+
+function closeTutorial(){
+  document.getElementById('tutorial-overlay').classList.remove('show');
+}
+
+function tutorialNext(){
+  if(_tutorialStep < TUTORIAL_STEPS.length-1){
+    _tutorialStep++;
+    _renderTutorialStep();
+  } else {
+    closeTutorial();
+  }
+}
+
+function tutorialPrev(){
+  if(_tutorialStep > 0){
+    _tutorialStep--;
+    _renderTutorialStep();
+  }
+}
+
+function _renderTutorialStep(){
+  const step=TUTORIAL_STEPS[_tutorialStep];
+  const total=TUTORIAL_STEPS.length;
+  const isLast=_tutorialStep===total-1;
+  const isFirst=_tutorialStep===0;
+
+  document.getElementById('tutorial-icon').textContent=step.icon;
+  document.getElementById('tutorial-title').textContent=step.title;
+  document.getElementById('tutorial-desc').innerHTML=step.desc;
+
+  // dots
+  const dotsEl=document.getElementById('tutorial-dots');
+  dotsEl.innerHTML='';
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');
+    d.className='tutorial-dot'+(i===_tutorialStep?' active':'');
+    dotsEl.appendChild(d);
+  }
+
+  // back button
+  document.getElementById('tutorial-back-btn').style.display=isFirst?'none':'';
+  // next button label
+  document.getElementById('tutorial-next-btn').textContent=isLast?'Get Started! 🚀':'Next →';
+  // skip button
+  document.getElementById('tutorial-skip-btn').style.display=isLast?'none':'';
 }
 
 // ============================================================
