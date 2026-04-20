@@ -15,6 +15,14 @@
   .orb3{width:350px;height:350px;background:rgba(52,199,89,0.12);bottom:-100px;left:30%;animation-delay:4s}
   @keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
   .app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 16px 60px}
+  .side-ads{display:none}
+  .side-ad-rail{position:fixed;top:120px;width:160px;z-index:50}
+  .side-ad-left{left:24px}
+  .side-ad-right{right:24px}
+  .side-ad-box{min-height:600px;padding:12px;background:rgba(255,255,255,0.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid var(--glass-border);border-radius:20px;box-shadow:var(--glass-shadow)}
+  .side-ad-box .adsbygoogle{display:block;width:100%;min-height:600px}
+  .inline-ad{margin:0 0 18px;padding:12px;background:rgba(255,255,255,0.38);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid var(--glass-border);border-radius:18px;box-shadow:var(--glass-shadow)}
+  .inline-ad .adsbygoogle{display:block;min-height:90px}
   .header{position:relative;z-index:1200;text-align:center;margin-bottom:24px;padding:24px 32px 20px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);animation:slideDown 0.5s ease}
   @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
   .header-badge{display:inline-block;background:rgba(0,122,255,0.15);color:var(--accent-blue);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(0,122,255,0.25)}
@@ -135,6 +143,11 @@
   .results-modal p{color:var(--text-secondary);font-size:14px;line-height:1.5;margin-bottom:18px}
   .results-score{font-size:42px;font-weight:800;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
   @media(max-width:600px){.pres-detail-grid{grid-template-columns:1fr}.nav-tab{font-size:11px;padding:8px 9px}}
+
+  @media(min-width:1400px){
+    .side-ads{display:block}
+    .app{max-width:980px}
+  }
 
   /* ===== AUTH PAGE ===== */
   .auth-overlay{position:fixed;inset:0;background:var(--bg-gradient);background-attachment:fixed;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.4s ease}
@@ -437,6 +450,17 @@
   .lb-correct{color:#34C759;font-weight:700;text-align:center}
   .lb-wrong{color:#FF3B30;font-weight:700;text-align:center}
   .lb-total,.lb-time,.lb-date{color:var(--text-secondary);text-align:center;font-size:12px}
+  .compete-activity-section{background:rgba(255,255,255,0.52);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--glass-border);border-radius:20px;padding:20px;margin-top:14px}
+  .compete-activity-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:6px;letter-spacing:0.2px}
+  .compete-activity-subtitle{font-size:12px;color:var(--text-tertiary);margin-bottom:12px;line-height:1.5}
+  .compete-activity-empty{color:var(--text-tertiary);font-size:13px;text-align:center;padding:24px}
+  .compete-activity-list{display:flex;flex-direction:column;gap:7px}
+  .compete-activity-row{display:grid;grid-template-columns:minmax(100px,1.2fr) 96px 82px minmax(140px,1.5fr);gap:8px;align-items:center;padding:11px 13px;border-radius:13px;background:rgba(255,255,255,0.45);transition:background 0.15s}
+  .compete-activity-row:hover{background:rgba(255,255,255,0.78)}
+  .compete-activity-header{display:grid;grid-template-columns:minmax(100px,1.2fr) 96px 82px minmax(140px,1.5fr);gap:8px;padding:0 13px 6px;font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.5px}
+  .activity-name{font-size:13px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .activity-date,.activity-clock{font-size:12px;color:var(--text-secondary)}
+  .activity-mode{font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .compete-timer-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid var(--glass-border);border-radius:14px;padding:12px 18px;margin-bottom:10px}
   .compete-timer{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent-blue);letter-spacing:1px}
   .compete-progress-text{font-size:14px;font-weight:600;color:var(--text-secondary)}
@@ -452,8 +476,11 @@
   .correct-color{color:#34C759}.incorrect-color{color:#FF3B30}
   .compete-result-saved{font-size:13px;color:#34C759;font-weight:600;margin-bottom:20px;background:rgba(52,199,89,0.1);border-radius:8px;padding:8px 16px;display:inline-block}
   body.dark-mode .compete-lobby,body.dark-mode .compete-lb-section{background:rgba(255,255,255,0.06)}
+  body.dark-mode .compete-activity-section{background:rgba(255,255,255,0.06)}
   body.dark-mode .compete-lb-row{background:rgba(255,255,255,0.07)}
+  body.dark-mode .compete-activity-row{background:rgba(255,255,255,0.07)}
   body.dark-mode .compete-lb-row:hover{background:rgba(255,255,255,0.13)}
+  body.dark-mode .compete-activity-row:hover{background:rgba(255,255,255,0.13)}
   body.dark-mode .compete-timer-bar,body.dark-mode .compete-result-card{background:rgba(255,255,255,0.07)}
   body.dark-mode .compete-result-stat{background:rgba(255,255,255,0.07)}
   @media(max-width:600px){
@@ -463,13 +490,45 @@
     .notif-panel{right:12px;width:min(350px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:min(72vh,520px)}
     .help-action-grid{grid-template-columns:1fr}
     .compete-lb-header,.compete-lb-row{grid-template-columns:28px 1fr 32px 32px 44px 54px}
+    .compete-activity-header,.compete-activity-row{grid-template-columns:1fr 78px 72px}
+    .activity-mode{grid-column:1/-1}
     .lb-date{display:none}
     .compete-result-stats{grid-template-columns:1fr 1fr}
   }
 </style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1787280703870664" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+
+<div class="side-ads" aria-hidden="true">
+  <aside class="side-ad-rail side-ad-left">
+    <div class="side-ad-box">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1787280703870664"
+           data-ad-slot="2675212522"
+           data-ad-format="vertical"
+           data-full-width-responsive="false"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+  <aside class="side-ad-rail side-ad-right">
+    <div class="side-ad-box">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1787280703870664"
+           data-ad-slot="2675212522"
+           data-ad-format="vertical"
+           data-full-width-responsive="false"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </aside>
+</div>
 
 <!-- ===== AUTH OVERLAY ===== -->
 <div class="auth-overlay" id="auth-overlay">
@@ -761,7 +820,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">AGK OS 1.7.11</div>
+              <div class="settings-row-desc">AGK OS 1.7.12</div>
             </div>
           </div>
         </div>
@@ -910,6 +969,17 @@
     </div>
     <h1>AGK AGLOA Practice</h1>
     <p>Flashcards, quizzes, reference, &amp; Competition for AGLOA. Built by Adithan G.</p>
+  </div>
+  <div class="inline-ad">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-1787280703870664"
+         data-ad-slot="2675212522"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
   <div class="nav">
     <button class="nav-tab active" onclick="switchMode('flashcards')">Flashcards</button>
@@ -3529,6 +3599,11 @@ function getLeaderboard(){
   try{return JSON.parse(localStorage.getItem('agk_leaderboard')||'[]').map(normalizeLeaderboardEntry);}catch(e){return[];}
 }
 function saveLeaderboard(lb){localStorage.setItem('agk_leaderboard',JSON.stringify(lb));}
+async function getAllCompeteEntriesMerged(){
+  const subjects=['propaganda','presidents','currentevents','theme','linguistics'];
+  const entries=await Promise.all(subjects.map(subject=>getLeaderboardMerged(subject)));
+  return entries.flat();
+}
 async function getLeaderboardMerged(subject){
   let entries=getLeaderboard().filter(e=>e.subject===subject);
   if(window._fbReady&&window._fbGetScores){
@@ -3543,6 +3618,20 @@ async function getLeaderboardMerged(subject){
   return entries;
 }
 function formatTime(sec){const m=Math.floor(sec/60);const s=sec%60;return `${m}:${String(s).padStart(2,'0')}`;}
+function formatCompeteEntryDate(entry){
+  if(entry.ts) return new Date(entry.ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return entry.date||'Unknown';
+}
+function formatCompeteEntryClock(entry){
+  if(entry.ts) return new Date(entry.ts).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  return entry.time||'Unknown';
+}
+function getCompeteEntryMode(entry){
+  const subjectLabel=getSubjectTitle(entry.subject||'compete');
+  const sectionLabel=entry.section&&entry.section!=='All'?` · ${entry.section}`:'';
+  const questionLabel=` · ${normalizeCompeteQuestionCount(entry.questionCount)}Q`;
+  return `${subjectLabel}${sectionLabel}${questionLabel}`;
+}
 function renderCompeteCountFilter(){
   return `<div class="section-filter-row">
     ${COMPETE_QUESTION_COUNTS.map(count=>`<button class="sect-btn ${competeQuestionCount===count?'active':''}" data-section-setter="setCompeteQuestionCount" data-section-value="${count}">${count} Q</button>`).join('')}
@@ -3556,6 +3645,9 @@ async function renderCompete(){
 
 async function renderCompeteLobby(){
   const all=await getLeaderboardMerged(currentSubject);
+  const recentActivity=(await getAllCompeteEntriesMerged())
+    .sort((a,b)=>(b.ts||0)-(a.ts||0))
+    .slice(0,12);
   const filtered=all.filter(e=>(!competeSection||e.section===(competeSection||'All'))&&e.questionCount===competeQuestionCount);
   filtered.sort((a,b)=>(b.correct-a.correct)||(a.timeSeconds-b.timeSeconds));
   const sectionHtml=renderSectionFilter(competeSection,currentSubject,'setCompeteSection');
@@ -3579,6 +3671,17 @@ async function renderCompeteLobby(){
           </div>`;
         }).join('')}
       </div>`;
+  const activityHtml=recentActivity.length===0
+    ?`<div class="compete-activity-empty">No compete activity yet.</div>`
+    :`<div class="compete-activity-list">
+        <div class="compete-activity-header"><span>Name</span><span>Date</span><span>Time</span><span>Mode</span></div>
+        ${recentActivity.map(entry=>`<div class="compete-activity-row">
+          <span class="activity-name">${entry.name||'Anonymous'}</span>
+          <span class="activity-date">${formatCompeteEntryDate(entry)}</span>
+          <span class="activity-clock">${formatCompeteEntryClock(entry)}</span>
+          <span class="activity-mode">${getCompeteEntryMode(entry)}</span>
+        </div>`).join('')}
+      </div>`;
   return `<div class="card-area">
     ${sectionHtml}
     ${countHtml}
@@ -3591,6 +3694,11 @@ async function renderCompeteLobby(){
     <div class="compete-lb-section">
       <div class="compete-lb-title">Leaderboard — ${currentSubject.charAt(0).toUpperCase()+currentSubject.slice(1)}${competeSection?' · '+competeSection:''} · ${competeQuestionCount} Questions</div>
       ${lbHtml}
+    </div>
+    <div class="compete-activity-section">
+      <div class="compete-activity-title">Recent Activity</div>
+      <div class="compete-activity-subtitle">Latest compete runs across all subjects. Mode shows subject, section, and question count.</div>
+      ${activityHtml}
     </div>
   </div>`;
 }
