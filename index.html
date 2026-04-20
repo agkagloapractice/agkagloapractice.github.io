@@ -365,12 +365,22 @@
   .frp-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
   .frp-msg{font-size:12px;color:var(--text-secondary)}
   .frp-close{margin-left:auto;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.07);cursor:pointer;font-size:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0}
+  .browser-warning{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-12px);display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,0.97);border:1.5px solid rgba(255,149,0,0.28);border-radius:18px;padding:14px 16px;box-shadow:0 12px 34px rgba(0,0,0,0.16);z-index:3600;max-width:min(560px,calc(100vw - 28px));width:max-content;opacity:0;pointer-events:none;transition:opacity 0.28s,transform 0.28s}
+  .browser-warning.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .browser-warning-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:1px}
+  .browser-warning-copy{min-width:0}
+  .browser-warning-title{font-size:14px;font-weight:800;color:var(--text-primary);margin-bottom:3px}
+  .browser-warning-msg{font-size:12.5px;line-height:1.55;color:var(--text-secondary)}
+  .browser-warning-close{width:28px;height:28px;border:none;border-radius:50%;background:rgba(0,0,0,0.06);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s}
+  .browser-warning-close:hover{background:rgba(255,149,0,0.12);color:var(--accent-orange)}
   body.dark-mode .feedback-modal,body.dark-mode .admin-panel-modal{background:rgba(28,28,38,0.98);border-color:rgba(255,255,255,0.1)}
   body.dark-mode .feedback-modal-body textarea{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.13);color:#f0f0f5}
   body.dark-mode .admin-fb-entry{border-color:rgba(255,255,255,0.09)}
   body.dark-mode .admin-fb-unread{background:rgba(0,122,255,0.1)}
   body.dark-mode .admin-fb-read{background:rgba(255,255,255,0.04)}
   body.dark-mode .feedback-review-popup{background:rgba(28,28,38,0.98);border-color:rgba(0,122,255,0.3)}
+  body.dark-mode .browser-warning{background:rgba(28,28,38,0.98);border-color:rgba(255,149,0,0.35)}
+  body.dark-mode .browser-warning-close{background:rgba(255,255,255,0.08);color:var(--text-primary)}
 
   /* ===== COMPETE ===== */
   .compete-lobby{background:rgba(255,255,255,0.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid var(--glass-border);border-radius:20px;padding:28px;text-align:center;margin-bottom:16px}
@@ -714,7 +724,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">AGK OS 1.7.7</div>
+              <div class="settings-row-desc">AGK OS 1.7.8</div>
             </div>
           </div>
         </div>
@@ -774,6 +784,16 @@
     <div class="frp-msg">Thanks for helping us improve AGK AGLOA Practice!</div>
   </div>
   <button class="frp-close" onclick="closeFeedbackReviewPopup()">✕</button>
+</div>
+
+<!-- ===== BROWSER WARNING ===== -->
+<div class="browser-warning" id="browser-warning">
+  <div class="browser-warning-icon">⚠️</div>
+  <div class="browser-warning-copy">
+    <div class="browser-warning-title" id="browser-warning-title">Browser update recommended</div>
+    <div class="browser-warning-msg" id="browser-warning-msg">This browser may be outdated, which can cause lag or display issues in newer versions of the app.</div>
+  </div>
+  <button class="browser-warning-close" onclick="dismissBrowserWarning()">✕</button>
 </div>
 
 <!-- ===== TUTORIAL OVERLAY ===== -->
@@ -1076,6 +1096,7 @@ function _convertOnclick(el){
 // Convert all current onclick elements at script start (function declarations are hoisted).
 document.querySelectorAll('[onclick]').forEach(_convertOnclick);
 // Watch for dynamically-added elements (e.g. from render()) and convert their onclick too.
+var _dynamicOnclickRoot=document.getElementById('main-content')||document.body;
 new MutationObserver(function(mutations){
   mutations.forEach(function(mr){
     mr.addedNodes.forEach(function(node){
@@ -1084,7 +1105,7 @@ new MutationObserver(function(mutations){
       node.querySelectorAll('[onclick]').forEach(_convertOnclick);
     });
   });
-}).observe(document.documentElement, {childList:true, subtree:true});
+}).observe(_dynamicOnclickRoot, {childList:true, subtree:true});
 
 document.addEventListener('click', function(e){
   var button = e.target.closest('.sect-btn[data-section-setter]');
@@ -2727,6 +2748,9 @@ function updateHelpMenu(){
   const panel=document.getElementById('help-panel');
   const button=document.getElementById('help-btn');
   if(!panel||!button) return;
+  const isOpen=panel.classList.contains('show');
+  button.classList.toggle('active',isOpen);
+  if(!isOpen) return;
   const state=getHelpMenuState();
   document.getElementById('help-panel-title').textContent=state.title;
   document.getElementById('help-panel-subtitle').textContent=state.subtitle;
@@ -2739,7 +2763,6 @@ function updateHelpMenu(){
   `;
   document.getElementById('help-smart-list').innerHTML=state.bullets.map(item=>`<li>${item}</li>`).join('');
   document.getElementById('help-action-grid').innerHTML=state.actions.map(item=>`<button class="help-action-btn ${item.type}" onclick="runHelpAction(${JSON.stringify(item.action).replace(/"/g,'&quot;')})">${item.label}</button>`).join('');
-  button.classList.toggle('active',panel.classList.contains('show'));
   positionHelpMenu();
 }
 
@@ -2810,12 +2833,19 @@ function setSubject(s){
   refState={propSection:null,propTech:null,presEra:null,pres:null};
   render();
 }
-function render(){
+let _renderVersion=0;
+async function render(){
   const el=document.getElementById('main-content');
+  const renderVersion=++_renderVersion;
   if(currentMode==='flashcards') el.innerHTML=renderFlashcards();
   else if(currentMode==='quiz') el.innerHTML=renderQuiz();
   else if(currentMode==='reference') el.innerHTML=renderReference();
-  else if(currentMode==='compete') el.innerHTML=renderCompete();
+  else if(currentMode==='compete'){
+    el.innerHTML=`<div class="card-area"><div class="compete-lobby"><div class="compete-lobby-title">Loading compete mode...</div></div></div>`;
+    const competeHtml=await renderCompete();
+    if(renderVersion!==_renderVersion||currentMode!=='compete') return;
+    el.innerHTML=competeHtml;
+  }
   updateHelpMenu();
 }
  
@@ -2998,7 +3028,9 @@ function makeSupplementQuiz(subject,section,source,sources,variantIndex,sourceIn
   return {q:payload.q,section:subject==='propaganda'?sectionDisplay:section,options:payload.options,answer:payload.answer,explanation:payload.explanation};
 }
 const MIN_SECTION_COVERAGE=150;
+let _coveragePreparedMinimum=0;
 function ensureMinimumSectionCoverage(minimumPerSection=MIN_SECTION_COVERAGE){
+  if(_coveragePreparedMinimum>=minimumPerSection) return;
   const subjects=['propaganda','presidents','currentevents','theme','linguistics'];
   subjects.forEach(subject=>{
     getSections(subject).forEach(sectionInfo=>{
@@ -3035,6 +3067,7 @@ function ensureMinimumSectionCoverage(minimumPerSection=MIN_SECTION_COVERAGE){
       }
     });
   });
+  _coveragePreparedMinimum=minimumPerSection;
 }
 ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
  
@@ -3042,7 +3075,6 @@ ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
 // FLASHCARDS
 // ============================================================
 function renderFlashcards(){
-  ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
   if(flashcardQueue.length===0){
     const all=FLASHCARD_DATA[currentSubject];
     flashcardQueue=flashcardSection?all.filter(c=>cardMatchesSection(c,flashcardSection,currentSubject)):all.slice();
@@ -3087,14 +3119,13 @@ function scheduleAutoFlip(){clearAutoFlip();const p=getPrefs();if(!p.autoflip||i
 function nextCard(){if(!flashcardQueue.length)return;cardIndex=(cardIndex+1)%flashcardQueue.length;isFlipped=false;render();scheduleAutoFlip();}
 function prevCard(){if(!flashcardQueue.length)return;cardIndex=(cardIndex-1+flashcardQueue.length)%flashcardQueue.length;isFlipped=false;render();scheduleAutoFlip();}
 function shuffleCards(){if(!flashcardQueue.length)return;flashcardQueue.sort(()=>Math.random()-0.5);cardIndex=0;isFlipped=false;render();}
-function setFlashSection(s){ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);flashcardSection=s==='null'||s==null?null:s;flashcardQueue=[];cardIndex=0;isFlipped=false;clearAutoFlip();render();scheduleAutoFlip();}
-function setQuizSection(s){ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);quizSection=s==='null'||s==null?null:s;quizIndex=0;quizAnswered=false;selectedOption=null;quizCards=[];quizScore={correct:0,incorrect:0};render();}
+function setFlashSection(s){flashcardSection=s==='null'||s==null?null:s;flashcardQueue=[];cardIndex=0;isFlipped=false;clearAutoFlip();render();scheduleAutoFlip();}
+function setQuizSection(s){quizSection=s==='null'||s==null?null:s;quizIndex=0;quizAnswered=false;selectedOption=null;quizCards=[];quizScore={correct:0,incorrect:0};render();}
  
 // ============================================================
 // QUIZ
 // ============================================================
 function renderQuiz(){
-  ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
   if(!QUIZ_DATA[currentSubject]||QUIZ_DATA[currentSubject].length===0)
     return `<div class="ask-ai-box"><p style="color:var(--text-tertiary);text-align:center;padding:20px">No quiz available for this subject in this mode.</p></div>`;
   if(quizCards.length===0){
@@ -3416,14 +3447,31 @@ function renderLingRef(){
 let competeSection=null,competeCards=[],competeIndex=0,competeAnswered=false;
 let competeScore={correct:0,wrong:0},competeSelectedOption=null,competeRunning=false;
 let _competeTimerStart=0,_competeTimerInterval=null,_competeElapsed=0;
+const COMPETE_QUESTION_COUNTS=[5,10,15,20,30,40,50];
+const DEFAULT_COMPETE_QUESTION_COUNT=10;
+let competeQuestionCount=DEFAULT_COMPETE_QUESTION_COUNT;
 
-function getLeaderboard(){try{return JSON.parse(localStorage.getItem('agk_leaderboard')||'[]');}catch(e){return[];}}
+function normalizeCompeteQuestionCount(value){
+  const parsed=parseInt(value,10);
+  return COMPETE_QUESTION_COUNTS.includes(parsed)?parsed:DEFAULT_COMPETE_QUESTION_COUNT;
+}
+function normalizeLeaderboardEntry(entry){
+  return {
+    ...entry,
+    section:entry.section||'All',
+    questionCount:normalizeCompeteQuestionCount(entry.questionCount)
+  };
+}
+
+function getLeaderboard(){
+  try{return JSON.parse(localStorage.getItem('agk_leaderboard')||'[]').map(normalizeLeaderboardEntry);}catch(e){return[];}
+}
 function saveLeaderboard(lb){localStorage.setItem('agk_leaderboard',JSON.stringify(lb));}
 async function getLeaderboardMerged(subject){
   let entries=getLeaderboard().filter(e=>e.subject===subject);
   if(window._fbReady&&window._fbGetScores){
     try{
-      const cloud=await window._fbGetScores(subject);
+      const cloud=(await window._fbGetScores(subject)).map(normalizeLeaderboardEntry);
       // Merge: use cloud as authoritative, keep local entries not yet in cloud (ts within last 10s)
       const cloudTs=new Set(cloud.map(e=>e.ts));
       const localOnly=entries.filter(e=>!cloudTs.has(e.ts)&&(Date.now()-e.ts)<10000);
@@ -3433,19 +3481,25 @@ async function getLeaderboardMerged(subject){
   return entries;
 }
 function formatTime(sec){const m=Math.floor(sec/60);const s=sec%60;return `${m}:${String(s).padStart(2,'0')}`;}
+function renderCompeteCountFilter(){
+  return `<div class="section-filter-row">
+    ${COMPETE_QUESTION_COUNTS.map(count=>`<button class="sect-btn ${competeQuestionCount===count?'active':''}" data-section-setter="setCompeteQuestionCount" data-section-value="${count}">${count} Q</button>`).join('')}
+  </div>`;
+}
 
-function renderCompete(){
+async function renderCompete(){
   if(competeRunning) return renderCompeteQuestion();
-  return renderCompeteLobby();
+  return await renderCompeteLobby();
 }
 
 async function renderCompeteLobby(){
   const all=await getLeaderboardMerged(currentSubject);
-  const filtered=all.filter(e=>!competeSection||e.section===(competeSection||'All'));
+  const filtered=all.filter(e=>(!competeSection||e.section===(competeSection||'All'))&&e.questionCount===competeQuestionCount);
   filtered.sort((a,b)=>(b.correct-a.correct)||(a.timeSeconds-b.timeSeconds));
   const sectionHtml=renderSectionFilter(competeSection,currentSubject,'setCompeteSection');
+  const countHtml=renderCompeteCountFilter();
   const lbHtml=filtered.length===0
-    ?`<div class="compete-lb-empty">No scores yet for this subject. Be the first!</div>`
+    ?`<div class="compete-lb-empty">No scores yet for this ${competeQuestionCount}-question board. Be the first!</div>`
     :`<div class="compete-lb-table">
         <div class="compete-lb-header"><span class="lb-rank">#</span><span class="lb-name">Player</span><span class="lb-correct">✓</span><span class="lb-wrong">✗</span><span class="lb-total">Total</span><span class="lb-time">Time</span><span class="lb-date">Date</span></div>
         ${filtered.slice(0,30).map((e,i)=>{
@@ -3465,14 +3519,15 @@ async function renderCompeteLobby(){
       </div>`;
   return `<div class="card-area">
     ${sectionHtml}
+    ${countHtml}
     <div class="compete-lobby">
       <div class="compete-trophy">🏆</div>
       <div class="compete-lobby-title">Compete</div>
-      <div class="compete-lobby-desc">Answer all questions as fast as you can.<br>Your score and time are saved to the leaderboard.</div>
+      <div class="compete-lobby-desc">Answer ${competeQuestionCount} questions as fast as you can.<br>Your score and time are saved to the matching leaderboard.</div>
       <button class="btn btn-primary compete-start-btn" onclick="startCompete()">Start Timed Test →</button>
     </div>
     <div class="compete-lb-section">
-      <div class="compete-lb-title">Leaderboard — ${currentSubject.charAt(0).toUpperCase()+currentSubject.slice(1)}${competeSection?' · '+competeSection:''}</div>
+      <div class="compete-lb-title">Leaderboard — ${currentSubject.charAt(0).toUpperCase()+currentSubject.slice(1)}${competeSection?' · '+competeSection:''} · ${competeQuestionCount} Questions</div>
       ${lbHtml}
     </div>
   </div>`;
@@ -3508,13 +3563,19 @@ function setCompeteSection(s){
   competeSection=s==='null'||s==null?null:s;competeRunning=false;competeCards=[];competeIndex=0;
   competeScore={correct:0,wrong:0};clearCompeteTimer();render();
 }
+function setCompeteQuestionCount(count){
+  competeQuestionCount=normalizeCompeteQuestionCount(count);
+  competeRunning=false;competeCards=[];competeIndex=0;
+  competeScore={correct:0,wrong:0};clearCompeteTimer();render();
+}
 
 function startCompete(){
   const all=QUIZ_DATA[currentSubject];
   if(!all||!all.length){alert('No questions available for this subject.');return;}
   const filtered=competeSection?all.filter(c=>cardMatchesSection(c,competeSection,currentSubject)):all;
   if(!filtered.length){alert('No questions for this section.');return;}
-  competeCards=[...filtered].sort(()=>Math.random()-0.5);
+  if(filtered.length<competeQuestionCount){alert(`Only ${filtered.length} questions are available for this section.`);return;}
+  competeCards=[...filtered].sort(()=>Math.random()-0.5).slice(0,competeQuestionCount);
   competeIndex=0;competeScore={correct:0,wrong:0};
   competeAnswered=false;competeSelectedOption=null;competeRunning=true;
   _competeTimerStart=Date.now();_competeElapsed=0;
@@ -3572,6 +3633,7 @@ function finishCompete(){
   const entry={
     name:displayName,email:user?user.email:'',
     subject:currentSubject,section:competeSection||'All',
+    questionCount:competeCards.length,
     correct:competeScore.correct,wrong:competeScore.wrong,
     timeSeconds:elapsed,
     date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
@@ -3596,7 +3658,7 @@ function finishCompete(){
         <div class="compete-result-stat"><span class="cr-label">⏱ Time</span><span class="cr-val">${formatTime(entry.timeSeconds)}</span></div>
         <div class="compete-result-stat"><span class="cr-label">Accuracy</span><span class="cr-val">${pct}%</span></div>
       </div>
-      <div class="compete-result-saved">✓ Score saved to leaderboard</div>
+      <div class="compete-result-saved">✓ Score saved to the ${entry.questionCount}-question leaderboard</div>
       <div class="controls">
         <button class="btn btn-secondary" onclick="startCompete()">Try Again</button>
         <button class="btn btn-primary" onclick="render()">View Leaderboard</button>
@@ -3650,8 +3712,10 @@ function handleSignIn(){
       signInUser(user);
     }).catch(e=>{
       if(btn){btn.disabled=false;btn.textContent='Sign In →';}
-      const msg=e.code==='auth/user-not-found'||e.code==='auth/invalid-credential'?'No account found with that email. Try signing up!'
+      const existingAccount=getStoredAccounts()[email];
+      const msg=e.code==='auth/user-not-found'?'No account found with that email. Try signing up!'
                :e.code==='auth/wrong-password'?'Incorrect password. Please try again.'
+               :e.code==='auth/invalid-credential'?(existingAccount?'Incorrect password. Please try again.':'No account found with that email. Try signing up!')
                :e.code==='auth/too-many-requests'?'Too many attempts. Please try again later.'
                :'Sign in failed. Please try again.';
       showAuthError(err,msg);
@@ -3660,7 +3724,7 @@ function handleSignIn(){
     // Fallback: localStorage only (Firebase not yet configured)
     const existing=getStoredAccounts()[email];
     if(btn){btn.disabled=false;btn.textContent='Sign In →';}
-    if(!existing){showAuthError(err,'These account credentials  Try signing up!');return;}
+    if(!existing){showAuthError(err,'No account found with that email. Try signing up!');return;}
     if(existing.pw!==hashSimple(pw)){showAuthError(err,'Incorrect password. Please try again.');return;}
     signInUser({email,name:existing.name,isGuest:false});
   }
@@ -4186,6 +4250,64 @@ function closeTutorial(){
   document.getElementById('tutorial-overlay').classList.remove('show');
 }
 
+// ============================================================
+// BROWSER WARNING
+// ============================================================
+const BROWSER_WARNING_KEY='agk_browser_warning_dismissed';
+
+function getBrowserInfo(){
+  const ua=navigator.userAgent;
+  let match;
+  if((match=ua.match(/Edg\/(\d+)/))) return {name:'Microsoft Edge',family:'edge',major:parseInt(match[1],10)};
+  if((match=ua.match(/Chrome\/(\d+)/))&&!/Edg\//.test(ua)&&!/OPR\//.test(ua)) return {name:'Google Chrome',family:'chrome',major:parseInt(match[1],10)};
+  if((match=ua.match(/Firefox\/(\d+)/))) return {name:'Firefox',family:'firefox',major:parseInt(match[1],10)};
+  if((match=ua.match(/Version\/(\d+).+Safari\//))&&!/Chrome\//.test(ua)&&!/CriOS\//.test(ua)&&!/Edg\//.test(ua)) return {name:'Safari',family:'safari',major:parseInt(match[1],10)};
+  return {name:'This browser',family:'unknown',major:null};
+}
+
+function evaluateBrowserWarning(){
+  const info=getBrowserInfo();
+  const minimums={chrome:118,edge:118,firefox:115,safari:16};
+  const reasons=[];
+  if(typeof window.Promise!=='function'||typeof window.fetch!=='function'||typeof window.MutationObserver!=='function'||typeof window.localStorage==='undefined'){
+    reasons.push('missing modern web features');
+  }
+  if(info.family!=='unknown'&&info.major!==null&&info.major<(minimums[info.family]||0)){
+    reasons.push(`${info.name} ${info.major} is behind current support targets`);
+  }
+  if(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2){
+    reasons.push('limited CPU resources can increase lag');
+  }
+  if(navigator.deviceMemory&&navigator.deviceMemory<=2){
+    reasons.push('low device memory can increase lag');
+  }
+  if(!reasons.length) return null;
+  return {
+    id:`${info.family}-${info.major||'unknown'}-${navigator.hardwareConcurrency||'na'}-${navigator.deviceMemory||'na'}`,
+    title:'Browser update recommended',
+    message:`${info.name} may be outdated or underpowered for the latest version of this app. You may notice lag or display issues. Try updating your browser first.${reasons.length?` Detected: ${reasons.join('; ')}.`:''}`
+  };
+}
+
+function dismissBrowserWarning(){
+  const warning=document.getElementById('browser-warning');
+  if(warning) warning.classList.remove('show');
+  if(window._activeBrowserWarningId) localStorage.setItem(BROWSER_WARNING_KEY,window._activeBrowserWarningId);
+}
+
+function maybeShowBrowserWarning(){
+  const payload=evaluateBrowserWarning();
+  if(!payload) return;
+  const dismissed=localStorage.getItem(BROWSER_WARNING_KEY);
+  if(dismissed===payload.id) return;
+  window._activeBrowserWarningId=payload.id;
+  const warning=document.getElementById('browser-warning');
+  if(!warning) return;
+  document.getElementById('browser-warning-title').textContent=payload.title;
+  document.getElementById('browser-warning-msg').textContent=payload.message;
+  warning.classList.add('show');
+}
+
 function tutorialNext(){
   if(_tutorialStep < TUTORIAL_STEPS.length-1){
     _tutorialStep++;
@@ -4239,6 +4361,8 @@ function _renderTutorialStep(){
   if(p.largeText) document.body.classList.add('large-text');
   if(p.accent) applyAccentColor(p.accent,p.accentGrad||'#5AC8FA');
 })();
+
+maybeShowBrowserWarning();
 
 const startUser=getUser();
 if(!startUser){
