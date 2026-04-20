@@ -15,7 +15,7 @@
   .orb3{width:350px;height:350px;background:rgba(52,199,89,0.12);bottom:-100px;left:30%;animation-delay:4s}
   @keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
   .app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 16px 60px}
-  .header{text-align:center;margin-bottom:24px;padding:24px 32px 20px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);animation:slideDown 0.5s ease}
+  .header{position:relative;z-index:1200;text-align:center;margin-bottom:24px;padding:24px 32px 20px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);animation:slideDown 0.5s ease}
   @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
   .header-badge{display:inline-block;background:rgba(0,122,255,0.15);color:var(--accent-blue);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(0,122,255,0.25)}
   .header h1{font-size:clamp(20px,4vw,30px);font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#007AFF,#AF52DE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
@@ -182,11 +182,39 @@
   /* ===== HEADER USER CHIP ===== */
   .header-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .header-actions{display:flex;gap:8px;align-items:center}
+  .help-menu-wrap{position:relative}
   .user-chip{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 7px;border-radius:20px;background:rgba(255,255,255,0.55);border:1.5px solid var(--glass-border);cursor:pointer;transition:all 0.2s;font-size:13px;font-weight:600;color:var(--text-primary)}
   .user-chip:hover{background:rgba(255,255,255,0.85)}
   .user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
-  .settings-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.55);border:1.5px solid var(--glass-border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:17px;flex-shrink:0}
-  .settings-btn:hover{background:rgba(255,255,255,0.85);transform:rotate(30deg)}
+  .settings-btn,.help-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.55);border:1.5px solid var(--glass-border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:17px;flex-shrink:0}
+  .settings-btn:hover,.help-btn:hover{background:rgba(255,255,255,0.85)}
+  .settings-btn:hover{transform:rotate(30deg)}
+  .help-btn{font-size:15px;font-weight:800;color:var(--text-primary);position:relative}
+  .help-btn:hover{transform:translateY(-1px)}
+  .help-btn.active{background:linear-gradient(135deg,rgba(0,122,255,0.18),rgba(175,82,222,0.16));border-color:rgba(0,122,255,0.22)}
+  .help-panel{position:fixed;top:76px;right:24px;width:min(360px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:min(70vh,560px);overflow:auto;background:rgba(255,255,255,0.9);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);border:1.5px solid rgba(255,255,255,0.7);border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,0.16);padding:16px;display:flex;flex-direction:column;gap:14px;opacity:0;transform:translateY(-6px) scale(0.98);pointer-events:none;transition:opacity 0.2s,transform 0.2s;z-index:3200}
+  .help-panel.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .help-panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .help-panel-kicker{font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-blue);margin-bottom:5px}
+  .help-panel-title{font-size:18px;font-weight:800;color:var(--text-primary);line-height:1.1}
+  .help-panel-subtitle{font-size:12px;line-height:1.5;color:var(--text-secondary);margin-top:6px}
+  .help-close{width:30px;height:30px;border:none;border-radius:50%;background:rgba(0,0,0,0.06);color:var(--text-secondary);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all 0.18s;flex-shrink:0}
+  .help-close:hover{background:rgba(255,59,48,0.12);color:var(--accent-red)}
+  .help-context-row{display:flex;flex-wrap:wrap;gap:8px}
+  .help-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(0,122,255,0.09);border:1px solid rgba(0,122,255,0.16);font-size:12px;font-weight:700;color:var(--text-primary)}
+  .help-chip-muted{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.06);color:var(--text-secondary)}
+  .help-card{background:rgba(255,255,255,0.58);border:1px solid rgba(255,255,255,0.6);border-radius:16px;padding:13px 14px}
+  .help-card-label{font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:7px}
+  .help-card-text{font-size:13px;line-height:1.6;color:var(--text-secondary)}
+  .help-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+  .help-list li{font-size:13px;line-height:1.55;color:var(--text-secondary);padding-left:16px;position:relative}
+  .help-list li::before{content:'•';position:absolute;left:0;color:var(--accent-blue);font-weight:800}
+  .help-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .help-action-btn{border:none;border-radius:14px;padding:11px 12px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;justify-content:center;text-align:center}
+  .help-action-btn.primary{background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff;box-shadow:0 8px 20px rgba(0,122,255,0.22)}
+  .help-action-btn.secondary{background:rgba(0,0,0,0.06);color:var(--text-primary);border:1px solid rgba(0,0,0,0.06)}
+  .help-action-btn:hover{transform:translateY(-1px)}
+  .help-action-btn.full{grid-column:1/-1}
 
   /* ===== SETTINGS MODAL ===== */
   .settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;place-items:center;z-index:1500;padding:20px}
@@ -247,7 +275,11 @@
   body.dark-mode .auth-tab.active{background:rgba(255,255,255,0.12);color:#5AC8FA}
   body.dark-mode .settings-group{background:rgba(255,255,255,0.06)}
   body.dark-mode .settings-row{border-bottom-color:rgba(255,255,255,0.07)}
-  body.dark-mode .user-chip,body.dark-mode .settings-btn{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.12)}
+  body.dark-mode .user-chip,body.dark-mode .settings-btn,body.dark-mode .help-btn{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.12)}
+  body.dark-mode .help-panel{background:rgba(24,24,32,0.94);border-color:rgba(255,255,255,0.1)}
+  body.dark-mode .help-card{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.06)}
+  body.dark-mode .help-close,body.dark-mode .help-action-btn.secondary{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.08);color:var(--text-primary)}
+  body.dark-mode .help-chip-muted{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08)}
   body.dark-mode .auth-guest{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.12);color:#EBEBF5}
   /* Large text mode */
   body.large-text .card-content{font-size:clamp(17px,2.6vw,22px)}
@@ -379,6 +411,10 @@
   body.dark-mode .compete-timer-bar,body.dark-mode .compete-result-card{background:rgba(255,255,255,0.07)}
   body.dark-mode .compete-result-stat{background:rgba(255,255,255,0.07)}
   @media(max-width:600px){
+    .header-top-row{align-items:flex-start;gap:12px}
+    .header-actions{flex-wrap:wrap;justify-content:flex-end}
+    .help-panel{right:12px;width:min(340px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:min(72vh,520px)}
+    .help-action-grid{grid-template-columns:1fr}
     .compete-lb-header,.compete-lb-row{grid-template-columns:28px 1fr 32px 32px 44px 54px}
     .lb-date{display:none}
     .compete-result-stats{grid-template-columns:1fr 1fr}
@@ -678,7 +714,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">AGK OS 1.7.5</div>
+              <div class="settings-row-desc">AGK OS 1.7.7</div>
             </div>
           </div>
         </div>
@@ -766,6 +802,29 @@
     <div class="header-top-row">
       <div class="header-badge">AGK Agloa Practice ~Adithan G.</div>
       <div class="header-actions">
+        <div class="help-menu-wrap">
+          <button class="help-btn" onclick="toggleHelpMenu()" id="help-btn" title="Help">?</button>
+          <div class="help-panel" id="help-panel">
+            <div class="help-panel-header">
+              <div>
+                <div class="help-panel-kicker">Smart Help</div>
+                <div class="help-panel-title" id="help-panel-title">Need a quick reset?</div>
+                <div class="help-panel-subtitle" id="help-panel-subtitle">I can point you to the right next step based on what you're studying.</div>
+              </div>
+              <button class="help-close" onclick="closeHelpMenu()" title="Close help">✕</button>
+            </div>
+            <div class="help-context-row" id="help-context-row"></div>
+            <div class="help-card">
+              <div class="help-card-label">Right Now</div>
+              <div class="help-card-text" id="help-current-tip"></div>
+            </div>
+            <div class="help-card">
+              <div class="help-card-label">Try This</div>
+              <ul class="help-list" id="help-smart-list"></ul>
+            </div>
+            <div class="help-action-grid" id="help-action-grid"></div>
+          </div>
+        </div>
         <button class="feedback-btn" onclick="openFeedback()" title="Send Feedback">💬</button>
         <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
         <div class="user-chip" onclick="openSettings()" id="user-chip">
@@ -974,11 +1033,40 @@ function _convertOnclick(el){
   var fn = m[1].split('.').reduce(function(o,k){ return o && o[k]; }, window);
   if(typeof fn !== 'function') return;
   var argStr = m[2].trim();
-  var args = argStr ? argStr.split(',').map(function(a){
+  var argParts = [];
+  if(argStr){
+    var current = '';
+    var quote = null;
+    for(var i = 0; i < argStr.length; i++){
+      var ch = argStr[i];
+      if(quote){
+        current += ch;
+        if(ch === quote && argStr[i - 1] !== '\\') quote = null;
+        continue;
+      }
+      if(ch === '\'' || ch === '"'){
+        quote = ch;
+        current += ch;
+        continue;
+      }
+      if(ch === ','){
+        argParts.push(current);
+        current = '';
+        continue;
+      }
+      current += ch;
+    }
+    if(current || argStr.endsWith(',')) argParts.push(current);
+  }
+  var args = argParts.map(function(a){
     a = a.trim();
+    if (a === 'null') return null;
+    if (a === 'undefined') return undefined;
+    if (a === 'true') return true;
+    if (a === 'false') return false;
     if (/^(['"]).*\1$/.test(a)) return a.slice(1, -1);
     var n = Number(a); return isNaN(n) ? a : n;
-  }) : [];
+  });
   var needsEvent = /\bevent\b/.test(raw);
   el.addEventListener('click', needsEvent
     ? function(e){ fn.apply(window, [e].concat(args)); }
@@ -997,6 +1085,26 @@ new MutationObserver(function(mutations){
     });
   });
 }).observe(document.documentElement, {childList:true, subtree:true});
+
+document.addEventListener('click', function(e){
+  var button = e.target.closest('.sect-btn[data-section-setter]');
+  if(!button) return;
+  var setterName = button.getAttribute('data-section-setter');
+  var setter = window[setterName];
+  if(typeof setter !== 'function') return;
+  var value = button.getAttribute('data-section-value');
+  setter(value === '' ? null : value);
+});
+
+document.addEventListener('click', function(e){
+  var helpWrap = e.target.closest('.help-menu-wrap');
+  if(helpWrap) return;
+  closeHelpMenu();
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeHelpMenu();
+});
 // ============================================================
 // PROPAGANDA SECTIONS (full reference data)
 // ============================================================
@@ -2270,6 +2378,229 @@ const QUIZ_DATA={
     {q:'What is pronoun case?',section:'Functions and Usage',options:['Whether a pronoun is singular or plural','The form a pronoun takes based on its function: subjective (I/he/she), objective (me/him/her), possessive (my/his/her)','Whether a pronoun is definite or indefinite','The tense expressed by a pronoun'],answer:1,explanation:'Subjective case for subjects (She won). Objective case for objects (Give it to me / him). Common error: Between you and I (should be me).'}
   ],
 };
+
+const PROPAGANDA_DOC_BANK=[
+  {technique:'Emotional Terms',example:'"Democrats are unscrupulous tax-raisers who take advantage of unsuspecting workers and poor people."'},
+  {technique:'Emotional Terms',example:'"How can our state make any progress with a lying, scheming crook like Edwin Jones as governor?"'},
+  {technique:'Emotional Terms',example:'"A vote for my opponent is a vote for all the cockeyed, wasteful liberal programs that nearly destroyed this nation\'s precious economy."'},
+  {technique:'Emotional Terms',example:'"He sneakily lured the poor victim away and then mercilessly destroyed him."'},
+  {technique:'Emotional Terms',example:'"Our political enemy\'s hands are tainted with the filthy lucre of gambling money."'},
+  {technique:'Metaphor and Simile',example:'"You students are so hard to handle. You all act like wound-up robots."'},
+  {technique:'Metaphor and Simile',example:'"The Vietnam War is the ghost that will haunt this country for a hundred years."'},
+  {technique:'Metaphor and Simile',example:'"The hurricane roared through the state like a freight train."'},
+  {technique:'Metaphor and Simile',example:'"He\'s about as personable as a slug."'},
+  {technique:'Emphasis',example:'"But Miss Buxley, you forbade me to CALL Maggie a vituperous vixen. I just wrote it on the board."'},
+  {technique:'Emphasis',example:'"The First Amendment applied only to free SPEECH."'},
+  {technique:'Emphasis',example:'"After YOU clean up the yard, you can get your snack."'},
+  {technique:'Quotation Out of Context',example:'"For Cezanne it\'s pretty poor, but still it\'s a whole lot better than 20th-century French paintings" was shortened to "a whole lot better than 20th-century French paintings."'},
+  {technique:'Quotation Out of Context',example:'A professor said Cuba was good to live under "if you don\'t care about personal freedom," but the report quoted only "Cuba is a good one to live under."'},
+  {technique:'Quotation Out of Context',example:'A review calling a film "a colossal waste of time and money" was reused as critics calling it "colossal."'},
+  {technique:'Abstract Terms',example:'"All people should pay a fair share of the real estate tax load."'},
+  {technique:'Abstract Terms',example:'"Throughout the Communist world, people call for freedom."'},
+  {technique:'Abstract Terms',example:'"Christianity is the hope of the world."'},
+  {technique:'Vagueness',example:'"You girls must keep acceptable hours."'},
+  {technique:'Vagueness',example:'"Your daughter hasn\'t been working hard enough. She simply has to work harder."'},
+  {technique:'Ambiguity',example:'"Thank you for a copy of the new Academic Game. I shall waste no time in playing it."'},
+  {technique:'Ambiguity',example:'"I heard that Jones voted for Schmidt. He must be a Democrat."'},
+  {technique:'Shift of Meaning',example:'"Man is the highest being on the evolutionary ladder... that\'s why women are inferior."'},
+  {technique:'Shift of Meaning',example:'"The sewage amendment must pass because one of the founding principles of this nation is compromise, amending our opinion."'},
+
+  {technique:'Appeal to Pity',example:'"Please do not withdraw from Korea. Our small ill-prepared military doesn\'t stand a chance."'},
+  {technique:'Appeal to Pity',example:'"Could you look into the sad, proud eye of this poor girl and say, \"No, child, I will not help you\"?"'},
+  {technique:'Appeal to Pity',example:'"My cat had kittens and I was up all night helping her. That\'s why I didn\'t do my homework."'},
+  {technique:'Appeal to Pity',example:'"Passing this course means a great deal to me... I hope you can see your way clear to give me a passing grade."'},
+  {technique:'Appeal to Flattery',example:'"The genuine pearl earrings give your face a radiant glow."'},
+  {technique:'Appeal to Flattery',example:'"You are one of these choice customers."'},
+  {technique:'Appeal to Flattery',example:'"You are clearly the keystones to the success of this community."'},
+  {technique:'Appeal to Flattery',example:'"Mr. Radburn, your beautifully tailored clothes make you more suited to our Acura Legend."'},
+  {technique:'Appeal to Ridicule',example:'"As a Vice-President Hubert Humphrey makes a good drugstore clerk."'},
+  {technique:'Appeal to Ridicule',example:'"What she needs is a yappendectomy."'},
+  {technique:'Appeal to Ridicule',example:'"I always suspected you were stupid, but to show it off in class is really too much."'},
+  {technique:'Appeal to Prestige',example:'"George Cabot Latham, leading collector of objects of art, also takes pride in his collection of Botany suits."'},
+  {technique:'Appeal to Prestige',example:'"Join the elite. Invest in Audubon Resort Hotels."'},
+  {technique:'Appeal to Prestige',example:'"Membership has its privileges."'},
+  {technique:'Appeal to Prejudice',example:'"I cannot see how you can enjoy that piece of music. Why, it was a favorite of Hitler\'s."'},
+  {technique:'Appeal to Prejudice',example:'"Taxes must never be used to support parochial schools. Should you and I support Catholicism? Never!"'},
+  {technique:'Appeal to Prejudice',example:'"The amendment may sound acceptable, but Senator Fullbite is the most notorious left-winger in Congress."'},
+  {technique:'Bargain Appeal',example:'"With this 106-piece Socket Wrench and Tool Set you will save year after year by doing it yourself."'},
+  {technique:'Bargain Appeal',example:'"Why pay $50 for a Cabbage Patch Kid when you can get an exact copy from our warehouse?"'},
+  {technique:'Bargain Appeal',example:'"Buy Zoom-Zoom gas and play Pic-a-Win for free. Win valuable free prizes!"'},
+  {technique:'Folksy Appeal',example:'"If it\'s good enough for Harry Jones, it\'s good enough for you."'},
+  {technique:'Folksy Appeal',example:'"Reach out and touch someone."'},
+  {technique:'Join the Bandwagon',example:'"Everybody else in the dorm is on strike against the food! What\'s the matter with you?"'},
+  {technique:'Join the Bandwagon',example:'"More people watched CBS News with Dan Rather on election night than any other station."'},
+  {technique:'Appeal to Practical Consequences',example:'"If the property tax bill passes, wages will not be increased for one year."'},
+  {technique:'Appeal to Practical Consequences',example:'"If you value freedom, you\'ll help fight Communism."'},
+  {technique:'Appeal to Practical Consequences',example:'"Failure to pass the increased defense appropriation will mean the Russians can destroy our cities."'},
+  {technique:'Passing from the Acceptable to the Dubious',example:'"Johnny wants to know what\'s beyond the moon... you can assist him by buying the Hamilton Children\'s Encyclopedia."'},
+  {technique:'Passing from the Acceptable to the Dubious',example:'"Everyone likes to be warm and look stylish. Shop at Luther\'s for your new London Fog jacket."'},
+  {technique:'Passing from the Acceptable to the Dubious',example:'"Florida is a great state... let\'s keep it that way by giving Florida the contract to build the Space Station."'},
+
+  {technique:'Diversion',example:'Late son changes the topic from being late to Mrs. Bump expecting her fifth child.'},
+  {technique:'Diversion',example:'Criticism of a Christmas display is answered with "This is just the Mardi Gras spirit that is so special to this city."'},
+  {technique:'Disproving a Minor Point',example:'One doubtful Russian statistic is used to dismiss the wider claim that the U.S. lags internationally in math and science.'},
+  {technique:'Disproving a Minor Point',example:'Jeff answers a long conduct complaint by saying he always pays attention when the class is told to get ready for lunch.'},
+  {technique:'Ad Hominem',example:'"Mrs. Felton is President of the PTA... she\'s the last one I would believe."'},
+  {technique:'Ad Hominem',example:'"Sure you think we should build a new bridge. After all, you own 2000 acres on the other side of the river."'},
+  {technique:'Ad Hominem',example:'"Smith says he will represent us well in the Senate. This comes from a man whose father was a gangster and whose mother was an alcoholic."'},
+  {technique:'Appeal to Ignorance',example:'"When has the Catholic Church ever admitted its priests did anything wrong?"'},
+  {technique:'Appeal to Ignorance',example:'"Not a single person has come forward who actually saw Frank steal the lunch money. How can anyone conclude he is guilty?"'},
+  {technique:'Leading Question',example:'"You were across the yellow line, weren\'t you?"'},
+  {technique:'Leading Question',example:'"Tell me, professor, why do we have to go on with this inhuman grading system?"'},
+  {technique:'Leading Question',example:'"Does Peter still burp when he eats at the Burger Palace?"'},
+  {technique:'Complex Question',example:'"Are you going to wear your diamond earrings tonight or may I borrow them?"'},
+  {technique:'Inconsequent Argument',example:'A case about students buying beer is answered with a point about half a bottle causing only a 5% loss in thinking ability.'},
+  {technique:'Inconsequent Argument',example:'A teacher competency hearing is defended by saying the teacher completed four years of college and never missed a day of school in 16 years.'},
+  {technique:'Attacking a Straw Man',example:'Support for police using dogs and shotguns for riot control is twisted into support for people being bitten by mad dogs.'},
+  {technique:'Attacking a Straw Man',example:'Support for strong defense is twisted into wanting every young man and woman in uniform.'},
+  {technique:'Victory by Definition',example:'"A true American never quits."'},
+  {technique:'Victory by Definition',example:'"The Saints haven\'t beaten a strong team." "The Rams aren\'t really a strong team."'},
+  {technique:'Begging the Question',example:'"I should get an A on my report card because I deserve it."'},
+  {technique:'Begging the Question',example:'"The reason Joan Collins is a celebrity is because she is so well known."'}
+];
+
+const PROPAGANDA_RESEARCH_FLASHCARDS=[
+  {q:'How do Emotional Terms and Appeal to Pity differ?',a:'Emotional Terms use loaded wording to bias the audience. Appeal to Pity asks the audience to decide based on sympathy for a person or victim. One is language coloring; the other is a specific emotional lever.',section:'Section B – Language'},
+  {q:'How do Bargain Appeal and Appeal to Practical Consequences differ?',a:'Bargain Appeal says a choice is good because it is cheap or a great deal. Appeal to Practical Consequences says a belief or decision should be accepted because of its useful or harmful results.',section:'Section D – Exploitation'},
+  {q:'How do Appeal to Prestige and Folksy Appeal differ?',a:'Appeal to Prestige borrows authority from elite status, celebrity, or exclusivity. Folksy Appeal borrows trust by sounding ordinary, neighborly, or down-home.',section:'Section D – Exploitation'},
+  {q:'How do Leading Question and Complex Question differ?',a:'A Leading Question nudges the listener toward the desired answer. A Complex Question traps the listener with a hidden assumption that any direct answer seems to admit.',section:'Section F – Maneuver'},
+  {q:'How do Attacking a Straw Man and Ad Hominem differ?',a:'A Straw Man distorts the opponent\'s argument into a weaker version. Ad Hominem attacks the person instead of the argument. One targets the claim by distortion; the other targets the speaker.',section:'Section F – Maneuver'},
+  {q:'How do Quotation Out of Context and Emphasis differ?',a:'Quotation Out of Context removes surrounding words to distort meaning. Emphasis changes meaning by stressing one word or phrase while leaving the wording in place.',section:'Section B – Language'},
+  {q:'How do Vagueness and Abstract Terms differ?',a:'Vagueness hides specifics through imprecision. Abstract Terms use lofty concepts like freedom or justice that sound meaningful but remain undefined unless unpacked.',section:'Section B – Language'},
+  {q:'How do Victory by Definition and Begging the Question differ?',a:'Victory by Definition changes or narrows a term so the conclusion becomes automatically true. Begging the Question assumes the truth of the conclusion inside the reasoning itself.',section:'Section F – Maneuver'},
+  {q:'What is a fast way to spot propaganda in an ad or speech?',a:'Check whether the message gives evidence, defines key terms, and addresses the real issue. If it relies on loaded wording, identity pressure, status, fear, or a distorted opponent, propaganda techniques are likely in play.',section:'Section C – Irrelevance'},
+  {q:'Why are propaganda examples often easier than definitions to remember?',a:'Examples show the technique in action. Once you learn the pattern behind a vivid example, you can recognize the same structure in new slogans, ads, debates, and social media posts.',section:'Section A – Self-Deception'}
+];
+
+const PROPAGANDA_RESEARCH_QUIZ=[
+  {q:'Which technique relies on sympathy rather than evidence?',section:'Section D – Exploitation',options:['Appeal to Pity','Emotional Terms','Slogans','Technical Jargon'],answer:0,explanation:'Appeal to Pity asks the audience to decide by feeling sorry for someone rather than by evaluating reasons.'},
+  {q:'Which pair is correctly matched?',section:'Section D – Exploitation',options:['Appeal to Prestige = sounding like an ordinary neighbor','Folksy Appeal = borrowing elite status','Bargain Appeal = low price or savings used as persuasion','Join the Bandwagon = redefining words to win'],answer:2,explanation:'Bargain Appeal persuades by emphasizing price, savings, freebies, or value rather than truth or quality.'},
+  {q:'Which technique best fits a question that sneaks in an accusation?',section:'Section F – Maneuver',options:['Leading Question','Complex Question','Diversion','Inconsequent Argument'],answer:1,explanation:'A Complex Question embeds an assumption that the listener seems to accept just by answering.'},
+  {q:'If a speaker twists a moderate policy into an extreme one before attacking it, which technique is being used?',section:'Section F – Maneuver',options:['Ad Hominem','Appeal to Ignorance','Attacking a Straw Man','Victory by Definition'],answer:2,explanation:'A Straw Man replaces the real claim with a distorted, easier target.'},
+  {q:'What is the best description of Vagueness?',section:'Section B – Language',options:['A phrase with two distinct meanings','A quote cut away from its context','Imprecise wording that avoids specifics','A dramatic comparison between unlike things'],answer:2,explanation:'Vagueness keeps wording broad or fuzzy so the audience fills in the blanks.'},
+  {q:'What is the key warning sign of Quotation Out of Context?',section:'Section B – Language',options:['The quote is very short and missing surrounding qualifiers','The speaker uses a metaphor','The wording sounds emotional','The claim contains numbers'],answer:0,explanation:'Removing qualifiers, contrast, or nearby explanation is the classic sign that a quote has been stripped of context.'},
+  {q:'Which technique says something should be believed because the result would be useful or beneficial?',section:'Section D – Exploitation',options:['Appeal to Practical Consequences','Bargain Appeal','Appeal to Prestige','Appeal to Flattery'],answer:0,explanation:'Practical benefits do not prove a belief true, but this technique treats them as if they do.'},
+  {q:'Which technique attacks the speaker rather than the speaker\'s reasoning?',section:'Section F – Maneuver',options:['Ad Hominem','Attacking a Straw Man','Disproving a Minor Point','Begging the Question'],answer:0,explanation:'Ad Hominem shifts attention from argument quality to personal attacks.'},
+  {q:'Which technique most often sounds like "everyone agrees" or "you don\'t want to be left out"?',section:'Section D – Exploitation',options:['Join the Bandwagon','Appeal to Flattery','Folksy Appeal','Appeal to Pity'],answer:0,explanation:'Bandwagon pressure relies on crowd behavior and fear of being the odd one out.'},
+  {q:'Which technique changes a definition to avoid a counterexample?',section:'Section F – Maneuver',options:['Victory by Definition','Begging the Question','Appeal to Ignorance','Diversion'],answer:0,explanation:'Victory by Definition protects the claim by redefining the key term after the challenge appears.'}
+];
+
+const AGLOA_PROPAGANDA_FLASHCARDS=[
+  {q:'AGLOA April 2020 prompt: Doctor to allergy patient: "Did you recently get a cat?" Patient: "Yes. It was my mother\'s. She died." Which technique fits best?',a:'Ambiguity — "She died" could refer either to the mother or to the cat, and the sentence leaves that meaning unresolved.',section:'Section B – Language'},
+  {q:'AGLOA October 2020 prompt: Police officer says, "I got a Code Eight call and responded 10-4... it was also a Code Eleven situation." Which technique fits best?',a:'Technical Jargon — specialized codes make the statement sound official while obscuring its meaning for ordinary listeners.',section:'Section C – Irrelevance'},
+  {q:'AGLOA December 2020 prompt: Wired ad: "Get More Artificial Intelligence. Get More Robots. Get More Ideas. Get More Rockets. Get More Informed." Which technique fits best?',a:'Repetition — the ad repeats the "Get More" formula to build persuasive rhythm and memorability instead of offering an argument.',section:'Section C – Irrelevance'},
+  {q:'AGLOA June 2020 prompt: "We should hire Mrs. Smith. Of the four candidates, she was the best-dressed and neatest in personal appearance." Which technique fits best?',a:'Appearance — the choice is based on looks and presentation rather than teaching ability or evidence of competence.',section:'Section C – Irrelevance'},
+  {q:'AGLOA July 2020 prompt: "Certified Herbalist. Nutrition Consultant. Natural Medicine Advocate. Advisory Council Board, Texas A&M Agricultural Center." Which technique fits best?',a:'Degrees and Titles — a stack of credentials and formal-sounding roles is used to impress the audience rather than prove the claim itself.',section:'Section C – Irrelevance'},
+  {q:'AGLOA April 2020 prompt: Navy recruiter says, "The Navy needs smart, ambitious, patriotic recruits like you." Which technique fits best?',a:'Appeal to Flattery — the recruit is praised as smart, ambitious, and patriotic to make acceptance feel like a compliment.',section:'Section D – Exploitation'},
+  {q:'AGLOA June 2020 prompt: "Every 30 seconds, someone chooses AT&T Fiber for their Internet connection." Which technique fits best?',a:'Join the Bandwagon — the message leans on popularity and constant adoption to make the choice seem automatically correct.',section:'Section D – Exploitation'},
+  {q:'AGLOA October 2020 prompt: "Of course, we should all wear face masks, and we should wear diapers and drink from baby bottles, too!" Which technique fits best?',a:'Appeal to Ridicule — mask-wearing is mocked by absurd comparison instead of being answered seriously.',section:'Section D – Exploitation'},
+  {q:'AGLOA January 2021 prompt: A young mother asks a local church for assistance and brings her three young children with her to speak to the pastor. Which technique fits best?',a:'Appeal to Pity — the visible presence of the children is part of an emotional request for help.',section:'Section D – Exploitation'},
+  {q:'AGLOA September 2024 prompt: Firestone ad: "Champions race with grit, determination, and Firestone Tires." Which technique fits best?',a:'Appeal to Prestige — the product borrows status from championship racers and elite performance.',section:'Section D – Exploitation'},
+  {q:'AGLOA December 2020 prompt: Student to teacher: "My mom is this school\'s biggest donor, so you should reconsider that C on my latest paper." Which technique fits best?',a:'Appeal to Prestige — the student tries to borrow influence from the mother\'s high-status donor position rather than defending the paper on merit.',section:'Section D – Exploitation'},
+  {q:'AGLOA July 2020 prompt: AT&T message: "Thanks for choosing Wireless from AT&T... Add a device today so all your friends and family can talk, text, share, video chat, stream entertainment, and more." Which technique fits best?',a:'Passing from the Acceptable to the Dubious — it begins with the reasonable value of staying connected and slides toward the sales conclusion that you should add another device.',section:'Section D – Exploitation'}
+];
+
+const AGLOA_PROPAGANDA_QUIZ=[
+  {q:'AGLOA prompt: Doctor to allergy patient: "Did you recently get a cat?" Patient: "Yes. It was my mother\'s. She died." Which technique is being used?',section:'Section B – Language',options:['Ambiguity','Vagueness','Shift of Meaning','Quotation Out of Context'],answer:0,explanation:'Ambiguity: "She died" can point to two different referents, and the speaker leaves the audience to sort it out.'},
+  {q:'AGLOA prompt: "Get More Artificial Intelligence. Get More Robots. Get More Ideas. Get More Rockets. Get More Informed." Which technique is being used?',section:'Section C – Irrelevance',options:['Slogans','Repetition','Technical Jargon','Sophistical Formula'],answer:1,explanation:'Repetition builds force and recall by repeating the same phrase structure rather than supplying evidence.'},
+  {q:'AGLOA prompt: "We should hire Mrs. Smith. Of the four candidates, she was the best-dressed and neatest in personal appearance." Which technique is being used?',section:'Section C – Irrelevance',options:['Appearance','Manner','Status','Degrees and Titles'],answer:0,explanation:'Appearance judges the person by how she looks rather than by relevant qualifications for the teaching job.'},
+  {q:'AGLOA prompt: "Certified Herbalist. Nutrition Consultant. Natural Medicine Advocate. Advisory Council Board, Texas A&M Agricultural Center." Which technique is being used?',section:'Section C – Irrelevance',options:['Status','Degrees and Titles','Manner','Technical Jargon'],answer:1,explanation:'Degrees and Titles uses credentials and labels to impress the audience regardless of whether they prove the point at issue.'},
+  {q:'AGLOA prompt: Navy recruiter says, "The Navy needs smart, ambitious, patriotic recruits like you." Which technique is being used?',section:'Section D – Exploitation',options:['Appeal to Prestige','Appeal to Flattery','Folksy Appeal','Join the Bandwagon'],answer:1,explanation:'Appeal to Flattery praises the audience directly to make the requested action feel like confirmation of their worth.'},
+  {q:'AGLOA prompt: "Every 30 seconds, someone chooses AT&T Fiber for their Internet connection." Which technique is being used?',section:'Section D – Exploitation',options:['Bargain Appeal','Appeal to Prestige','Join the Bandwagon','Appeal to Practical Consequences'],answer:2,explanation:'Join the Bandwagon makes popularity itself the reason to join in.'},
+  {q:'AGLOA prompt: "Of course, we should all wear face masks, and we should wear diapers and drink from baby bottles, too!" Which technique is being used?',section:'Section D – Exploitation',options:['Appeal to Ridicule','Appeal to Prejudice','Appeal to Flattery','Passing from the Acceptable to the Dubious'],answer:0,explanation:'Appeal to Ridicule mocks the position through absurd comparison instead of addressing it seriously.'},
+  {q:'AGLOA prompt: A young mother asks a local church for help and brings her three young children with her to speak to the pastor. Which technique is being used?',section:'Section D – Exploitation',options:['Appeal to Pity','Appeal to Practical Consequences','Folksy Appeal','Bargain Appeal'],answer:0,explanation:'Appeal to Pity uses sympathy for the family and children to influence the decision.'},
+  {q:'AGLOA prompt: Firestone ad: "Champions race with grit, determination, and Firestone Tires." Which technique is being used?',section:'Section D – Exploitation',options:['Appeal to Prestige','Join the Bandwagon','Appeal to Practical Consequences','Appeal to Flattery'],answer:0,explanation:'Appeal to Prestige borrows credibility and aura from admired champions.'},
+  {q:'AGLOA prompt: Student says, "My mom is this school\'s biggest donor, so you should reconsider that C on my latest paper." Which technique is being used?',section:'Section D – Exploitation',options:['Appeal to Prestige','Appeal to Pity','Appeal to Prejudice','Bargain Appeal'],answer:0,explanation:'The student invokes donor influence and status instead of the paper\'s actual quality.'},
+  {q:'AGLOA prompt: AT&T message says, "Stay connected to the people you care about most. Add a device today..." Which technique is being used?',section:'Section D – Exploitation',options:['Appeal to Flattery','Folksy Appeal','Passing from the Acceptable to the Dubious','Appeal to Practical Consequences'],answer:2,explanation:'It starts with the acceptable value of staying close to loved ones, then slides into the more dubious conclusion that buying another device follows from that.'},
+  {q:'AGLOA prompt: Officer says, "I got a Code Eight call and responded 10-4. When I arrived, I realized it was also a Code Eleven situation." Which technique is being used?',section:'Section C – Irrelevance',options:['Numbers','Status','Technical Jargon','Sophistical Formula'],answer:2,explanation:'Technical Jargon uses specialized codes that sound impressive but communicate poorly to general listeners.'}
+];
+
+function getPropTechniqueMeta(name){
+  for(const section of PROP_SECTIONS){
+    const technique=section.techniques.find(t=>t.name===name);
+    if(technique) return {section,technique};
+  }
+  return null;
+}
+
+function buildDocTechniqueOptions(techniqueName,index){
+  const meta=getPropTechniqueMeta(techniqueName);
+  if(!meta) return {options:[techniqueName],answer:0};
+  const pool=meta.section.techniques.map(t=>t.name).filter(name=>name!==techniqueName);
+  const picks=[];
+  for(let offset=0;offset<3;offset++) picks.push(pool[(index+offset)%pool.length]);
+  const answer=index%4;
+  const options=[];
+  let pickIndex=0;
+  for(let optionIndex=0;optionIndex<4;optionIndex++){
+    if(optionIndex===answer) options.push(techniqueName);
+    else options.push(picks[pickIndex++]);
+  }
+  return {options,answer};
+}
+
+function formatExampleTechniqueQuestion(prompt,lead){
+  const cleaned=cleanStudyText(prompt)
+    .replace(/^AGLOA [^:]+ prompt:\s*/i,'')
+    .replace(/^AGLOA prompt:\s*/i,'')
+    .replace(/^Doc example(?: \d+)?:\s*/i,'')
+    .replace(/\s*Which (?:propaganda )?technique (?:is being used|is illustrated|fits best)\?\s*$/i,'')
+    .trim();
+  return `${lead} ${cleaned}`;
+}
+
+function buildPropagandaDocFlashcards(){
+  return PROPAGANDA_DOC_BANK.map((item,index)=>{
+    const meta=getPropTechniqueMeta(item.technique);
+    return {
+      q:formatExampleTechniqueQuestion(`Doc example ${index+1}: ${item.example} Which propaganda technique is illustrated?`,'Which propaganda technique is illustrated by this example?'),
+      a:`${item.technique} — ${meta?meta.technique.def:'Identify the persuasion pattern rather than the topic.'}`,
+      section:meta?`${meta.section.label} - ${meta.section.title}`:'Propaganda'
+    };
+  });
+}
+
+function buildPropagandaDocQuiz(){
+  return PROPAGANDA_DOC_BANK.map((item,index)=>{
+    const meta=getPropTechniqueMeta(item.technique);
+    const quizOptions=buildDocTechniqueOptions(item.technique,index);
+    return {
+      q:formatExampleTechniqueQuestion(`Doc example: ${item.example} Which technique is being used?`,'Which propaganda technique is illustrated by this example?'),
+      section:meta?`${meta.section.label} - ${meta.section.title}`:'Propaganda',
+      options:quizOptions.options,
+      answer:quizOptions.answer,
+      explanation:`${item.technique}: ${meta?meta.technique.def:'Focus on how the argument persuades.'}`
+    };
+  });
+}
+
+AGLOA_PROPAGANDA_FLASHCARDS.forEach(item=>{
+  item.q=formatExampleTechniqueQuestion(item.q,'Which propaganda technique best fits this AGLOA example?');
+});
+
+AGLOA_PROPAGANDA_QUIZ.forEach(item=>{
+  item.q=formatExampleTechniqueQuestion(item.q,'Which propaganda technique is illustrated by this AGLOA example?');
+});
+
+function mergeUniqueEntries(base,extras){
+  const seen=new Set(base.map(item=>item.q));
+  extras.forEach(item=>{
+    if(!seen.has(item.q)){
+      base.push(item);
+      seen.add(item.q);
+    }
+  });
+}
+
+mergeUniqueEntries(FLASHCARD_DATA.propaganda,buildPropagandaDocFlashcards());
+mergeUniqueEntries(FLASHCARD_DATA.propaganda,PROPAGANDA_RESEARCH_FLASHCARDS);
+mergeUniqueEntries(FLASHCARD_DATA.propaganda,AGLOA_PROPAGANDA_FLASHCARDS);
+mergeUniqueEntries(QUIZ_DATA.propaganda,buildPropagandaDocQuiz());
+mergeUniqueEntries(QUIZ_DATA.propaganda,PROPAGANDA_RESEARCH_QUIZ);
+mergeUniqueEntries(QUIZ_DATA.propaganda,AGLOA_PROPAGANDA_QUIZ);
+
+const SOURCE_FLASHCARD_DATA=Object.fromEntries(Object.entries(FLASHCARD_DATA).map(([subject,items])=>[subject,items.slice()]));
+const SOURCE_QUIZ_DATA=Object.fromEntries(Object.entries(QUIZ_DATA).map(([subject,items])=>[subject,items.slice()]));
  
 // ============================================================
 // STATE
@@ -2280,11 +2611,189 @@ let cardIndex=0,isFlipped=false;
 let flashcardQueue=[],flashcardSection=null,quizSection=null;
 let quizIndex=0,quizAnswered=false,quizScore={correct:0,incorrect:0},quizCards=[],selectedOption=null;
 let refState={propSection:null,propTech:null,presEra:null,pres:null};
+
+function getSubjectTitle(subject){
+  const labels={
+    propaganda:'Propaganda',
+    presidents:'Presidents',
+    currentevents:'Current Events',
+    theme:'Theme',
+    linguistics:'LinguiSHTIK'
+  };
+  return labels[subject]||subject;
+}
+
+function getModeTitle(mode){
+  const labels={flashcards:'Flashcards',quiz:'Quiz',reference:'Reference',compete:'Compete'};
+  return labels[mode]||mode;
+}
+
+function getCurrentSectionForHelp(){
+  if(currentMode==='flashcards') return flashcardSection;
+  if(currentMode==='quiz') return quizSection;
+  if(currentMode==='compete') return competeSection;
+  if(currentMode==='reference' && currentSubject==='propaganda' && refState.propSection!==null){
+    const section=PROP_SECTIONS[refState.propSection];
+    return section?`${section.label} - ${section.title}`:null;
+  }
+  if(currentMode==='reference' && currentSubject==='presidents' && refState.presEra!==null){
+    const era=PRESIDENT_ERAS[refState.presEra];
+    return era?era.label:null;
+  }
+  return null;
+}
+
+function getHelpMenuState(){
+  const subjectTitle=getSubjectTitle(currentSubject);
+  const modeTitle=getModeTitle(currentMode);
+  const sectionTitle=getCurrentSectionForHelp();
+  const sectionCount=getSections(currentSubject).length;
+  const base={
+    title:`${subjectTitle} ${modeTitle}`,
+    subtitle:sectionTitle?`Focused on ${sectionTitle}.`:`You are in ${modeTitle.toLowerCase()} mode for ${subjectTitle}.`,
+    currentTip:'',
+    bullets:[],
+    actions:[]
+  };
+
+  if(currentMode==='flashcards'){
+    base.currentTip=sectionTitle
+      ?`You are reviewing ${sectionTitle}. Flip cards to lock in the basics, then switch to quiz mode to check whether the answers still stick.`
+      :`You are looking at all ${subjectTitle} flashcards. If it feels too broad, use the section filter to narrow the set before you start memorizing.`;
+    base.bullets=[
+      'Tap a card to flip it, then use the section filter if you want a smaller set.',
+      'Shuffle when you start recognizing the order instead of the content.',
+      `There are ${sectionCount} section${sectionCount===1?'':'s'} available in this subject.`
+    ];
+    base.actions=[
+      {label:'Start Quiz',type:'primary',action:"switchMode('quiz')"},
+      {label:'Open Tutorial',type:'secondary',action:'startTutorial()'},
+      {label:'Send Feedback',type:'secondary full',action:'openFeedback()'}
+    ];
+  } else if(currentMode==='quiz'){
+    base.currentTip=sectionTitle
+      ?`You are testing yourself on ${sectionTitle}. If you keep missing the same idea, jump back to flashcards for a fast reset before trying again.`
+      :`You are in mixed quiz mode for ${subjectTitle}. This is best once you already know the basics and want to check recall under pressure.`;
+    base.bullets=[
+      'Pick the answer first, then read the explanation to see why it was right or wrong.',
+      'Use a section filter when you want to isolate one weak area instead of mixing everything together.',
+      'Your results screen is better after a full pass than after stopping halfway through.'
+    ];
+    base.actions=[
+      {label:'Back to Flashcards',type:'primary',action:"switchMode('flashcards')"},
+      {label:'Open Reference',type:'secondary',action:"switchMode('reference')"},
+      {label:'Open Tutorial',type:'secondary full',action:'startTutorial()'}
+    ];
+  } else if(currentMode==='reference'){
+    base.currentTip=`Reference mode is your reset zone. Use it when a term feels fuzzy, then jump straight back into practice while the explanation is still fresh.`;
+    base.bullets=[
+      'Open a section or era first, then drill into the item you actually need.',
+      'Reference works best right before quiz mode, not after you are already frustrated.',
+      sectionTitle?`You already have a focused reference area open: ${sectionTitle}.`:`Pick a category first if you want narrower help.`
+    ];
+    base.actions=[
+      {label:'Go to Quiz',type:'primary',action:"switchMode('quiz')"},
+      {label:'Go to Flashcards',type:'secondary',action:"switchMode('flashcards')"},
+      {label:'Restart Tutorial',type:'secondary full',action:'startTutorial()'}
+    ];
+  } else {
+    base.currentTip=sectionTitle
+      ?`You are about to compete on ${sectionTitle}. That is best when you want pressure practice on one narrow area.`
+      :`Compete mode is for speed and stamina. Use it after flashcards or quiz mode, not before you learn the material.`;
+    base.bullets=[
+      'Timed mode pulls from quiz questions, so section filters still matter here.',
+      'A narrower section is better if you want to build confidence before running a full subject test.',
+      'Leaderboard runs are most useful after one review pass, not cold.'
+    ];
+    base.actions=[
+      {label:'Review Flashcards',type:'primary',action:"switchMode('flashcards')"},
+      {label:'Take a Quiz',type:'secondary',action:"switchMode('quiz')"},
+      {label:'Send Feedback',type:'secondary full',action:'openFeedback()'}
+    ];
+  }
+  return base;
+}
+
+function runHelpAction(action){
+  closeHelpMenu();
+  if(action==='startTutorial()') return startTutorial();
+  if(action==='openFeedback()') return openFeedback();
+  if(action==="switchMode('flashcards')") return switchMode('flashcards');
+  if(action==="switchMode('quiz')") return switchMode('quiz');
+  if(action==="switchMode('reference')") return switchMode('reference');
+}
+
+function updateHelpMenu(){
+  const panel=document.getElementById('help-panel');
+  const button=document.getElementById('help-btn');
+  if(!panel||!button) return;
+  const state=getHelpMenuState();
+  document.getElementById('help-panel-title').textContent=state.title;
+  document.getElementById('help-panel-subtitle').textContent=state.subtitle;
+  document.getElementById('help-current-tip').textContent=state.currentTip;
+  const contextRow=document.getElementById('help-context-row');
+  contextRow.innerHTML=`
+    <span class="help-chip">Mode: ${getModeTitle(currentMode)}</span>
+    <span class="help-chip">Subject: ${getSubjectTitle(currentSubject)}</span>
+    ${getCurrentSectionForHelp()?`<span class="help-chip help-chip-muted">Section: ${getCurrentSectionForHelp()}</span>`:''}
+  `;
+  document.getElementById('help-smart-list').innerHTML=state.bullets.map(item=>`<li>${item}</li>`).join('');
+  document.getElementById('help-action-grid').innerHTML=state.actions.map(item=>`<button class="help-action-btn ${item.type}" onclick="runHelpAction(${JSON.stringify(item.action).replace(/"/g,'&quot;')})">${item.label}</button>`).join('');
+  button.classList.toggle('active',panel.classList.contains('show'));
+  positionHelpMenu();
+}
+
+function positionHelpMenu(){
+  const panel=document.getElementById('help-panel');
+  const button=document.getElementById('help-btn');
+  if(!panel||!button) return;
+  const rect=button.getBoundingClientRect();
+  const viewportWidth=window.innerWidth;
+  const viewportHeight=window.innerHeight;
+  const panelWidth=Math.min(360, viewportWidth-32);
+  const top=Math.min(rect.bottom+10, Math.max(12, viewportHeight-panel.offsetHeight-12));
+  let left=rect.right-panelWidth;
+  if(left<12) left=12;
+  if(left+panelWidth>viewportWidth-12) left=viewportWidth-panelWidth-12;
+  panel.style.top=`${top}px`;
+  panel.style.left=`${left}px`;
+  panel.style.right='auto';
+  panel.style.width=`${panelWidth}px`;
+}
+
+function openHelpMenu(){
+  const panel=document.getElementById('help-panel');
+  if(!panel) return;
+  updateHelpMenu();
+  panel.classList.add('show');
+  document.getElementById('help-btn').classList.add('active');
+}
+
+function closeHelpMenu(){
+  const panel=document.getElementById('help-panel');
+  const button=document.getElementById('help-btn');
+  if(panel) panel.classList.remove('show');
+  if(button) button.classList.remove('active');
+}
+
+function toggleHelpMenu(){
+  const panel=document.getElementById('help-panel');
+  if(!panel) return;
+  if(panel.classList.contains('show')) closeHelpMenu();
+  else openHelpMenu();
+}
+
+window.addEventListener('resize', positionHelpMenu);
+window.addEventListener('scroll', function(){
+  const panel=document.getElementById('help-panel');
+  if(panel&&panel.classList.contains('show')) positionHelpMenu();
+}, {passive:true});
  
 // ============================================================
 // NAVIGATION
 // ============================================================
 function switchMode(mode){
+  ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
   currentMode=mode;
   document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',['flashcards','quiz','reference','compete'][i]===mode));
   cardIndex=0;isFlipped=false;flashcardQueue=[];flashcardSection=null;quizSection=null;quizIndex=0;quizAnswered=false;quizScore={correct:0,incorrect:0};quizCards=[];selectedOption=null;
@@ -2293,6 +2802,7 @@ function switchMode(mode){
   render();
 }
 function setSubject(s){
+  ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
   currentSubject=s;
   document.querySelectorAll('.subject-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sbtn-'+s).classList.add('active');
@@ -2306,6 +2816,7 @@ function render(){
   else if(currentMode==='quiz') el.innerHTML=renderQuiz();
   else if(currentMode==='reference') el.innerHTML=renderReference();
   else if(currentMode==='compete') el.innerHTML=renderCompete();
+  updateHelpMenu();
 }
  
 // ============================================================
@@ -2351,26 +2862,187 @@ function getSections(subject){
   ];
   return [];
 }
+function normalizeSectionValue(value){
+  return String(value ?? '')
+    .replace(/[–—-]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
 function cardMatchesSection(card,section,subject){
   if(!section) return true;
   if(subject==='presidents') return card.group&&card.group.includes(section);
-  if(subject==='propaganda') return card.section===section||card.section.startsWith(section+' ');
-  return card.section===section;
+  const normalizedCardSection=normalizeSectionValue(card.section);
+  const normalizedSection=normalizeSectionValue(section);
+  if(subject==='propaganda') return normalizedCardSection===normalizedSection||normalizedCardSection.startsWith(normalizedSection+' ');
+  return normalizedCardSection===normalizedSection;
 }
 function renderSectionFilter(section,subject,setter){
   const sects=getSections(subject);
   if(!sects.length) return '';
-  const allActive=!section?'active':'';
+  const activeSection=section==='null'?null:section;
+  const allActive=!activeSection?'active':'';
   return `<div class="section-filter-row">
-    <button class="sect-btn ${allActive}" onclick="${setter}(null)">All</button>
-    ${sects.map(s=>`<button class="sect-btn ${section===s.key?'active':''}" onclick="${setter}('${s.key}')">${s.label}</button>`).join('')}
+    <button class="sect-btn ${allActive}" data-section-setter="${setter}" data-section-value="">All</button>
+    ${sects.map(s=>`<button class="sect-btn ${activeSection===s.key?'active':''}" data-section-setter="${setter}" data-section-value="${s.key}">${s.label}</button>`).join('')}
   </div>`;
 }
+
+function cleanStudyText(value){
+  return String(value ?? '').replace(/\s+/g,' ').trim();
+}
+function shortStudyText(value,maxLen=180){
+  const cleaned=cleanStudyText(value);
+  return cleaned.length<=maxLen?cleaned:`${cleaned.slice(0,maxLen-1)}…`;
+}
+function getSectionDisplayLabel(subject,section){
+  if(subject==='propaganda'){
+    const meta=PROP_SECTIONS.find(item=>item.label===section);
+    return meta?`${meta.label} – ${meta.title}`:section;
+  }
+  if(subject==='presidents'){
+    const meta=getSections(subject).find(item=>item.key===section);
+    return meta?meta.label:section;
+  }
+  return section;
+}
+function getSectionOptionPool(subject){
+  const keys=getSections(subject).map(item=>item.key);
+  if(subject==='presidents') return [...keys,'All Presidents'];
+  return keys;
+}
+function buildUnifiedSectionSources(subject,section){
+  const flashSources=(SOURCE_FLASHCARD_DATA[subject]||[])
+    .filter(item=>cardMatchesSection(item,section,subject))
+    .map((item,index)=>({
+      id:`fc-${index}`,
+      prompt:cleanStudyText(item.q),
+      answer:cleanStudyText(item.a),
+      explanation:'',
+      section:section,
+      sourceType:'flashcard'
+    }));
+  const quizSources=(SOURCE_QUIZ_DATA[subject]||[])
+    .filter(item=>cardMatchesSection(item,section,subject))
+    .map((item,index)=>({
+      id:`qz-${index}`,
+      prompt:cleanStudyText(item.q),
+      answer:cleanStudyText((item.options&&item.options[item.answer])||''),
+      explanation:cleanStudyText(item.explanation||''),
+      section:section,
+      sourceType:'quiz'
+    }));
+  return [...flashSources,...quizSources].filter(item=>item.prompt&&item.answer);
+}
+function buildDeterministicOptions(correctValue,poolValues,seed,fallbackLabel){
+  const correct=cleanStudyText(correctValue);
+  const pool=[...new Set(poolValues.map(cleanStudyText).filter(value=>value&&value!==correct))];
+  const distractors=[];
+  let cursor=seed;
+  while(distractors.length<3&&pool.length){
+    const candidate=pool[cursor%pool.length];
+    if(candidate&&!distractors.includes(candidate)) distractors.push(candidate);
+    cursor+=2;
+    if(cursor>pool.length*6) break;
+  }
+  while(distractors.length<3){
+    const fallback=`${fallbackLabel} ${distractors.length+1}`;
+    if(fallback!==correct&&!distractors.includes(fallback)) distractors.push(fallback);
+    else distractors.push(`${fallbackLabel} ${distractors.length+2}`);
+  }
+  const answerIndex=seed%4;
+  const options=[];
+  let distractorIndex=0;
+  for(let optionIndex=0;optionIndex<4;optionIndex++){
+    if(optionIndex===answerIndex) options.push(correct);
+    else options.push(distractors[distractorIndex++]);
+  }
+  return {options,answerIndex};
+}
+function makeSupplementFlashcard(subject,section,source,variantIndex,sourceIndex){
+  const sectionDisplay=getSectionDisplayLabel(subject,section);
+  const templates=[
+    ()=>({q:`What is the best answer to this prompt? ${source.prompt}`,a:`${source.answer}${source.explanation?` ${source.explanation}`:''}`}),
+    ()=>({q:`Which section does this prompt belong to? ${source.prompt}`,a:sectionDisplay}),
+    ()=>({q:`What prompt matches this answer? ${shortStudyText(source.answer,220)}`,a:source.prompt}),
+    ()=>({q:`In ${sectionDisplay}, what is the best response to this prompt? ${source.prompt}`,a:source.answer}),
+    ()=>({q:`Why is this response correct for this prompt? ${source.prompt}`,a:`Best response: ${source.answer}.${source.explanation?` ${source.explanation}`:''}`}),
+    ()=>({q:`Which section includes this answer or idea? ${shortStudyText(source.answer,220)}`,a:sectionDisplay}),
+    ()=>({q:`Which study prompt goes with this answer? ${shortStudyText(source.answer,220)}`,a:source.prompt}),
+    ()=>({q:`How would you answer this prompt in ${sectionDisplay}? ${source.prompt}`,a:`${source.answer}${source.explanation?` ${source.explanation}`:''}`}),
+    ()=>({q:`What key idea is this prompt testing? ${source.prompt}`,a:source.answer}),
+    ()=>({q:`Which section should this study item go under? ${shortStudyText(source.prompt,220)}`,a:sectionDisplay})
+  ];
+  const payload=templates[variantIndex%templates.length]();
+  if(subject==='presidents') return {q:payload.q,a:payload.a,section:sectionDisplay,group:[section]};
+  return {q:payload.q,a:payload.a,section:subject==='propaganda'?sectionDisplay:section};
+}
+function makeSupplementQuiz(subject,section,source,sources,variantIndex,sourceIndex){
+  const sectionDisplay=getSectionDisplayLabel(subject,section);
+  const promptPool=sources.map(item=>shortStudyText(item.prompt,180));
+  const answerPool=sources.map(item=>shortStudyText(item.answer,180));
+  const sectionPool=getSectionOptionPool(subject);
+  const templates=[
+    ()=>{const built=buildDeterministicOptions(section,sectionPool,variantIndex+sourceIndex,'Other Section'); return {q:`Which section does this prompt belong to? ${shortStudyText(source.prompt,220)}`,options:built.options,answer:built.answerIndex,explanation:`This item belongs to ${sectionDisplay}.`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.answer,180),answerPool,variantIndex+sourceIndex,'Study Answer'); return {q:`Which answer best matches this prompt? ${shortStudyText(source.prompt,220)}`,options:built.options,answer:built.answerIndex,explanation:`The best response is ${source.answer}.${source.explanation?` ${source.explanation}`:''}`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.prompt,180),promptPool,variantIndex+sourceIndex,'Study Prompt'); return {q:`Which prompt matches this answer? ${shortStudyText(source.answer,200)}`,options:built.options,answer:built.answerIndex,explanation:`The matching prompt is: ${source.prompt}`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.answer,180),answerPool,variantIndex+sourceIndex+7,'Study Answer'); return {q:`In ${sectionDisplay}, what is the best response to this prompt? ${shortStudyText(source.prompt,220)}`,options:built.options,answer:built.answerIndex,explanation:`Correct response: ${source.answer}.${source.explanation?` ${source.explanation}`:''}`};},
+    ()=>{const built=buildDeterministicOptions(section,sectionPool,variantIndex+sourceIndex+11,'Other Section'); return {q:`Which section best fits this answer? ${shortStudyText(source.answer,200)}`,options:built.options,answer:built.answerIndex,explanation:`This answer belongs in ${sectionDisplay}.`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.prompt,180),promptPool,variantIndex+sourceIndex+13,'Study Prompt'); return {q:`Which study prompt goes with this answer? ${shortStudyText(source.answer,200)}`,options:built.options,answer:built.answerIndex,explanation:`The source prompt is: ${source.prompt}`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.answer,180),answerPool,variantIndex+sourceIndex+17,'Study Answer'); return {q:`Based on this prompt, which answer is correct? ${shortStudyText(source.prompt,220)}`,options:built.options,answer:built.answerIndex,explanation:`Correct response: ${source.answer}.${source.explanation?` ${source.explanation}`:''}`};},
+    ()=>{const built=buildDeterministicOptions(section,sectionPool,variantIndex+sourceIndex+19,'Other Section'); return {q:`Which section should this study item go under? ${shortStudyText(source.prompt,220)}`,options:built.options,answer:built.answerIndex,explanation:`It belongs to ${sectionDisplay}.`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.prompt,180),promptPool,variantIndex+sourceIndex+23,'Study Prompt'); return {q:`Which prompt goes with this answer? ${shortStudyText(source.answer,200)}`,options:built.options,answer:built.answerIndex,explanation:`The matching prompt is: ${source.prompt}`};},
+    ()=>{const built=buildDeterministicOptions(shortStudyText(source.answer,180),answerPool,variantIndex+sourceIndex+29,'Study Answer'); return {q:`Which response best restates the main idea of this prompt? ${shortStudyText(source.prompt,220)}`,options:built.options,answer:built.answerIndex,explanation:`The strongest match is ${source.answer}.${source.explanation?` ${source.explanation}`:''}`};}
+  ];
+  const payload=templates[variantIndex%templates.length]();
+  if(subject==='presidents') return {q:payload.q,section:sectionDisplay,options:payload.options,answer:payload.answer,explanation:payload.explanation,group:[section]};
+  return {q:payload.q,section:subject==='propaganda'?sectionDisplay:section,options:payload.options,answer:payload.answer,explanation:payload.explanation};
+}
+const MIN_SECTION_COVERAGE=150;
+function ensureMinimumSectionCoverage(minimumPerSection=MIN_SECTION_COVERAGE){
+  const subjects=['propaganda','presidents','currentevents','theme','linguistics'];
+  subjects.forEach(subject=>{
+    getSections(subject).forEach(sectionInfo=>{
+      const section=sectionInfo.key;
+      const sources=buildUnifiedSectionSources(subject,section);
+      if(!sources.length) return;
+      const flashcards=FLASHCARD_DATA[subject]||[];
+      const quizzes=QUIZ_DATA[subject]||[];
+      const flashSeen=new Set(flashcards.map(item=>item.q));
+      const quizSeen=new Set(quizzes.map(item=>item.q));
+      let flashCount=flashcards.filter(item=>cardMatchesSection(item,section,subject)).length;
+      let quizCount=quizzes.filter(item=>cardMatchesSection(item,section,subject)).length;
+      let flashVariantIndex=0;
+      let quizVariantIndex=0;
+      while(flashCount<minimumPerSection&&flashVariantIndex<minimumPerSection*20){
+        const sourceIndex=flashVariantIndex%sources.length;
+        const candidate=makeSupplementFlashcard(subject,section,sources[sourceIndex],flashVariantIndex,sourceIndex);
+        if(candidate&&!flashSeen.has(candidate.q)){
+          flashcards.push(candidate);
+          flashSeen.add(candidate.q);
+          flashCount++;
+        }
+        flashVariantIndex++;
+      }
+      while(quizCount<minimumPerSection&&quizVariantIndex<minimumPerSection*20){
+        const sourceIndex=quizVariantIndex%sources.length;
+        const candidate=makeSupplementQuiz(subject,section,sources[sourceIndex],sources,quizVariantIndex,sourceIndex);
+        if(candidate&&!quizSeen.has(candidate.q)){
+          quizzes.push(candidate);
+          quizSeen.add(candidate.q);
+          quizCount++;
+        }
+        quizVariantIndex++;
+      }
+    });
+  });
+}
+ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
  
 // ============================================================
 // FLASHCARDS
 // ============================================================
 function renderFlashcards(){
+  ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
   if(flashcardQueue.length===0){
     const all=FLASHCARD_DATA[currentSubject];
     flashcardQueue=flashcardSection?all.filter(c=>cardMatchesSection(c,flashcardSection,currentSubject)):all.slice();
@@ -2415,13 +3087,14 @@ function scheduleAutoFlip(){clearAutoFlip();const p=getPrefs();if(!p.autoflip||i
 function nextCard(){if(!flashcardQueue.length)return;cardIndex=(cardIndex+1)%flashcardQueue.length;isFlipped=false;render();scheduleAutoFlip();}
 function prevCard(){if(!flashcardQueue.length)return;cardIndex=(cardIndex-1+flashcardQueue.length)%flashcardQueue.length;isFlipped=false;render();scheduleAutoFlip();}
 function shuffleCards(){if(!flashcardQueue.length)return;flashcardQueue.sort(()=>Math.random()-0.5);cardIndex=0;isFlipped=false;render();}
-function setFlashSection(s){flashcardSection=s;flashcardQueue=[];cardIndex=0;isFlipped=false;clearAutoFlip();render();scheduleAutoFlip();}
-function setQuizSection(s){quizSection=s;quizIndex=0;quizAnswered=false;selectedOption=null;quizCards=[];quizScore={correct:0,incorrect:0};render();}
+function setFlashSection(s){ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);flashcardSection=s==='null'||s==null?null:s;flashcardQueue=[];cardIndex=0;isFlipped=false;clearAutoFlip();render();scheduleAutoFlip();}
+function setQuizSection(s){ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);quizSection=s==='null'||s==null?null:s;quizIndex=0;quizAnswered=false;selectedOption=null;quizCards=[];quizScore={correct:0,incorrect:0};render();}
  
 // ============================================================
 // QUIZ
 // ============================================================
 function renderQuiz(){
+  ensureMinimumSectionCoverage(MIN_SECTION_COVERAGE);
   if(!QUIZ_DATA[currentSubject]||QUIZ_DATA[currentSubject].length===0)
     return `<div class="ask-ai-box"><p style="color:var(--text-tertiary);text-align:center;padding:20px">No quiz available for this subject in this mode.</p></div>`;
   if(quizCards.length===0){
@@ -2832,7 +3505,7 @@ function renderCompeteQuestion(){
 }
 
 function setCompeteSection(s){
-  competeSection=s;competeRunning=false;competeCards=[];competeIndex=0;
+  competeSection=s==='null'||s==null?null:s;competeRunning=false;competeCards=[];competeIndex=0;
   competeScore={correct:0,wrong:0};clearCompeteTimer();render();
 }
 
@@ -2987,7 +3660,7 @@ function handleSignIn(){
     // Fallback: localStorage only (Firebase not yet configured)
     const existing=getStoredAccounts()[email];
     if(btn){btn.disabled=false;btn.textContent='Sign In →';}
-    if(!existing){showAuthError(err,'No account found with that email. Try signing up!');return;}
+    if(!existing){showAuthError(err,'These account credentials  Try signing up!');return;}
     if(existing.pw!==hashSimple(pw)){showAuthError(err,'Incorrect password. Please try again.');return;}
     signInUser({email,name:existing.name,isGuest:false});
   }
@@ -3133,6 +3806,7 @@ function updateUserChip(){
 // SETTINGS
 // ============================================================
 function openSettings(){
+  closeHelpMenu();
   document.getElementById('settings-overlay').classList.add('show');
   updateSettingsProfile();
   loadPrefsToUI();
@@ -3317,6 +3991,7 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
 
 function openFeedback(){
+  closeHelpMenu();
   document.getElementById('feedback-text').value='';
   document.getElementById('feedback-form-err').className='feedback-form-err';
   document.getElementById('feedback-overlay').classList.add('show');
