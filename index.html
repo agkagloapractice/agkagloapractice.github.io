@@ -827,7 +827,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">AGK OS 1.7.13 BETA</div>
+              <div class="settings-row-desc">AGK OS 1.7.13</div>
             </div>
           </div>
         </div>
@@ -950,15 +950,15 @@
           </div>
         </div>
         <div class="notif-menu-wrap">
-          <button class="notif-btn" onclick="toggleNotificationCenter()" id="notif-btn" title="Notifications">🔔<span class="notif-badge" id="notif-badge">0</span></button>
+          <button class="notif-btn" onclick="toggleNotificationCenter()" id="notif-btn" title="Notification Center">🔔<span class="notif-badge" id="notif-badge">0</span></button>
           <div class="notif-panel" id="notif-panel">
             <div class="notif-panel-header">
               <div>
                 <div class="notif-panel-kicker">Updates</div>
-                <div class="notif-panel-title">Notifications</div>
-                <div class="notif-panel-subtitle">Browser warnings, feedback updates, and app notices show up here.</div>
+                <div class="notif-panel-title">Notification Center</div>
+                <div class="notif-panel-subtitle">Feedback updates, site updates, and app notices show up here.</div>
               </div>
-              <button class="notif-close" onclick="closeNotificationCenter()" title="Close notifications">✕</button>
+              <button class="notif-close" onclick="closeNotificationCenter()" title="Close notification center">✕</button>
             </div>
             <div class="notif-toolbar">
               <div class="notif-toolbar-note" id="notif-toolbar-note">No unread notifications.</div>
@@ -3457,7 +3457,31 @@ function renderCERef(){
   return `<div class="card-area">
     <div class="sources-intro">
       <strong>📰 Top Credible Sources for AGLOA Current Events</strong><br>
-      Bookmark these sources and check them daily. Updated as of <strong>${dateStr}</strong>.
+      This page is meant to help you study current events efficiently, not just click random headlines. Use the source list below to build a daily routine, compare coverage, and keep your notes focused on issues that are likely to matter in competition. Updated as of <strong>${dateStr}</strong>.
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">How To Study This Section</div>
+      <div class="source-cards">
+        <div class="source-card"><div class="source-name">Start With 3 Big Questions</div><div class="source-desc">For every major story, ask: What happened? Why does it matter? What could happen next? If you can answer those three questions in your own words, you are already ahead of most students who only memorize headlines.</div><span class="source-tag">Study Method</span></div>
+        <div class="source-card"><div class="source-name">Track Ongoing Stories</div><div class="source-desc">AGLOA questions often come from issues that stay in the news for days or weeks, not one-time viral moments. Pay attention to elections, court decisions, economic reports, major legislation, scientific discoveries, and international conflicts that keep developing over time.</div><span class="source-tag">What To Watch</span></div>
+        <div class="source-card"><div class="source-name">Write Your Own Summary</div><div class="source-desc">After reading from a reliable source, write a two- or three-sentence summary without copying the article. That turns outside information into original understanding, which is exactly what helps in competition and makes this section more useful than a simple link list.</div><span class="source-tag">Best Practice</span></div>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">Daily And Weekly Checklist</div>
+      <div class="source-cards">
+        <div class="source-card"><div class="source-name">Daily Routine</div><div class="source-desc">Read one national story, one world story, one government or politics story, and one science or economics story. Focus on understanding the facts, the people involved, and the larger consequence of each event.</div><span class="source-tag">Daily</span></div>
+        <div class="source-card"><div class="source-name">Weekly Review</div><div class="source-desc">At the end of each week, make a short review sheet with the top 5 stories, important names, countries, agencies, court cases, bills, and vocabulary words that appeared repeatedly.</div><span class="source-tag">Weekly</span></div>
+        <div class="source-card"><div class="source-name">Source Comparison</div><div class="source-desc">Compare at least two reliable sources on the same event. If both agree on the main facts, you can trust your notes more. If the emphasis is different, write down what each source chose to highlight and why.</div><span class="source-tag">Analysis</span></div>
+      </div>
+    </div>
+    <div class="source-category">
+      <div class="source-cat-label">How To Judge A Source</div>
+      <div class="source-cards">
+        <div class="source-card"><div class="source-name">Straight Reporting First</div><div class="source-desc">When you are learning the basic facts of a story, start with wire services, public broadcasters, official government releases, or clearly reported news articles before moving to opinion or commentary.</div><span class="source-tag">Reliability</span></div>
+        <div class="source-card"><div class="source-name">Check Dates And Context</div><div class="source-desc">A story can be true and still be outdated. Always check when it was published, whether it is reporting a first announcement or a later update, and whether the situation has changed since then.</div><span class="source-tag">Accuracy</span></div>
+        <div class="source-card"><div class="source-name">Avoid Sensational Summaries</div><div class="source-desc">Headlines are designed to grab attention. Your notes should be calmer and more precise than the headline. Use neutral wording, name the real people or institutions involved, and keep your summary factual.</div><span class="source-tag">Media Literacy</span></div>
+      </div>
     </div>
     <div class="source-category">
       <div class="source-cat-label">🇺🇸 U.S. National News</div>
@@ -3507,6 +3531,9 @@ function renderCERef(){
         <a class="source-card" href="https://snopes.com" target="_blank"><div class="source-name">Snopes</div><div class="source-desc">The original internet fact-checker. Debunks viral misinformation and hoaxes quickly.</div><span class="source-tag">Fact-Check</span></a>
         <a class="source-card" href="https://mediabiasfactcheck.com" target="_blank"><div class="source-name">Media Bias/Fact Check</div><div class="source-desc">Rates hundreds of outlets on bias and factual accuracy. Use to evaluate your sources.</div><span class="source-tag">Media Literacy</span></a>
       </div>
+    </div>
+    <div class="sources-intro">
+      <strong>How this helps for AGLOA:</strong> the goal is not to read everything. The goal is to build a clean habit of following major stories, naming the key people and institutions involved, and explaining why each story matters in plain language. These source links work best when paired with your own notes, summaries, and review sheets.
     </div>
   </div>`;
 }
@@ -4246,6 +4273,9 @@ function getNotifications(){
 function saveNotifications(items){
   localStorage.setItem(NOTIFICATION_KEY,JSON.stringify(items.slice(0,50)));
 }
+function removeNotificationsByTag(tag){
+  saveNotifications(getNotifications().filter(item=>item.tag!==tag));
+}
 function formatNotificationTime(ts){
   const diff=Math.max(0,Date.now()-(ts||Date.now()));
   const mins=Math.floor(diff/60000);
@@ -4270,7 +4300,7 @@ function renderNotificationCenter(){
   if(note) note.textContent=unread?`${unread} unread notification${unread===1?'':'s'}.`:'No unread notifications.';
   if(!list) return;
   if(!items.length){
-    list.innerHTML='<div class="notif-empty">No notifications yet. Browser warnings and feedback updates will appear here.</div>';
+    list.innerHTML='<div class="notif-empty">No notifications yet. Feedback updates, site update notices, and app messages will appear here.</div>';
     return;
   }
   list.innerHTML=items.map(item=>`
@@ -4375,6 +4405,47 @@ function toggleNotificationCenter(){
   if(!panel) return;
   if(panel.classList.contains('show')) closeNotificationCenter();
   else openNotificationCenter();
+}
+
+const GITHUB_COMMITS_API='https://api.github.com/repos/agkagloapractice/agkagloapractice.github.io/commits?per_page=1';
+const GITHUB_COMMIT_SHA_KEY='agk_last_seen_github_commit';
+const GITHUB_CHECK_INTERVAL_MS=300000;
+
+function getRefreshShortcutLabel(){
+  const ua=navigator.userAgent||'';
+  const platform=navigator.platform||'';
+  return /(Mac|iPhone|iPad|iPod)/i.test(`${platform} ${ua}`)?'Cmd+Shift+R':'Ctrl+Shift+R';
+}
+
+async function maybeNotifyGithubUpdate(){
+  try{
+    const response=await fetch(GITHUB_COMMITS_API,{headers:{Accept:'application/vnd.github+json'}});
+    if(!response.ok) return;
+    const commits=await response.json();
+    const latest=Array.isArray(commits)?commits[0]:null;
+    if(!latest||!latest.sha) return;
+    const latestSha=latest.sha;
+    const previousSha=localStorage.getItem(GITHUB_COMMIT_SHA_KEY);
+    localStorage.setItem(GITHUB_COMMIT_SHA_KEY,latestSha);
+    if(!previousSha||previousSha===latestSha) return;
+    const shortcut=getRefreshShortcutLabel();
+    const authorTs=latest.commit&&latest.commit.author&&latest.commit.author.date?new Date(latest.commit.author.date).getTime():Date.now();
+    pushNotification({
+      title:'Site update available',
+      message:`A new GitHub update is live. Press ${shortcut} to load the latest version of the site.`,
+      icon:'🔄',
+      tag:'Update',
+      ts:authorTs,
+      dedupeKey:`github-update-${latestSha}`
+    });
+  }catch(e){
+    console.warn('GitHub update check failed',e);
+  }
+}
+
+function startGithubUpdateChecks(){
+  maybeNotifyGithubUpdate();
+  window.setInterval(maybeNotifyGithubUpdate,GITHUB_CHECK_INTERVAL_MS);
 }
 
 function submitFeedback(){
@@ -4623,14 +4694,7 @@ function dismissBrowserWarning(){
 function maybeShowBrowserWarning(){
   const payload=evaluateBrowserWarning();
   if(!payload) return;
-  pushNotification({
-    title:payload.title,
-    message:payload.message,
-    icon:'⚠️',
-    tag:'Browser',
-    dedupeKey:`browser-warning-${payload.id}`,
-    ts:Date.now()
-  });
+  removeNotificationsByTag('Browser');
   const dismissed=localStorage.getItem(BROWSER_WARNING_KEY);
   if(dismissed===payload.id) return;
   window._activeBrowserWarningId=payload.id;
@@ -4704,6 +4768,8 @@ function _renderTutorialStep(){
 renderNotificationCenter();
 
 maybeShowBrowserWarning();
+
+startGithubUpdateChecks();
 
 const startUser=getUser();
 if(!startUser){
