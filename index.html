@@ -14,15 +14,21 @@
   .orb2{width:300px;height:300px;background:rgba(175,82,222,0.15);top:40%;right:-80px;animation-delay:2s}
   .orb3{width:350px;height:350px;background:rgba(52,199,89,0.12);bottom:-100px;left:30%;animation-delay:4s}
   @keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
-  .app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 16px 60px}
-  .side-ads{display:none}
-  .side-ad-rail{position:fixed;top:120px;width:160px;z-index:50}
+  .page-shell{position:relative;z-index:1;max-width:none;margin:0;padding:0}
+  .app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 16px 60px;min-width:0}
+  .side-ads{display:block}
+  .side-ad-rail{position:fixed;top:24px;width:120px;z-index:50}
   .side-ad-left{left:24px}
   .side-ad-right{right:24px}
-  .side-ad-box{min-height:600px;padding:12px;background:rgba(255,255,255,0.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid var(--glass-border);border-radius:20px;box-shadow:var(--glass-shadow)}
-  .side-ad-box .adsbygoogle{display:block;width:100%;min-height:600px}
-  .inline-ad{margin:0 0 18px;padding:12px;background:rgba(255,255,255,0.38);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid var(--glass-border);border-radius:18px;box-shadow:var(--glass-shadow)}
-  .inline-ad .adsbygoogle{display:block;min-height:90px}
+  .side-ad-box{min-height:600px;padding:0;background:transparent;border:none;border-radius:0;box-shadow:none}
+  .side-ad-label,.inline-ad-label{display:none}
+  .side-ad-box .adsbygoogle{display:block;width:100%;min-height:600px;background:transparent;border-radius:0}
+  .inline-ad{display:none;margin:0 0 18px;padding:12px;background:rgba(255,255,255,0.38);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px dashed rgba(0,122,255,0.35);border-radius:18px;box-shadow:var(--glass-shadow)}
+  .inline-ad .adsbygoogle{display:block;min-height:90px;background:rgba(255,255,255,0.3);border-radius:12px}
+  .app-layout{display:block}
+  .app-main{min-width:0}
+  .embedded-side-ad{display:none}
+  .page-side-ad{display:none !important;min-width:0}
   .header{position:relative;z-index:1200;text-align:center;margin-bottom:24px;padding:24px 32px 20px;background:var(--glass-bg);backdrop-filter:blur(var(--blur));-webkit-backdrop-filter:blur(var(--blur));border:1.5px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);animation:slideDown 0.5s ease}
   @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
   .header-badge{display:inline-block;background:rgba(0,122,255,0.15);color:var(--accent-blue);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(0,122,255,0.25)}
@@ -144,9 +150,8 @@
   .results-score{font-size:42px;font-weight:800;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
   @media(max-width:600px){.pres-detail-grid{grid-template-columns:1fr}.nav-tab{font-size:11px;padding:8px 9px}}
 
-  @media(min-width:1400px){
-    .side-ads{display:block}
-    .app{max-width:980px}
+  @media(max-width:999px){
+    .side-ads{display:none}
   }
 
   /* ===== AUTH PAGE ===== */
@@ -504,6 +509,7 @@
 <div class="side-ads" aria-hidden="true">
   <aside class="side-ad-rail side-ad-left">
     <div class="side-ad-box">
+      <div class="side-ad-label">Advertisement</div>
       <ins class="adsbygoogle"
            style="display:block"
            data-ad-client="ca-pub-1787280703870664"
@@ -517,6 +523,7 @@
   </aside>
   <aside class="side-ad-rail side-ad-right">
     <div class="side-ad-box">
+      <div class="side-ad-label">Advertisement</div>
       <ins class="adsbygoogle"
            style="display:block"
            data-ad-client="ca-pub-1787280703870664"
@@ -820,7 +827,7 @@
           <div class="settings-row">
             <div class="settings-row-left">
               <div class="settings-row-title">Built By Adithan G.</div>
-              <div class="settings-row-desc">AGK OS 1.7.12</div>
+              <div class="settings-row-desc">AGK OS 1.7.13 BETA</div>
             </div>
           </div>
         </div>
@@ -913,8 +920,9 @@
   </div>
 </div>
 
-<div class="app">
-  <div class="header">
+<div class="page-shell">
+  <div class="app">
+    <div class="header">
     <div class="header-top-row">
       <div class="header-badge">AGK Agloa Practice ~Adithan G.</div>
       <div class="header-actions">
@@ -969,32 +977,22 @@
     </div>
     <h1>AGK AGLOA Practice</h1>
     <p>Flashcards, quizzes, reference, &amp; Competition for AGLOA. Built by Adithan G.</p>
+    </div>
+    <div class="nav">
+      <button class="nav-tab active" onclick="switchMode('flashcards')">Flashcards</button>
+      <button class="nav-tab" onclick="switchMode('quiz')">Quiz</button>
+      <button class="nav-tab" onclick="switchMode('reference')">Reference</button>
+      <button class="nav-tab" onclick="switchMode('compete')">🏆 Compete</button>
+    </div>
+    <div class="subject-row" id="subject-row">
+      <button class="subject-btn active" onclick="setSubject('propaganda')" id="sbtn-propaganda"><span class="subject-icon">🗣️</span> Propaganda</button>
+      <button class="subject-btn" onclick="setSubject('presidents')" id="sbtn-presidents"><span class="subject-icon">🎖️</span> Presidents</button>
+      <button class="subject-btn" onclick="setSubject('currentevents')" id="sbtn-currentevents"><span class="subject-icon">🌍</span> Current Events</button>
+      <button class="subject-btn" onclick="setSubject('theme')" id="sbtn-theme"><span class="subject-icon">📜</span> Theme</button>
+      <button class="subject-btn" onclick="setSubject('linguistics')" id="sbtn-linguistics"><span class="subject-icon">📝</span> LinguiSHTIK</button>
+    </div>
+    <div id="main-content"></div>
   </div>
-  <div class="inline-ad">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-1787280703870664"
-         data-ad-slot="2675212522"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
-  <div class="nav">
-    <button class="nav-tab active" onclick="switchMode('flashcards')">Flashcards</button>
-    <button class="nav-tab" onclick="switchMode('quiz')">Quiz</button>
-    <button class="nav-tab" onclick="switchMode('reference')">Reference</button>
-    <button class="nav-tab" onclick="switchMode('compete')">🏆 Compete</button>
-  </div>
-  <div class="subject-row" id="subject-row">
-    <button class="subject-btn active" onclick="setSubject('propaganda')" id="sbtn-propaganda"><span class="subject-icon">🗣️</span> Propaganda</button>
-    <button class="subject-btn" onclick="setSubject('presidents')" id="sbtn-presidents"><span class="subject-icon">🎖️</span> Presidents</button>
-    <button class="subject-btn" onclick="setSubject('currentevents')" id="sbtn-currentevents"><span class="subject-icon">🌍</span> Current Events</button>
-    <button class="subject-btn" onclick="setSubject('theme')" id="sbtn-theme"><span class="subject-icon">📜</span> Theme</button>
-    <button class="subject-btn" onclick="setSubject('linguistics')" id="sbtn-linguistics"><span class="subject-icon">📝</span> LinguiSHTIK</button>
-  </div>
-  <div id="main-content"></div>
 </div>
 <div class="results-overlay" id="results-overlay">
   <div class="results-modal">
